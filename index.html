@@ -2,16 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lapidados Control</title>
-<meta name="description" content="Sistema de gestão de pacientes — Lapidados Control">
-<meta name="theme-color" content="#E85D04">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Lapidados">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -330,6 +322,52 @@ tr:hover td{background:#fafafa}
 .cfg-schema{background:var(--ink7);border:1px solid var(--ink6);border-radius:10px;padding:14px 16px;font-size:12px;color:var(--ink3);font-family:monospace;line-height:1.8}
 .cfg-schema strong{color:var(--or4);font-family:'Plus Jakarta Sans',sans-serif;font-size:11px}
 @media(max-width:760px){.cfg-layout{grid-template-columns:1fr}.cfg-nav{display:flex;flex-wrap:wrap;gap:4px;padding:6px}.cfg-nav-item{width:auto;padding:6px 10px}}
+
+/* ── MOBILE RESPONSIVE ── */
+.mob-nav{display:none}
+@media(max-width:768px){
+  .sidebar{display:none !important}
+  .app-body{min-height:calc(100vh - 54px)}
+  .main-content{width:100%}
+  .main{padding:16px 16px 80px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .date-chip{display:none}
+  .logo-sub{display:none}
+  .prof-chip-name{display:none}
+  .home-greeting{padding:18px 20px}
+  .home-greeting-left h2{font-size:17px}
+  .home-qa{grid-template-columns:1fr 1fr}
+  .topbar-inner{padding:0 14px}
+  .hist-month-grid{grid-template-columns:1fr 1fr}
+  .goal-card{padding:16px 18px}
+  .kpi{padding:14px 16px}
+  .kpi-v{font-size:22px}
+  .srch input{width:100% !important}
+  .tbar{flex-direction:column;align-items:flex-start}
+  .tbar-l{width:100%}
+  .srch{width:100%}
+  .pg-head{margin-bottom:16px}
+  .pg-title{font-size:18px}
+  .tw{border-radius:10px}
+  th,td{padding:9px 10px}
+  .td-act{gap:3px}
+  .btn-xs{padding:3px 7px;font-size:10px}
+  .mob-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid #1c1c1c;height:58px;z-index:200;padding:0 4px 6px;align-items:flex-end}
+  .mob-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 2px;border:none;background:none;color:#666;font-size:9px;font-weight:600;cursor:pointer;border-radius:8px;transition:all .15s;position:relative}
+  .mob-nav-item.on{color:var(--or4)}
+  .mob-nav-item.on .mob-nav-dot{opacity:1}
+  .mob-nav-icon{font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;width:24px;height:24px}
+  .mob-nav-dot{width:4px;height:4px;border-radius:50%;background:var(--or4);position:absolute;bottom:2px;opacity:0;transition:opacity .15s}
+  .mob-nav-badge{position:absolute;top:4px;right:50%;transform:translateX(14px);background:#E84040;color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:10px;min-width:14px;text-align:center}
+}
+@media(max-width:400px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:1fr}
+  .hist-month-grid{grid-template-columns:1fr}
+}
+[data-dark="1"] .mob-nav{background:#0A0A0A;border-top-color:#1f1f1f}
 </style>
 <body>
 <div id="root"></div>
@@ -1562,20 +1600,19 @@ function App(){
           h(Settings,{db})
         )
       )
+    ),
+    h('nav',{className:'mob-nav'},
+      TABS.map(([id,icon,lbl])=>h('button',{key:id,className:'mob-nav-item'+(tab===id?' on':''),onClick:()=>st(id)},
+        h('span',{className:'mob-nav-icon'},icon),
+        h('span',null,lbl),
+        id==='home'&&alerts>0?h('span',{className:'mob-nav-badge'},alerts):null,
+        h('span',{className:'mob-nav-dot'})
+      ))
     )
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));
-
-// ─── PWA SERVICE WORKER REGISTRATION ───
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/sw.js')
-      .then(r=>console.log('SW registrado:',r.scope))
-      .catch(e=>console.log('SW erro:',e));
-  });
-}
 </script>
 </body>
 </html>
