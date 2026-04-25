@@ -239,8 +239,9 @@ tr:hover td{background:#fafafa}
 @media(max-width:640px){.kpi-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}:root{--pad:16px}}
 @media(max-width:480px){
 .main{padding:8px 10px 84px}
+.main-content{padding-left:0}
 .topbar{height:54px}
-.topbar-inner{padding:0 8px;height:54px}
+.topbar-inner{padding:0 8px;height:54px;width:100%;margin-left:0}
 .logo{height:32px;width:auto;max-width:140px}
 .logo-mark{width:120px;height:32px}
 .home-greeting{padding:12px 10px;margin-bottom:10px}
@@ -358,6 +359,56 @@ tr:hover td{background:#fafafa}
 .pe-wrap:active{cursor:grabbing}
 .pe-controls{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .pe-hint{font-size:11px;color:var(--ink3);text-align:center;margin-bottom:4px}
+
+/* ── PREVISTOS ── */
+.prev-month-block{margin-bottom:12px;border:1px solid var(--ink6);border-radius:var(--radius-lg);overflow:hidden;background:var(--w)}
+.prev-month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s;gap:12px}
+.prev-month-header:hover{background:var(--ink7)}
+.prev-month-header.open{background:var(--or1);border-bottom:1px solid var(--or2)}
+.prev-month-title{font-size:14px;font-weight:800;letter-spacing:-.2px;text-transform:capitalize;color:var(--ink)}
+.prev-month-header.open .prev-month-title{color:var(--or5)}
+.prev-month-meta{display:flex;align-items:center;gap:8px}
+.prev-month-count{font-size:12px;font-weight:600;color:var(--ink3);background:var(--ink7);padding:2px 8px;border-radius:20px}
+.prev-month-header.open .prev-month-count{background:var(--or2);color:var(--or6)}
+.prev-month-arrow{font-size:12px;color:var(--ink4);transition:transform .2s;flex-shrink:0}
+.prev-month-header.open .prev-month-arrow{transform:rotate(180deg);color:var(--or4)}
+.prev-month-body{padding:0 0 6px}
+.prev-pat-row{display:flex;align-items:center;gap:12px;padding:10px 18px;border-top:1px solid var(--ink6);transition:background .15s}
+.prev-pat-row:first-child{border-top:none}
+.prev-pat-row:hover{background:var(--ink7)}
+.prev-pat-av{width:34px;height:34px;border-radius:10px;background:var(--or1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--or5);flex-shrink:0}
+.prev-pat-info{flex:1;min-width:0}
+.prev-pat-name{font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prev-pat-date{font-size:11px;color:var(--ink3);margin-top:1px}
+.prev-pat-prog{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.prev-pat-prog-bar{width:48px;height:4px;background:var(--ink6);border-radius:2px;overflow:hidden}
+.prev-pat-prog-fill{height:100%;background:var(--or4);border-radius:2px}
+.prev-pat-prog-txt{font-size:10px;font-weight:700;color:var(--ink3);white-space:nowrap}
+.prev-pat-wa{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:var(--g1);color:var(--g4);font-size:14px;text-decoration:none;flex-shrink:0;transition:background .15s}
+.prev-pat-wa:hover{background:#dcfce7}
+.prev-today-chip{display:inline-flex;align-items:center;padding:2px 7px;background:var(--or4);color:#fff;border-radius:20px;font-size:9px;font-weight:700;margin-left:5px;vertical-align:middle}
+.prev-overdue-chip{display:inline-flex;align-items:center;padding:2px 7px;background:var(--r4);color:#fff;border-radius:20px;font-size:9px;font-weight:700;margin-left:5px;vertical-align:middle}
+
+/* ── APT GROUP (Registros agrupado por paciente) ── */
+.apt-group{background:var(--w);border:1px solid var(--ink6);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
+.apt-group:hover{box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.apt-group-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s}
+.apt-group-header:hover{background:var(--ink7)}
+.apt-group-header.open{background:var(--or1);border-bottom:1px solid var(--or2)}
+.apt-group-av{width:38px;height:38px;border-radius:11px;background:var(--or1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--or5);flex-shrink:0;border:2px solid var(--or2)}
+.apt-group-header.open .apt-group-av{background:var(--or4);color:#fff;border-color:var(--or5)}
+.apt-group-info{flex:1;min-width:0}
+.apt-group-name{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.apt-group-header.open .apt-group-name{color:var(--or6)}
+.apt-group-sub{font-size:11px;color:var(--ink3);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.apt-group-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.apt-group-count{font-size:11px;font-weight:700;color:var(--ink3);background:var(--ink7);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.apt-group-header.open .apt-group-count{background:var(--or2);color:var(--or6)}
+.apt-group-arrow{font-size:11px;color:var(--ink4);transition:transform .2s;flex-shrink:0}
+.apt-group-header.open .apt-group-arrow{transform:rotate(180deg);color:var(--or5)}
+.apt-group-body{border-top:1px solid var(--ink6)}
+.apt-group-body .apt-card{border-radius:0;border:none;border-bottom:1px solid var(--ink6);margin-bottom:0}
+.apt-group-body .apt-card:last-child{border-bottom:none}
 .cfg-schema{background:var(--ink7);border:1px solid var(--ink6);border-radius:10px;padding:14px 16px;font-size:12px;color:var(--ink3);font-family:monospace;line-height:1.8}
 .cfg-schema strong{color:var(--or4);font-family:'Plus Jakarta Sans',sans-serif;font-size:11px}
 @media(max-width:760px){.cfg-layout{grid-template-columns:1fr}.cfg-nav{display:flex;flex-wrap:wrap;gap:3px;padding:4px}.cfg-nav-item{width:auto;padding:6px 9px;font-size:12px;border-radius:7px}.cfg-panel{padding:16px;border-radius:var(--mob-radius)}.cfg-section-title{font-size:14px;margin-bottom:3px}.cfg-section-sub{font-size:11px;margin-bottom:18px}.cfg-divider{margin:16px 0}.plan-card{padding:11px 13px;border-radius:10px;gap:10px;margin-bottom:6px}.plan-card-icon{width:34px;height:34px;font-size:13px}.plan-card-name{font-size:12px;margin-bottom:1px}.plan-card-meta{font-size:10px}.plan-card-price{font-size:13px}.av-upload-wrap{flex-direction:column;gap:14px;padding:12px}.av-preview{width:64px;height:64px;font-size:20px;border:2px solid var(--or2)}.av-upload-btns .hint{font-size:10px}.pe-controls{gap:4px}.cfg-schema{padding:10px 12px;font-size:11px}}
@@ -366,10 +417,10 @@ tr:hover td{background:#fafafa}
 .mob-nav{display:none}
 @media(max-width:768px){
 .sidebar{display:none !important}
-.main-content{width:100%;margin-left:0}
+.main-content{width:100%;margin-left:0;padding-left:0}
 .main{padding:12px 12px 88px}
 .topbar{height:56px}
-.topbar-inner{padding:0 10px;height:56px;width:auto;margin-left:0}
+.topbar-inner{padding:0 10px;height:56px;width:100%;margin-left:0}
 .logo{height:34px;width:auto;max-width:160px}
 .logo-mark{width:130px;height:34px}
 .date-chip{display:none}
@@ -463,13 +514,156 @@ td{padding:9px 10px;font-size:11px}
 .mob-nav-item:active{background:var(--ink7);transform:scale(.92)}
 .mob-nav-item.on{color:var(--or4)}
 .mob-nav-icon{font-size:16px;line-height:1;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:7px;transition:var(--mob-trans)}
-.mob-nav-item.on .mob-nav-icon{background:var(--or1);font-size:15px}
+.mob-nav-item.on .mob-nav-icon{background:var(--or1);font-size:15px;width:48px;height:28px;border-radius:20px}
 .mob-nav-badge{position:absolute;top:0;right:50%;transform:translateX(12px);background:var(--r4);color:#fff;font-size:6px;font-weight:700;padding:0.25px 1.5px;border-radius:6px;min-width:10px;text-align:center;line-height:1;pointer-events:none}
 .mob-nav-lbl{font-size:7px;font-weight:600;color:inherit;line-height:1;margin-top:0.5px}
+
+/* ── PATIENT CARDS MOBILE ── */
+.pat-card{background:var(--w);border:1px solid var(--ink6);border-radius:var(--mob-radius);padding:14px 16px;margin-bottom:8px;transition:all .15s}
+.pat-card:active{background:var(--ink7)}
+.pat-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pat-card-name{font-size:14px;font-weight:700;color:var(--or4);cursor:pointer;letter-spacing:-.2px}
+.pat-card-id{font-family:monospace;font-size:10px;background:var(--ink7);color:var(--ink3);padding:2px 6px;border-radius:5px;margin-top:2px}
+.pat-card-mid{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.pat-card-bottom{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pat-card-stat{display:flex;flex-direction:column;gap:2px}
+.pat-card-stat-l{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink4);font-weight:700}
+.pat-card-stat-v{font-size:12px;font-weight:600;color:var(--ink2)}
+.pat-card-acts{display:flex;gap:5px;margin-top:10px;border-top:1px solid var(--ink6);padding-top:10px}
+.pat-card-acts .btn{flex:1;justify-content:center;min-height:36px;font-size:11px}
+/* ── FIN CARDS MOBILE ── */
+.fin-cards{display:none}
+.fin-card{background:var(--w);border:1px solid var(--ink6);border-radius:var(--mob-radius);padding:14px 16px;margin-bottom:8px}
+.fin-card.overdue{border-color:#fca5a5;background:#fff9f9}
+.fin-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px}
+.fin-card-name{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
+.fin-card-id{font-family:monospace;font-size:9px;color:var(--ink4);margin-top:1px}
+.fin-card-values{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.fin-card-val-box{background:var(--ink7);border-radius:8px;padding:8px 10px}
+.fin-card-val-l{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink4);font-weight:700;margin-bottom:2px}
+.fin-card-val-v{font-size:14px;font-weight:800;letter-spacing:-.3px}
+.fin-card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:var(--ink3)}
+.fin-card-acts{display:flex;gap:5px;border-top:1px solid var(--ink6);padding-top:10px}
+.fin-card-acts .btn{flex:1;justify-content:center;min-height:36px;font-size:11px}
+}
+@media(max-width:768px){
+.fin-cards{display:block}
+.tw{display:none}
 }
 [data-dark="1"] .mob-nav{background:#0A0A0A;border-top-color:#1c1c1c}
 [data-dark="1"] .mob-nav-item.on .mob-nav-icon{background:#3C1A00}
-</style>
+
+/* ── GAMIFICAÇÃO — RANKS & BADGES ── */
+.rank-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:-.1px}
+.rank-bruto{background:#2a2a2a;color:#aaa;border:1px solid #444}
+.rank-destravado{background:#1e3a5f;color:#60a5fa;border:1px solid #3b82f6}
+.rank-afiado{background:#1f2d3d;color:#a78bfa;border:1px solid #7c3aed}
+.rank-imparavel{background:#3d1a00;color:#fb923c;border:1px solid #f97316}
+.rank-lapidado{background:linear-gradient(135deg,#78350f,#92400e);color:#fcd34d;border:1px solid #d97706}
+[data-dark="0"] .rank-bruto{background:#f3f4f6;color:#374151;border-color:#d1d5db}
+[data-dark="0"] .rank-destravado{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd}
+[data-dark="0"] .rank-afiado{background:#f5f3ff;color:#6d28d9;border-color:#c4b5fd}
+[data-dark="0"] .rank-imparavel{background:#fff7ed;color:#c2410c;border-color:#fdba74}
+[data-dark="0"] .rank-lapidado{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f;border-color:#f59e0b}
+
+.badge-svg{width:48px;height:48px;flex-shrink:0}
+.badge-svg-lg{width:80px;height:80px}
+
+.rankup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.rankup-card{background:var(--w);border-radius:20px;padding:32px 28px;max-width:380px;width:100%;text-align:center;animation:rankPop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes rankPop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.rankup-emoji{font-size:48px;margin-bottom:12px;display:block;animation:rankBounce 1s ease .3s both}
+@keyframes rankBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.rankup-title{font-size:13px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.rankup-name{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:14px}
+.rankup-msg{font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:22px}
+.rankup-particles{font-size:24px;letter-spacing:4px;margin-bottom:16px}
+
+.patient-rank-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--ink7);border-radius:9px;margin-bottom:8px}
+.prb-pts{font-size:18px;font-weight:800;letter-spacing:-.4px;color:var(--or4);flex-shrink:0}
+.prb-info{flex:1;min-width:0}
+.prb-next{font-size:10px;color:var(--ink3);margin-top:2px}
+.prb-bar{height:4px;background:var(--ink6);border-radius:2px;overflow:hidden;margin-top:4px}
+.prb-fill{height:100%;border-radius:2px;background:var(--or4);transition:width .6s}
+
+.ac-section{margin-bottom:20px}
+.ac-section-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;user-select:none}
+.ac-section-hd.red{background:#FFF1F0;border:1px solid #fca5a5}
+.ac-section-hd.yellow{background:var(--y1);border:1px solid #fde68a}
+.ac-section-hd.green{background:var(--g1);border:1px solid #86efac}
+[data-dark="1"] .ac-section-hd.red{background:#3D1212;border-color:#7f1d1d}
+[data-dark="1"] .ac-section-hd.yellow{background:#3D2800;border-color:#78350F}
+[data-dark="1"] .ac-section-hd.green{background:#0C2B15;border-color:#14532D}
+.ac-section-hd-left{display:flex;align-items:center;gap:10px}
+.ac-section-hd-icon{font-size:18px;line-height:1}
+.ac-section-hd-title{font-size:14px;font-weight:800;letter-spacing:-.2px}
+.ac-section-hd.red .ac-section-hd-title{color:var(--r6)}
+.ac-section-hd.yellow .ac-section-hd-title{color:var(--y6)}
+.ac-section-hd.green .ac-section-hd-title{color:var(--g6)}
+.ac-section-count{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;background:rgba(0,0,0,0.08)}
+.ac-section-hd.red .ac-section-count{background:var(--r1);color:var(--r6)}
+.ac-section-hd.yellow .ac-section-count{background:var(--y1);color:var(--y6)}
+.ac-section-hd.green .ac-section-count{background:var(--g1);color:var(--g6)}
+.ac-section-body{border:1px solid var(--ink6);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);overflow:hidden}
+.ac-pat-card{background:var(--w);border-top:1px solid var(--ink6);padding:14px 16px;transition:background .15s}
+.ac-pat-card:first-child{border-top:none}
+.ac-pat-card:hover{background:var(--ink7)}
+.ac-pat-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ac-pat-av{width:36px;height:36px;border-radius:10px;background:var(--or1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--or4);flex-shrink:0}
+.ac-pat-name{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
+.ac-pat-meta{font-size:11px;color:var(--ink3);margin-top:2px}
+.ac-pat-right{margin-left:auto;text-align:right}
+.ac-days{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.ac-days.hot{color:var(--r4)}
+.ac-days.warm{color:var(--y4)}
+.ac-days.cool{color:var(--g4)}
+.ac-days-lbl{font-size:9px;color:var(--ink3);font-weight:500;text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+.ac-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.ac-actions.four{grid-template-columns:1fr 1fr 1fr 1fr}
+.ac-btn{border:1.5px solid var(--ink6);background:var(--w);border-radius:9px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--ink2);text-align:left;line-height:1.3;display:flex;flex-direction:column;gap:3px;min-height:52px}
+.ac-btn:hover{border-color:var(--or4);color:var(--or4);background:var(--or1)}
+.ac-btn:active{transform:scale(.97)}
+.ac-btn-icon{font-size:14px;margin-bottom:1px}
+.ac-btn-lbl{font-size:10px;font-weight:700;color:inherit}
+.ac-btn-sub{font-size:9px;color:var(--ink3);font-weight:400}
+.ac-hist-toggle{font-size:11px;color:var(--ink3);cursor:pointer;display:flex;align-items:center;gap:4px;padding:4px 0;border:none;background:none;font-family:inherit;font-weight:500}
+.ac-hist-toggle:hover{color:var(--or4)}
+.ac-hist-list{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.ac-hist-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--ink7);border-radius:8px;font-size:11px}
+.ac-hist-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ac-hist-info{flex:1;min-width:0}
+.ac-hist-type{font-weight:600;color:var(--ink2)}
+.ac-hist-date{color:var(--ink3);margin-top:1px;font-size:10px}
+.ac-hist-resp{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:600;flex-shrink:0}
+.ac-hist-resp.yes{background:var(--g1);color:var(--g6)}
+.ac-hist-resp.no{background:var(--r1);color:var(--r6)}
+.ac-hist-resp.pend{background:var(--ink6);color:var(--ink3)}
+.ac-empty{text-align:center;padding:32px 20px;background:var(--w);border:1px solid var(--ink6);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);color:var(--ink3);font-size:13px}
+.ac-dash-card{background:var(--w);border:1px solid var(--ink6);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:16px}
+.ac-dash-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ac-dash-stats{display:flex;gap:0;margin-bottom:14px}
+.ac-dash-stat{flex:1;text-align:center;padding:10px 8px;border-radius:8px}
+.ac-dash-stat+.ac-dash-stat{margin-left:6px}
+.ac-dash-stat.hot{background:#FFF1F0}
+.ac-dash-stat.warm{background:var(--y1)}
+.ac-dash-stat.cool{background:var(--g1)}
+.ac-dash-num{font-size:24px;font-weight:800;letter-spacing:-.5px;line-height:1;margin-bottom:3px}
+.ac-dash-stat.hot .ac-dash-num{color:var(--r4)}
+.ac-dash-stat.warm .ac-dash-num{color:var(--y4)}
+.ac-dash-stat.cool .ac-dash-num{color:var(--g4)}
+.ac-dash-lbl{font-size:10px;font-weight:600;color:var(--ink3)}
+[data-dark="1"] .ac-dash-stat.hot{background:#3D1212}
+[data-dark="1"] .ac-dash-stat.warm{background:#3D2800}
+[data-dark="1"] .ac-dash-stat.cool{background:#0C2B15}
+[data-dark="1"] .ac-pat-card{background:var(--w)}
+[data-dark="1"] .ac-pat-card:hover{background:#2a2a2a}
+[data-dark="1"] .ac-btn{background:var(--w);border-color:var(--ink5)}
+@media(max-width:768px){
+  .ac-actions{grid-template-columns:1fr 1fr}
+  .ac-actions.four{grid-template-columns:1fr 1fr}
+  .ac-btn{font-size:10px;padding:7px 8px;min-height:48px}
+  .ac-days{font-size:18px}
+}</style>
 <body>
 <div id="root"></div>
 <div class="toast" id="toast"></div>
@@ -693,7 +887,7 @@ function useData(userId){
 
   useEffect(()=>{loadAll()},[loadAll]);
 
-  return{pats,apts,fin,plans,profile,loading,reload:loadAll,
+  return{pats,apts,fin,plans,profile,loading,reload:loadAll,_userId:userId,
     async addPat(p){
       const id=await getNextPatId(userId);
       const{error}=await SB.from('patients').insert(fromPat({...p,id},userId));
@@ -921,7 +1115,7 @@ const KPI_TIPS={
 };
 
 // ─── DASHBOARD ───
-function Dashboard({pats,apts,fin}){
+function Dashboard({pats,apts,fin,onNav}){
   const now=today();
   const enr=pats.map(p=>({...p,status:calcStatus(p,apts),ren:calcRen(p),last:lastC(p.id,apts)}));
   const alerts=enr.filter(p=>['ATRASADO','CONTATAR HOJE'].includes(p.status)).sort((a,b)=>{const o={'ATRASADO':0,'CONTATAR HOJE':1};return o[a.status]-o[b.status]});
@@ -944,6 +1138,7 @@ function Dashboard({pats,apts,fin}){
       h('div',{className:'kpi ye'},h('div',{className:'kpi-icon'},'↻'),h('div',{className:'kpi-v'},ren_w),h('div',{className:'kpi-l'},'Renovações ',h(InfoDot,{text:KPI_TIPS.ren})),h('div',{className:'kpi-d'},'planos pendentes')),
       h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'R$'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(fat)),h('div',{className:'kpi-l'},'Faturamento mês ',h(InfoDot,{text:KPI_TIPS.fat})),h('div',{className:'kpi-d'},fmtM(pend)+' pendente'))
     ),
+    h(CheckinDashCard,{pats,checkins:checkins||[],onNav}),
     h('div',{className:'grid2'},
       h('div',{className:'card'},
         h('div',{className:'card-head'},h('div',{className:'card-title'},'Alertas prioritários'),alerts.length>0&&h('span',{style:{fontSize:11,color:'var(--ink3)'}},alerts.length+' no total')),
@@ -983,6 +1178,7 @@ function Patients({pats,apts,fin,db,plans}){
   const del=async id=>{if(!confirm('Excluir paciente e todos seus dados?'))return;try{await db.delPat(id);toast('Removido.');}catch(e){alert('Erro: '+e.message)}};
   const curProf=prof?pats.find(p=>p.id===prof):null;
   const saveApt=async d=>{ss(true);try{if(aptM&&aptM._e)await db.updApt({...d,id:aptM.id});else await db.addApt({...d,id:'AT-'+Date.now()});sa(null);toast('Atendimento salvo.');}catch(e){alert('Erro: '+e.message);}ss(false)};
+  const mob=typeof window!=='undefined'&&window.innerWidth<=768;
   return h('div',null,
     h('div',{className:'pg-head'},
       h('div',null,h('div',{className:'pg-title'},'Pacientes'),h('div',{className:'pg-sub'},pats.length+' cadastrado'+(pats.length!==1?'s':''))),
@@ -998,34 +1194,170 @@ function Patients({pats,apts,fin,db,plans}){
       ),
       h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},filt.length+' resultado'+(filt.length!==1?'s':''))
     ),
-    h('div',{className:'tw'},h('table',null,
-      h('thead',null,h('tr',null,['ID','Nome','Plano','Consultas','Última','Próxima','Status','Renovação',''].map(x=>h('th',{key:x},x)))),
-      h('tbody',null,filt.length===0?h('tr',null,h('td',{colSpan:9,style:{textAlign:'center',padding:'48px',color:'var(--ink3)'}},pats.length===0?'Nenhum paciente cadastrado.':'Nenhum resultado.')):
-        filt.map(p=>h('tr',{key:p.id},
-          h('td',null,h('span',{className:'td-id'},p.id)),
-          h('td',null,h('div',{className:'td-n',style:{cursor:'pointer',color:'var(--or4)'},onClick:()=>sp(p.id)},p.name),p.phone&&h('div',{className:'td-s'},p.phone)),
-          h('td',null,h('span',{className:'badge b-brand'},p.plan+' · '+(PLANS[p.plan]?PLANS[p.plan].sessions:0)+'x')),
-          h('td',{style:{textAlign:'center'}},h('span',{style:{fontWeight:800}},p.cnt),' ',h('span',{className:'td-m'},'/ '+(PLANS[p.plan]?PLANS[p.plan].sessions:'?'))),
-          h('td',null,p.last?[h('div',{key:'a',style:{fontWeight:500}},fmt(p.last)),h('div',{key:'b',style:{fontSize:11,color:diff(now,p.last)>30?'var(--r4)':'var(--ink4)',fontWeight:600}},diff(now,p.last)+'d atrás')]:'—'),
-          h('td',{className:'td-m'},p.next?fmt(p.next):'—'),
-          h('td',null,h(Bdg,{c:SBCLS[p.status]||'',l:p.status})),
-          h('td',null,h(Bdg,{c:RNCLS[p.ren]||'',l:p.ren})),
-          h('td',null,h('div',{className:'td-act'},h('button',{className:'btn btn-info btn-xs',onClick:()=>sp(p.id)},'Ver'),h('button',{className:'btn btn-ghost btn-xs',onClick:()=>sm(p)},'Editar'),h('button',{className:'btn btn-del btn-xs',onClick:()=>del(p.id)},'×')))
-        ))
-      )
-    )),
+    filt.length===0
+      ?h('div',{style:{textAlign:'center',padding:'48px',background:'var(--w)',border:'1px solid var(--ink6)',borderRadius:'var(--radius-lg)',color:'var(--ink3)'}},pats.length===0?'Nenhum paciente cadastrado.':'Nenhum resultado.')
+      :mob
+        ?h('div',null,filt.map(p=>h('div',{key:p.id,className:'pat-card'},
+            h('div',{className:'pat-card-top'},
+              h('div',null,
+                h('div',{className:'pat-card-name',onClick:()=>sp(p.id)},p.name),
+                h('div',{style:{display:'flex',alignItems:'center',gap:6,marginTop:4}},
+                  h('span',{className:'pat-card-id'},p.id),
+                  p.phone&&h('span',{style:{fontSize:10,color:'var(--ink3)'}},p.phone)
+                )
+              ),
+              h('div',{style:{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:4}},
+                h(Bdg,{c:SBCLS[p.status]||'',l:p.status}),
+                h(Bdg,{c:RNCLS[p.ren]||'',l:p.ren})
+              )
+            ),
+            h('div',{className:'pat-card-mid'},
+              h('span',{className:'badge b-brand'},p.plan+' · '+(PLANS[p.plan]?PLANS[p.plan].sessions:0)+'x'),
+              h('span',{style:{fontSize:11,color:'var(--ink3)'}},p.cnt+'/'+(PLANS[p.plan]?PLANS[p.plan].sessions:'?')+' consultas')
+            ),
+            h('div',{className:'pat-card-bottom'},
+              h('div',{className:'pat-card-stat'},
+                h('div',{className:'pat-card-stat-l'},'Última consulta'),
+                h('div',{className:'pat-card-stat-v',style:{color:p.last&&diff(now,p.last)>30?'var(--r4)':'var(--ink2)'}},p.last?fmt(p.last)+' ('+diff(now,p.last)+'d)':'—')
+              ),
+              h('div',{className:'pat-card-stat'},
+                h('div',{className:'pat-card-stat-l'},'Próxima consulta'),
+                h('div',{className:'pat-card-stat-v'},p.next?fmt(p.next):'—')
+              )
+            ),
+            h('div',{className:'pat-card-acts'},
+              h('button',{className:'btn btn-info btn-xs',onClick:()=>sp(p.id)},'Ver perfil'),
+              h('button',{className:'btn btn-ghost btn-xs',onClick:()=>sm(p)},'Editar'),
+              h('button',{className:'btn btn-del btn-xs',onClick:()=>del(p.id)},'×')
+            )
+          )))
+        :h('div',{className:'tw'},h('table',null,
+            h('thead',null,h('tr',null,['ID','Nome','Plano','Consultas','Última','Próxima','Status','Renovação',''].map(x=>h('th',{key:x},x)))),
+            h('tbody',null,filt.map(p=>h('tr',{key:p.id},
+              h('td',null,h('span',{className:'td-id'},p.id)),
+              h('td',null,h('div',{className:'td-n',style:{cursor:'pointer',color:'var(--or4)'},onClick:()=>sp(p.id)},p.name),p.phone&&h('div',{className:'td-s'},p.phone)),
+              h('td',null,h('span',{className:'badge b-brand'},p.plan+' · '+(PLANS[p.plan]?PLANS[p.plan].sessions:0)+'x')),
+              h('td',{style:{textAlign:'center'}},h('span',{style:{fontWeight:800}},p.cnt),' ',h('span',{className:'td-m'},'/ '+(PLANS[p.plan]?PLANS[p.plan].sessions:'?'))),
+              h('td',null,p.last?[h('div',{key:'a',style:{fontWeight:500}},fmt(p.last)),h('div',{key:'b',style:{fontSize:11,color:diff(now,p.last)>30?'var(--r4)':'var(--ink4)',fontWeight:600}},diff(now,p.last)+'d atrás')]:'—'),
+              h('td',{className:'td-m'},p.next?fmt(p.next):'—'),
+              h('td',null,h(Bdg,{c:SBCLS[p.status]||'',l:p.status})),
+              h('td',null,h(Bdg,{c:RNCLS[p.ren]||'',l:p.ren})),
+              h('td',null,h('div',{className:'td-act'},h('button',{className:'btn btn-info btn-xs',onClick:()=>sp(p.id)},'Ver'),h('button',{className:'btn btn-ghost btn-xs',onClick:()=>sm(p)},'Editar'),h('button',{className:'btn btn-del btn-xs',onClick:()=>del(p.id)},'×')))
+            )))
+          )),
     modal&&h(Modal,{title:modal==='new'?'Novo paciente':'Editar paciente',onClose:()=>sm(null)},h(PatForm,{init:modal==='new'?null:modal,pats,plans,onSave:save,onClose:()=>sm(null),saving})),
     curProf&&h(Profile,{pat:curProf,apts,fin,onClose:()=>sp(null),onNewApt:()=>sa(curProf),onEditApt:a=>sa({...a,_e:true}),onDelApt:async id=>{if(!confirm('Excluir atendimento?'))return;try{await db.delApt(id);toast('Removido.');}catch(e){alert(e.message)}}}),
     aptM&&h(Modal,{title:aptM._e?'Editar atendimento':'Novo atendimento',sub:curProf?.name,onClose:()=>sa(null)},h(AptForm,{init:aptM._e?aptM:null,pats,defPid:aptM.id||aptM.patientId,onSave:saveApt,onClose:()=>sa(null),saving}))
   )
 }
 
+// ─── PREVISTOS ───
+function Previstos({pats,apts}){
+  const now=today();
+  const[openMonths,sop]=useState(()=>{
+    // open current + next month by default
+    const keys=new Set();
+    const d1=new Date(now);const d2=new Date(now);d2.setMonth(d2.getMonth()+1);
+    [d1,d2].forEach(d=>keys.add(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')));
+    return keys;
+  });
+
+  const toggleMonth=key=>sop(prev=>{const n=new Set(prev);n.has(key)?n.delete(key):n.add(key);return n});
+
+  // Build predictions: each active patient → next predicted date
+  const predictions=useMemo(()=>{
+    const rows=[];
+    pats.forEach(p=>{
+      const end=endDate(p.startDate,p.plan);
+      // skip plans already ended
+      if(end&&now>end)return;
+      const last=lastC(p.id,apts);
+      let predDate;
+      if(last){predDate=new Date(last);predDate.setDate(predDate.getDate()+30);}
+      else if(p.startDate){predDate=new Date(p.startDate+'T00:00:00');predDate.setDate(predDate.getDate()+30);}
+      else return;
+      const cnt=cntC(p.id,apts);
+      const total=PLANS[p.plan]?PLANS[p.plan].sessions:0;
+      // skip if already used all sessions
+      if(total>0&&cnt>=total)return;
+      rows.push({pat:p,predDate,cnt,total});
+    });
+    // sort by date ascending (priority = closest first)
+    return rows.sort((a,b)=>a.predDate-b.predDate);
+  },[pats,apts]);
+
+  // Group by month key YYYY-MM
+  const byMonth=useMemo(()=>{
+    const map={};
+    predictions.forEach(r=>{
+      const key=r.predDate.getFullYear()+'-'+String(r.predDate.getMonth()+1).padStart(2,'0');
+      if(!map[key])map[key]={key,label:r.predDate.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}),rows:[]};
+      map[key].rows.push(r);
+    });
+    return Object.values(map).sort((a,b)=>a.key.localeCompare(b.key));
+  },[predictions]);
+
+  if(byMonth.length===0)return h('div',{className:'empty',style:{padding:'60px 24px'}},
+    h('div',{className:'empty-icon'},'📅'),
+    h('div',{className:'empty-tt'},'Nenhum atendimento previsto'),
+    h('p',null,'Pacientes sem consultas registradas ou com planos encerrados não aparecem aqui.')
+  );
+
+  return h('div',null,
+    h('div',{style:{fontSize:12,color:'var(--ink3)',marginBottom:16,padding:'10px 14px',background:'var(--ink7)',borderRadius:10,border:'1px solid var(--ink6)'}},
+      '📌 Previsão baseada na última consulta + 30 dias. Clique num mês para ver os pacientes.'
+    ),
+    byMonth.map(({key,label,rows})=>{
+      const isOpen=openMonths.has(key);
+      const isCurrent=key===(now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0'));
+      return h('div',{key,className:'prev-month-block'},
+        h('div',{className:'prev-month-header'+(isOpen?' open':''),onClick:()=>toggleMonth(key)},
+          h('div',{style:{display:'flex',alignItems:'center',gap:8}},
+            h('div',{className:'prev-month-title'},label),
+            isCurrent&&h('span',{className:'prev-today-chip'},'este mês')
+          ),
+          h('div',{className:'prev-month-meta'},
+            h('span',{className:'prev-month-count'},rows.length+' paciente'+(rows.length!==1?'s':'')),
+            h('span',{className:'prev-month-arrow'},'▾')
+          )
+        ),
+        isOpen&&h('div',{className:'prev-month-body'},
+          rows.map(({pat,predDate,cnt,total})=>{
+            const pct=total>0?Math.min(100,Math.round(cnt/total*100)):0;
+            const isPast=predDate<now;
+            const isThisWeek=!isPast&&diff(predDate,now)<=7;
+            return h('div',{key:pat.id,className:'prev-pat-row'},
+              h('div',{className:'prev-pat-av'},ini(pat.name)),
+              h('div',{className:'prev-pat-info'},
+                h('div',{className:'prev-pat-name'},pat.name,
+                  isPast&&h('span',{className:'prev-overdue-chip'},'atrasado'),
+                  isThisWeek&&!isPast&&h('span',{className:'prev-today-chip'},'esta semana')
+                ),
+                h('div',{className:'prev-pat-date'},
+                  isPast?'Prevista: '+fmt(predDate)+' ('+Math.abs(diff(predDate,now))+'d atrás)':
+                  'Prevista: '+fmt(predDate)+(diff(predDate,now)===0?' · hoje':' · em '+diff(predDate,now)+'d')
+                )
+              ),
+              total>0&&h('div',{className:'prev-pat-prog'},
+                h('div',{className:'prev-pat-prog-bar'},h('div',{className:'prev-pat-prog-fill',style:{width:pct+'%'}})),
+                h('span',{className:'prev-pat-prog-txt'},cnt+'/'+total)
+              ),
+              pat.phone&&h('a',{className:'prev-pat-wa',href:'https://wa.me/55'+pat.phone.replace(/\D/g,''),target:'_blank',title:'WhatsApp'},'💬')
+            )
+          })
+        )
+      )
+    })
+  )
+}
+
 // ─── APPOINTMENTS ───
 function Appointments({apts,pats,db}){
+  const[subtab,sst]=useState('registros');
   const[modal,sm]=useState(null);const[q,sq]=useState('');const[pf,spf]=useState('');const[mf,smf]=useState('');const[saving,ss]=useState(false);
+  const[openPats,sop]=useState(()=>new Set());
   const pm=Object.fromEntries(pats.map(p=>[p.id,p]));
   const cm={};[...apts].sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(a=>{cm[a.patientId]=(cm[a.patientId]||0)+1;cm[a.id]=cm[a.patientId]});
-  // build month options from existing apts
   const monthOpts=useMemo(()=>{
     const seen=new Set();
     return [...apts].sort((a,b)=>b.date.localeCompare(a.date)).reduce((acc,a)=>{
@@ -1036,6 +1368,8 @@ function Appointments({apts,pats,db}){
       return acc;
     },[]);
   },[apts]);
+
+  // filtered flat list (used for CSV export + grouping)
   const filt=[...apts].sort((a,b)=>new Date(b.date)-new Date(a.date)).filter(a=>{
     const s=q.toLowerCase();const p=pm[a.patientId];
     if(s&&!(p&&p.name.toLowerCase().includes(s))&&!a.patientId.toLowerCase().includes(s))return false;
@@ -1043,20 +1377,40 @@ function Appointments({apts,pats,db}){
     if(mf&&a.date){const d=new Date(a.date+'T00:00:00');const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');if(k!==mf)return false;}
     return true;
   });
+
+  // group by patient — ordered by most recent appointment first
+  const groups=useMemo(()=>{
+    const map={};
+    filt.forEach(a=>{
+      if(!map[a.patientId])map[a.patientId]={patientId:a.patientId,apts:[]};
+      map[a.patientId].apts.push(a);
+    });
+    return Object.values(map).sort((a,b)=>new Date(b.apts[0].date)-new Date(a.apts[0].date));
+  },[filt]);
+
+  const togglePat=id=>sop(prev=>{const n=new Set(prev);n.has(id)?n.delete(id):n.add(id);return n});
+
   const save=async d=>{ss(true);try{if(modal==='new')await db.addApt({...d,id:'AT-'+Date.now()});else await db.updApt({...d,id:modal.id});sm(null);toast('Atendimento salvo.');}catch(e){alert('Erro: '+e.message);}ss(false)};
   const del=async id=>{if(!confirm('Excluir atendimento?'))return;try{await db.delApt(id);toast('Removido.');}catch(e){alert(e.message)}};
   const patOpts=[...new Set(apts.map(a=>a.patientId))].map(id=>pm[id]).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name));
+
   return h('div',null,
     h('div',{className:'pg-head'},
       h('div',null,h('div',{className:'pg-title'},'Atendimentos'),h('div',{className:'pg-sub'},apts.length+' registro'+(apts.length!==1?'s':''))),
       h('div',{style:{display:'flex',gap:8}},
-        h('button',{className:'btn btn-ghost',onClick:()=>exportCSV(filt.map(a=>{const p=pm[a.patientId];return{Data:fmt(a.date),Paciente:p?p.name:a.patientId,'Nº':cm[a.id]||'',Peso:a.weight,Avaliação:a.evaluation,Conduta:a.conduct,Próxima:fmt(a.nextDate)}}),'atendimentos.csv')},'Exportar CSV'),
+        subtab==='registros'&&h('button',{className:'btn btn-ghost',onClick:()=>exportCSV(filt.map(a=>{const p=pm[a.patientId];return{Data:fmt(a.date),Paciente:p?p.name:a.patientId,'Nº':cm[a.id]||'',Peso:a.weight,Avaliação:a.evaluation,Conduta:a.conduct,Próxima:fmt(a.nextDate)}}),'atendimentos.csv')},'Exportar CSV'),
         h('button',{className:'btn btn-primary',onClick:()=>sm('new')},'+ Novo atendimento')
       )
     ),
+    h('div',{className:'tabrow'},
+      [['registros','📋 Registros'],['previstos','📅 Previstos']].map(([id,lbl])=>
+        h('button',{key:id,className:'tabi'+(subtab===id?' on':''),onClick:()=>sst(id)},lbl)
+      )
+    ),
+    subtab==='previstos'?h(Previstos,{pats,apts}):
     apts.length===0?h('div',{style:{textAlign:'center',padding:'60px',background:'var(--w)',border:'1px solid var(--ink6)',borderRadius:'var(--radius-lg)'}},
       h('div',{style:{fontSize:28,marginBottom:12,opacity:.35}},'📋'),
-      h('div',{style:{fontSize:15,fontWeight:700,marginBottom:6,color:'var(--ink2)'},'letterSpacing':'-.2px'},'Nenhum atendimento registrado'),
+      h('div',{style:{fontSize:15,fontWeight:700,marginBottom:6,color:'var(--ink2)'}},'Nenhum atendimento registrado'),
       h('p',{style:{fontSize:13,color:'var(--ink3)',maxWidth:340,margin:'0 auto 20px',lineHeight:1.6}},'Registre consultas para acompanhar peso, avaliações e condutas de cada paciente.'),
       h('button',{className:'btn btn-primary',style:{display:'inline-flex'},onClick:()=>sm('new')},'+ Registrar primeiro atendimento')
     ):h('div',null,
@@ -1068,21 +1422,60 @@ function Appointments({apts,pats,db}){
         ),
         h('div',{style:{display:'flex',alignItems:'center',gap:8}},
           mf&&h('button',{className:'btn btn-ghost btn-sm',onClick:()=>smf('')},'✕ Limpar mês'),
-          h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},filt.length+' resultado'+(filt.length!==1?'s':''))
+          h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},groups.length+' paciente'+(groups.length!==1?'s':'')+' · '+filt.length+' registro'+(filt.length!==1?'s':''))
         )
       ),
-      filt.map(a=>{const p=pm[a.patientId];return h('div',{key:a.id,className:'apt-card'},
-        h('div',{className:'apt-card-top'},
-          h('span',{className:'hist-num',style:{borderRadius:8,width:26,height:26,fontSize:11}},cm[a.id]||'?'),
-          h('div',{style:{flex:1,minWidth:0}},h('div',{style:{fontWeight:700,fontSize:14,letterSpacing:'-.2px'}},p?p.name:a.patientId),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},fmt(a.date)+(a.weight?' · '+a.weight+' kg':''))),
-          a.nextDate&&h('span',{className:'chip',style:{fontSize:11}},fmt(a.nextDate)),
-          h('div',{style:{display:'flex',gap:5,marginLeft:8}},h('button',{className:'btn btn-ghost btn-xs',onClick:()=>sm(a)},'Editar'),h('button',{className:'btn btn-del btn-xs',onClick:()=>del(a.id)},'×'))
-        ),
-        (a.evaluation||a.conduct)&&h('div',{className:'apt-card-body'},h('div',{className:'apt-card-fields'},
-          a.evaluation&&h('div',null,h('div',{className:'apt-fl'},'Avaliação'),h('div',{className:'apt-fv'},a.evaluation)),
-          a.conduct&&h('div',null,h('div',{className:'apt-fl'},'Conduta'),h('div',{className:'apt-fv'},a.conduct))
-        ))
-      )})
+      groups.length===0?h('div',{style:{textAlign:'center',padding:'40px',color:'var(--ink3)',fontSize:13}},'Nenhum resultado para este filtro.'):
+      groups.map(({patientId,apts:gApts})=>{
+        const p=pm[patientId];
+        const isOpen=openPats.has(patientId);
+        const last=gApts[0]; // already sorted newest first
+        const plan=p&&PLANS[p.plan];
+        const sessTotal=plan?plan.sessions:0;
+        const sessDone=gApts.length;
+        const pct=sessTotal>0?Math.min(100,Math.round(sessDone/sessTotal*100)):0;
+        return h('div',{key:patientId,className:'apt-group'},
+          // ── Header ──
+          h('div',{className:'apt-group-header'+(isOpen?' open':''),onClick:()=>togglePat(patientId)},
+            h('div',{className:'apt-group-av'},p?ini(p.name):patientId.slice(0,2).toUpperCase()),
+            h('div',{className:'apt-group-info'},
+              h('div',{className:'apt-group-name'},p?p.name:patientId),
+              h('div',{className:'apt-group-sub'},
+                h('span',null,'Último: '+fmt(last.date)+(last.weight?' · '+last.weight+' kg':'')),
+                p&&h('span',{className:'badge b-brand',style:{fontSize:10}},p.plan),
+                sessTotal>0&&h('span',null,sessDone+'/'+sessTotal+' consultas ('+pct+'%)')
+              )
+            ),
+            h('div',{className:'apt-group-right'},
+              h('span',{className:'apt-group-count'},gApts.length+' registro'+(gApts.length!==1?'s':'')),
+              h('span',{className:'apt-group-arrow'},'▾')
+            )
+          ),
+          // ── Expandido ──
+          isOpen&&h('div',{className:'apt-group-body'},
+            gApts.map(a=>h('div',{key:a.id,className:'apt-card'},
+              h('div',{className:'apt-card-top'},
+                h('span',{className:'hist-num',style:{borderRadius:8,width:26,height:26,fontSize:11}},cm[a.id]||'?'),
+                h('div',{style:{flex:1,minWidth:0}},
+                  h('div',{style:{fontWeight:600,fontSize:13,letterSpacing:'-.1px'}},fmt(a.date)+(a.weight?' · '+a.weight+' kg':'')),
+                  a.nextDate&&h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:1}},'Próxima: '+fmt(a.nextDate))
+                ),
+                h('div',{style:{display:'flex',gap:5,marginLeft:8}},
+                  h('button',{className:'btn btn-ghost btn-xs',onClick:e=>{e.stopPropagation();sm(a)}},'Editar'),
+                  h('button',{className:'btn btn-del btn-xs',onClick:e=>{e.stopPropagation();del(a.id)}},'×')
+                )
+              ),
+              (a.evaluation||a.conduct||a.notes)&&h('div',{className:'apt-card-body'},
+                h('div',{className:'apt-card-fields'},
+                  a.evaluation&&h('div',null,h('div',{className:'apt-fl'},'Avaliação'),h('div',{className:'apt-fv'},a.evaluation)),
+                  a.conduct&&h('div',null,h('div',{className:'apt-fl'},'Conduta'),h('div',{className:'apt-fv'},a.conduct)),
+                  a.notes&&h('div',null,h('div',{className:'apt-fl'},'Notas'),h('div',{className:'apt-fv'},a.notes))
+                )
+              )
+            ))
+          )
+        )
+      })
     ),
     modal&&h(Modal,{title:modal==='new'?'Novo atendimento':'Editar atendimento',onClose:()=>sm(null)},h(AptForm,{init:modal==='new'?null:modal,pats,onSave:save,onClose:()=>sm(null),saving}))
   )
@@ -1202,6 +1595,7 @@ function Financial({fin,pats,db}){
       ),
       mf&&h('button',{className:'btn btn-ghost btn-sm',onClick:()=>smf('')},'✕ Limpar filtro de mês')
     ),
+    // ── DESKTOP: tabela ──
     h('div',{className:'tw'},h('table',null,
       h('thead',null,h('tr',null,['Data','Paciente','Plano','Total','Pago','Forma','Status','Vencimento',''].map(x=>h('th',{key:x},x)))),
       h('tbody',null,filt.length===0?h('tr',null,h('td',{colSpan:9,style:{textAlign:'center',padding:'48px',color:'var(--ink3)'}},fin.length===0?'Nenhum lançamento registrado.':'Nenhum resultado.')):
@@ -1218,6 +1612,47 @@ function Financial({fin,pats,db}){
         )})
       )
     )),
+    // ── MOBILE: cards ──
+    h('div',{className:'fin-cards'},
+      filt.length===0?h('div',{style:{textAlign:'center',padding:'40px 20px',background:'var(--w)',border:'1px solid var(--ink6)',borderRadius:12,color:'var(--ink3)',fontSize:13}},fin.length===0?'Nenhum lançamento registrado.':'Nenhum resultado.'):
+      filt.map(f=>{
+        const p=pm[f.patientId];
+        const ov=f.status!=='PAGO'&&f.dueDate&&new Date(f.dueDate+'T00:00:00')<now;
+        return h('div',{key:f.id,className:'fin-card'+(ov?' overdue':'')},
+          h('div',{className:'fin-card-top'},
+            h('div',null,
+              h('div',{className:'fin-card-name'},p?p.name:f.patientId),
+              h('div',{className:'fin-card-id'},f.patientId)
+            ),
+            h('div',{style:{display:'flex',gap:5,alignItems:'center',flexShrink:0}},
+              p&&h('span',{className:'badge b-brand',style:{fontSize:10}},p.plan),
+              h(Bdg,{c:PYCLS[f.status]||'',l:f.status||'—'})
+            )
+          ),
+          h('div',{className:'fin-card-values'},
+            h('div',{className:'fin-card-val-box'},
+              h('div',{className:'fin-card-val-l'},'Total'),
+              h('div',{className:'fin-card-val-v',style:{color:'var(--ink2)'}},fmtM(f.totalValue))
+            ),
+            h('div',{className:'fin-card-val-box'},
+              h('div',{className:'fin-card-val-l'},'Pago'),
+              h('div',{className:'fin-card-val-v',style:{color:'var(--g4)'}},fmtM(f.paidValue))
+            )
+          ),
+          h('div',{className:'fin-card-meta'},
+            h('span',null,fmt(f.date)),
+            h('span',null,'·'),
+            h('span',null,f.payMethod||'—'),
+            f.dueDate&&h('span',null,'· Venc. '+fmt(f.dueDate)),
+            ov&&h('span',{style:{color:'var(--r4)',fontWeight:700}},'⚠ Vencido')
+          ),
+          h('div',{className:'fin-card-acts'},
+            h('button',{className:'btn btn-ghost btn-sm',onClick:()=>sm(f)},'Editar'),
+            h('button',{className:'btn btn-del btn-sm',onClick:()=>del(f.id)},'Excluir')
+          )
+        )
+      })
+    ),
     modal&&h(Modal,{title:modal==='new'?'Novo lançamento':'Editar lançamento',onClose:()=>sm(null)},h(FinForm,{init:modal==='new'?null:modal,pats,onSave:save,onClose:()=>sm(null),saving}))
   )
 }
@@ -1537,7 +1972,7 @@ function Settings({db,onLogout}){
 }
 
 // ─── HOME PAGE ───
-function Home({pats,apts,fin,profile,db,plans,onNav}){
+function Home({pats,apts,fin,profile,db,plans,onNav,checkins}){
   const[qModal,sqm]=useState(null);
   const[saving,ss]=useState(false);
   const now=today();
@@ -1587,6 +2022,7 @@ function Home({pats,apts,fin,profile,db,plans,onNav}){
         )
       )
     ),
+    h(CheckinDashCard,{pats,checkins:checkins||[],onNav}),
     h('div',{className:'grid2'},
       h('div',{className:'card'},
         h('div',{className:'card-head'},h('div',{className:'card-title'},'Alertas prioritários'),alerts.length>0&&h('span',{style:{fontSize:11,color:'var(--ink3)'}},alerts.length+' no total')),
@@ -1647,13 +2083,14 @@ function App(){
   },[]);
 
   const db=useData(session?.user?.id);
+  const{checkins,loading:cLoading,reload:reloadCheckins}=useCheckins(session?.user?.id);
   const alerts=screen==='app'&&!db.loading&&db.pats?db.pats.filter(p=>['ATRASADO','CONTATAR HOJE'].includes(calcStatus(p,db.apts||[]))).length:0;
 
   if(screen==='loading')return h('div',{style:{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--ink7)'}},h('div',{className:'loading'},h('div',{className:'spinner'}),h('div',{style:{fontSize:13,fontWeight:600}},'Carregando...')));
   if(screen==='setup')return h(SetupScreen,{onDone:()=>ss('auth')});
   if(screen==='auth')return h(AuthScreen,{onLogin:s=>{sse(s);ss('app')}});
 
-  const TABS=[['home','🏠','Início'],['pats','👥','Pacientes'],['apts','📅','Atendimentos'],['fin','💵','Financeiro'],['cfg','⚙','Configurações']];
+  const TABS=[['home','🏠','Início'],['pats','👥','Pacientes'],['apts','📅','Atendimentos'],['checkin','📲','Check-in'],['fin','💵','Financeiro'],['cfg','⚙','Configurações']];
   const prof=db.profile;
   const profName=prof&&prof.fullName?prof.fullName.trim().split(' ')[0]:'Profissional';
   const profInitials=prof&&prof.fullName?ini(prof.fullName):'P';
@@ -1703,9 +2140,10 @@ function App(){
       h('div',{className:'main-content'},
         h('div',{className:'main'},
           db.loading?h('div',{className:'loading'},h('div',{className:'spinner'}),h('div',{style:{fontSize:13,fontWeight:600}},'Carregando dados...')):
-          tab==='home'?h(Home,{pats:db.pats,apts:db.apts,fin:db.fin,profile:db.profile,db,plans:db.plans,onNav:st}):
+          tab==='home'?h(Home,{pats:db.pats,apts:db.apts,fin:db.fin,profile:db.profile,db,plans:db.plans,onNav:st,checkins}):
           tab==='pats'?h(Patients,{pats:db.pats,apts:db.apts,fin:db.fin,db,plans:db.plans}):
           tab==='apts'?h(Appointments,{apts:db.apts,pats:db.pats,db}):
+          tab==='checkin'?h(CheckinHub,{pats:db.pats,db,onNav:st}):
           tab==='fin'?h(Financial,{fin:db.fin,pats:db.pats,db}):
           h(Settings,{db,onLogout:async()=>{await SB.auth.signOut();clearCfg();ss('setup')}})
         )
@@ -1719,6 +2157,351 @@ function App(){
       ))
     )
   )
+}
+
+// ─── GAMIFICATION CONSTANTS ───
+const CHECKIN_URL = 'https://lapidadosclub-checkin.vercel.app/';
+const PENALTY_PTS = 10;
+const PENALTY_DAYS = 6;
+
+const RANKS = [
+  {
+    id:'bruto', min:0, max:199,
+    icon:'🪨', name:'Bruto', cls:'rank-bruto',
+    badge:'🪨',
+    msg:'Parabéns você entrou pro RANQUE do LAPIDADOS CLUB e você é do RANQUE: 🪨 BRUTO\n\nVocê entrou no jogo agora. E aqui não é sobre começar motivado… é sobre não voltar pro padrão de antes.\n\nTeu foco agora é simples: aparecer toda semana. O resto a gente ajusta.',
+    title:'Entrada no jogo'
+  },
+  {
+    id:'destravado', min:200, max:499,
+    icon:'🧠', name:'Destravado', cls:'rank-destravado',
+    badge:'🧠',
+    msg:'🔍 Parabéns você subiu de RANQUE! Agora você é do RANK 🧠 Destravado\n\nVocê saiu do automático. E isso já coloca você na frente da maioria.\n\nAgora começa a parte importante: entender o que funciona no seu corpo, moldar teu ambiente pra jogar contigo e criar consistência.',
+    title:'Subiu de rank!'
+  },
+  {
+    id:'afiado', min:500, max:999,
+    icon:'⚡', name:'Afiado', cls:'rank-afiado',
+    badge:'⚡',
+    msg:'Parabéns você subiu de RANQUE! Agora você é do RANK ⚡ AFIADO\n\nAgora começa a ficar diferente. Você não tá só tentando… você tá executando.\n\nConsistência cria resultado. E você já entrou nessa zona.',
+    title:'Subiu de rank!'
+  },
+  {
+    id:'imparavel', min:1000, max:1999,
+    icon:'🔥', name:'Imparável', cls:'rank-imparavel',
+    badge:'🔥',
+    msg:'Parabéns você subiu de RANQUE! Agora você é do RANK 🔥 IMPARÁVEL\n\nAqui já não é mais sobre "seguir plano". É sobre controle.\n\nSeu corpo começa a responder quando suas decisões param de oscilar.\n\nVocê tá nesse ponto agora.',
+    title:'Subiu de rank!'
+  },
+  {
+    id:'lapidado', min:2000, max:Infinity,
+    icon:'👑', name:'Lapidado', cls:'rank-lapidado',
+    badge:'👑',
+    msg:'👑 BOAS VINDAS, VOCÊ CHEGOU NO MAIOR RANK E SE TORNOU UM LAPIDADO!!!\n\nPouca gente sustenta o que você sustentou até aqui. E não é por falta de tentativa, é por falta de constância.\n\nVocê não chegou aqui por motivação. Chegou porque começou a agir diferente… mesmo quando não tava com vontade.\n\nIsso é comportamento. Isso é padrão. Isso é o que separa quem tenta de quem constrói.\n\nAgora o jogo muda. Não é mais sobre chegar, é sobre se manter nesse nível.',
+    title:'LAPIDADO — Topo absoluto'
+  },
+];
+
+const WEEK_TIERS = [
+  {min:90, name:'🔥 LAPIDADO!',   color:'#FF5C1A', bg:'rgba(255,92,26,.12)'},
+  {min:75, name:'💪 NO CAMINHO',  color:'#22c55e', bg:'rgba(34,197,94,.1)'},
+  {min:55, name:'⚡ PROGREDINDO', color:'#3b82f6', bg:'rgba(59,130,246,.1)'},
+  {min:40, name:'🎯 FOCO TOTAL',  color:'#f59e0b', bg:'rgba(245,158,11,.1)'},
+  {min:0,  name:'🚨 ATENÇÃO',    color:'#ef4444', bg:'rgba(239,68,68,.1)'},
+];
+
+function getRank(totalPts){return RANKS.slice().reverse().find(r=>totalPts>=r.min)||RANKS[0]}
+function getWeekTier(score){return WEEK_TIERS.find(t=>score>=t.min)||WEEK_TIERS[4]}
+function getWeekNum(){
+  const now=new Date();const jan1=new Date(now.getFullYear(),0,1);
+  return{week:Math.ceil(((now-jan1)/86400000+jan1.getDay()+1)/7),year:now.getFullYear()};
+}
+function rankProgress(pts){
+  const r=getRank(pts);
+  if(r.max===Infinity)return{pct:100,next:0,label:'Rank máximo atingido'};
+  const range=r.max-r.min+1;
+  const progress=pts-r.min;
+  const pct=Math.min(100,Math.round(progress/range*100));
+  const next=r.max+1-pts;
+  const nextRank=getRank(r.max+1);
+  return{pct,next,label:next+'pts para '+nextRank.name};
+}
+
+// ─── CHECKIN DATA HOOK ───
+function useCheckins(userId){
+  const[checkins,sc]=useState([]);
+  const[invites,si]=useState([]);
+  const[loading,sl]=useState(false);
+
+  const load=useCallback(async()=>{
+    if(!SB||!userId)return;
+    sl(true);
+    const[cr,ir]=await Promise.all([
+      SB.from('checkins').select('*').order('created_at',{ascending:false}).limit(2000),
+      SB.from('checkin_invites').select('*').eq('user_id',userId).order('sent_at',{ascending:false}).limit(500)
+    ]);
+    sc(cr.data||[]);
+    si(ir.data||[]);
+    sl(false);
+  },[userId]);
+
+  useEffect(()=>{load();},[load]);
+
+  return{checkins,invites,loading,reload:load,
+    async logInvite(patientId,weekNumber,year){
+      await SB.from('checkin_invites').upsert(
+        {user_id:userId,patient_id:patientId,week_number:weekNumber,year,sent_at:new Date().toISOString()},
+        {onConflict:'patient_id,week_number,year'}
+      );
+      await load();
+    }
+  };
+}
+
+// ─── SCORE CALC ───
+function calcPatientTotal(allCheckins,invites){
+  const baseScore=allCheckins.reduce((s,c)=>s+(c.lapidados_score||0),0);
+  const now=new Date();
+  const penaltyCount=invites.filter(inv=>{
+    const sentAt=new Date(inv.sent_at);
+    const daysSince=Math.floor((now-sentAt)/86400000);
+    if(daysSince<PENALTY_DAYS)return false;
+    const hasCheckin=allCheckins.some(c=>c.week_number===inv.week_number&&c.year===inv.year);
+    return !hasCheckin;
+  }).length;
+  return Math.max(0,baseScore-(penaltyCount*PENALTY_PTS));
+}
+
+// ─── RANK UP OVERLAY ───
+function RankUpOverlay({rank,onClose}){
+  const[show,setShow]=useState(true);
+  useEffect(()=>{const t=setTimeout(()=>setShow(false),12000);return()=>clearTimeout(t);},[]);
+  if(!show)return null;
+  const lines=rank.msg.split('\n').filter(Boolean);
+  return h('div',{className:'rankup-overlay',onClick:onClose},
+    h('div',{className:'rankup-card',onClick:e=>e.stopPropagation()},
+      h('div',{className:'rankup-particles'},'🎊 🎉 🏆'),
+      h('span',{className:'rankup-emoji'},rank.badge),
+      h('div',{className:'rankup-title'},rank.title),
+      h('div',{className:'rankup-name',style:{color:{bruto:'#9ca3af',destravado:'#3b82f6',afiado:'#7c3aed',imparavel:'#f97316',lapidado:'#d97706'}[rank.id]}},
+        rank.icon+' '+rank.name.toUpperCase()
+      ),
+      h('div',{className:'rankup-msg'},lines.map((l,i)=>h('p',{key:i,style:{marginBottom:8}},l))),
+      h('button',{className:'btn btn-primary',style:{width:'100%',justifyContent:'center'},onClick:onClose},'🔥 Bora!')
+    )
+  );
+}
+
+// ─── SCORE BREAKDOWN ───
+function ScoreBreakdown({c}){
+  const rows=[
+    {icon:'🥗',lbl:'Dieta',pts:Math.round((c.diet_score/10)*30),max:30},
+    {icon:'🏋️',lbl:'Treino',pts:Math.round((c.training_score/10)*25),max:25},
+    {icon:'⚡',lbl:'Energia',pts:Math.round((c.energy_level/10)*20),max:20},
+    {icon:'🏃',lbl:'Cardio',pts:c.cardio_done?10:0,max:10},
+    {icon:'🍽️',lbl:'Refeições',pts:Math.max(0,10-c.off_plan_meals*2),max:10},
+    {icon:'😋',lbl:'Fome ctrl',pts:Math.round(((10-c.hunger_level)/10)*5),max:5},
+  ];
+  return h('div',{style:{marginTop:12}},
+    rows.map(r=>h('div',{key:r.lbl,style:{display:'flex',alignItems:'center',gap:8,marginBottom:5}},
+      h('span',{style:{fontSize:12,width:16}},r.icon),
+      h('span',{style:{fontSize:11,color:'var(--ink3)',width:58,flexShrink:0}},r.lbl),
+      h('div',{style:{flex:1,height:5,background:'var(--ink6)',borderRadius:3,overflow:'hidden'}},
+        h('div',{style:{height:'100%',width:(r.pts/r.max*100)+'%',background:'var(--or4)',borderRadius:3}})
+      ),
+      h('span',{style:{fontSize:10,fontWeight:700,color:'var(--ink2)',width:32,textAlign:'right'}},r.pts+'/'+r.max)
+    ))
+  );
+}
+
+// ─── PATIENT CHECKIN CARD ───
+function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}){
+  const[expanded,setExp]=useState(false);
+  const hasThisWeek=!!weekCheckin;
+  const weekTier=weekCheckin?getWeekTier(weekCheckin.lapidados_score||0):null;
+  const rank=getRank(totalPts);
+  const prog=rankProgress(totalPts);
+  const{week,year}=getWeekNum();
+  const thisWeekInvite=patInvites.find(i=>i.week_number===week&&i.year===year);
+  const streak=useMemo(()=>{
+    if(!allCheckins.length)return 0;
+    let s=1;
+    for(let i=0;i<allCheckins.length-1;i++){
+      const a=allCheckins[i],b=allCheckins[i+1];
+      if(a.week_number-b.week_number===1)s++;else break;
+    }
+    return s;
+  },[allCheckins]);
+
+  return h('div',{className:'ac-pat-card'},
+    h('div',{className:'ac-pat-top'},
+      h('div',{className:'ac-pat-av'},ini(p.name)),
+      h('div',{style:{flex:1,minWidth:0}},
+        h('div',{className:'ac-pat-name'},p.name),
+        h('div',{style:{display:'flex',gap:6,marginTop:4,flexWrap:'wrap',alignItems:'center'}},
+          h('span',{className:'rank-badge '+rank.cls},rank.icon+' '+rank.name),
+          streak>1&&h('span',{style:{fontSize:10,color:'#f59e0b',fontWeight:700}},'🔥 '+streak+'sem'),
+          allCheckins.length>0&&h('span',{style:{fontSize:10,color:'var(--ink3)'}},allCheckins.length+' check-ins')
+        )
+      ),
+      h('div',{className:'ac-pat-right',style:{textAlign:'right'}},
+        h('div',{style:{fontSize:17,fontWeight:800,color:'var(--or4)',letterSpacing:'-.4px'}},totalPts+'pts'),
+        hasThisWeek
+          ?h('div',{style:{fontSize:11,fontWeight:700,color:weekTier.color}},weekCheckin.lapidados_score+'pts semana')
+          :thisWeekInvite
+            ?h('div',{style:{fontSize:10,color:'var(--r4)',fontWeight:600,background:'var(--r1)',padding:'2px 7px',borderRadius:8,marginTop:2}},'⏳ Pendente')
+            :h('div',{style:{fontSize:10,color:'var(--ink3)',marginTop:2}},'Não enviado')
+      )
+    ),
+    h('div',{className:'patient-rank-bar'},
+      h('div',{className:'prb-pts'},totalPts),
+      h('div',{className:'prb-info'},
+        h('div',{style:{fontSize:11,fontWeight:600,color:'var(--ink2)'}},rank.icon+' '+rank.name),
+        h('div',{className:'prb-next'},prog.label),
+        h('div',{className:'prb-bar'},h('div',{className:'prb-fill',style:{width:prog.pct+'%'}}))
+      )
+    ),
+    hasThisWeek&&h('div',{
+      style:{background:weekTier.bg,border:'1px solid '+weekTier.color+'44',borderRadius:9,padding:'8px 12px',marginBottom:10,display:'flex',alignItems:'center',gap:8}
+    },
+      h('span',{style:{fontSize:12,fontWeight:800,color:weekTier.color}},weekTier.name),
+      h('span',{style:{fontSize:11,color:'var(--ink3)',flex:1}},'Score: '+weekCheckin.lapidados_score+'/100'),
+      h('button',{className:'btn btn-ghost btn-xs',onClick:()=>setExp(e=>!e)},expanded?'▲':'Ver ▼')
+    ),
+    expanded&&weekCheckin&&h('div',{style:{marginBottom:10}},
+      h(ScoreBreakdown,{c:weekCheckin}),
+      h('div',{style:{marginTop:10,display:'flex',flexDirection:'column',gap:6}},
+        weekCheckin.wins&&h('div',{style:{background:'rgba(34,197,94,.08)',borderRadius:8,padding:'8px 10px'}},
+          h('div',{style:{fontSize:9,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--g4)',fontWeight:700,marginBottom:3}},'🏆 Vitórias'),
+          h('div',{style:{fontSize:12,color:'var(--ink2)'}},weekCheckin.wins)
+        ),
+        weekCheckin.main_difficulty&&h('div',{style:{background:'rgba(239,68,68,.08)',borderRadius:8,padding:'8px 10px'}},
+          h('div',{style:{fontSize:9,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--r4)',fontWeight:700,marginBottom:3}},'⚠ Dificuldade'),
+          h('div',{style:{fontSize:12,color:'var(--ink2)'}},weekCheckin.main_difficulty)
+        ),
+        weekCheckin.needs_help&&h('div',{style:{background:'rgba(232,93,4,.08)',border:'1px solid rgba(232,93,4,.2)',borderRadius:8,padding:'8px 10px'}},
+          h('div',{style:{fontSize:9,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--or4)',fontWeight:700,marginBottom:3}},'🙋 Precisa de ajuda'),
+          h('div',{style:{fontSize:12,color:'var(--ink2)',fontWeight:500}},weekCheckin.needs_help)
+        )
+      )
+    ),
+    expanded&&allCheckins.length>0&&h('div',{style:{marginBottom:10}},
+      h('div',{style:{fontSize:10,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--ink3)',fontWeight:700,marginBottom:6}},'Histórico de semanas'),
+      allCheckins.slice(0,8).map(c=>{const t=getWeekTier(c.lapidados_score||0);return h('div',{key:c.id,style:{display:'flex',alignItems:'center',gap:8,padding:'5px 9px',background:'var(--ink7)',borderRadius:7,marginBottom:3}},
+        h('span',{style:{fontSize:10,color:'var(--ink3)',flex:1}},'Sem '+c.week_number+'/'+c.year),
+        h('span',{style:{fontWeight:700,fontSize:12,color:t.color}},c.lapidados_score+'pts'),
+        h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600}},t.name)
+      )})
+    ),
+    h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
+      p.phone&&h('button',{
+        className:'btn btn-primary btn-sm',style:{flex:1,justifyContent:'center'},
+        onClick:()=>onSendWA(p)
+      },'📲 Enviar Check-in'),
+      !p.phone&&h('span',{style:{flex:1,fontSize:11,color:'var(--ink3)',display:'flex',alignItems:'center'}},'Cadastre o WhatsApp para enviar'),
+      allCheckins.length>0&&h('button',{
+        className:'btn btn-ghost btn-sm',style:{flexShrink:0},
+        onClick:()=>setExp(e=>!e)
+      },expanded?'▲':'📊')
+    )
+  );
+}
+
+// ─── MAIN CHECKIN HUB ───
+function CheckinHub({pats,db}){
+  const{checkins,invites,loading,reload,logInvite}=useCheckins(db._userId);
+  const[filter,setFilter]=useState('all');
+  const[rankUp,setRankUp]=useState(null);
+  const{week,year}=getWeekNum();
+
+  const checkinByPat=useMemo(()=>{
+    const m={};checkins.forEach(c=>{if(!m[c.patient_id])m[c.patient_id]=[];m[c.patient_id].push(c);});return m;
+  },[checkins]);
+  const weekCheckinByPat=useMemo(()=>{
+    const m={};checkins.forEach(c=>{if(c.week_number===week&&c.year===year)m[c.patient_id]=c;});return m;
+  },[checkins,week,year]);
+  const invitesByPat=useMemo(()=>{
+    const m={};invites.forEach(i=>{if(!m[i.patient_id])m[i.patient_id]=[];m[i.patient_id].push(i);});return m;
+  },[invites]);
+
+  const enriched=pats.map(p=>{
+    const all=checkinByPat[p.id]||[];
+    const patInvites=invitesByPat[p.id]||[];
+    const totalPts=calcPatientTotal(all,patInvites);
+    return{...p,weekCheckin:weekCheckinByPat[p.id]||null,allCheckins:all,patInvites,totalPts,hasThisWeek:!!weekCheckinByPat[p.id]};
+  }).sort((a,b)=>b.totalPts-a.totalPts);
+
+  const pending=enriched.filter(p=>!p.hasThisWeek);
+  const done=enriched.filter(p=>p.hasThisWeek).sort((a,b)=>(b.weekCheckin?.lapidados_score||0)-(a.weekCheckin?.lapidados_score||0));
+  const displayed=filter==='pending'?pending:filter==='done'?done:enriched;
+
+  const totalDone=done.length;
+  const avgScore=done.length?Math.round(done.reduce((s,p)=>s+(p.weekCheckin?.lapidados_score||0),0)/done.length):0;
+
+  const handleSendWA=async(p)=>{
+    const profName=db.profile?.fullName?.split(' ')[0]||'Leo';
+    const link=CHECKIN_URL+'?patient_id='+encodeURIComponent(p.id)+'&name='+encodeURIComponent(p.name.split(' ')[0]);
+    const msg='Oi '+p.name.split(' ')[0]+'! 💪 Hora do seu Check-in semanal do Lapidados Club!\n\nResponde rapidinho e veja sua pontuação e RANK na gamificação 🎮🔥\n\n'+link;
+    const prevTotal=p.totalPts;
+    await logInvite(p.id,week,year).catch(()=>{});
+    const phone='55'+p.phone.replace(/\D/g,'');
+    window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank');
+  };
+
+  return h('div',null,
+    rankUp&&h(RankUpOverlay,{rank:rankUp,onClose:()=>setRankUp(null)}),
+    h('div',{className:'pg-head'},
+      h('div',null,
+        h('div',{className:'pg-title'},'Check-in · Lapidados'),
+        h('div',{className:'pg-sub'},'Semana '+week+' · '+year+' · '+totalDone+'/'+pats.length+' respondidos')
+      ),
+      h('button',{className:'btn btn-ghost btn-sm',onClick:reload},'↻ Atualizar')
+    ),
+    h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:10,marginBottom:20}},
+      h('div',{className:'kpi or'},h('div',{className:'kpi-icon'},'📲'),h('div',{className:'kpi-v'},pats.length),h('div',{className:'kpi-l'},'Total alunos')),
+      h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'✅'),h('div',{className:'kpi-v'},totalDone),h('div',{className:'kpi-l'},'Responderam')),
+      h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'⏳'),h('div',{className:'kpi-v'},pending.length),h('div',{className:'kpi-l'},'Pendentes')),
+      h('div',{className:'kpi bl'},h('div',{className:'kpi-icon'},'📊'),h('div',{className:'kpi-v'},avgScore||'—'),h('div',{className:'kpi-l'},'Score médio'))
+    ),
+    h('div',{style:{display:'flex',gap:6,marginBottom:16,flexWrap:'wrap'}},
+      [['all','Todos'],['pending','Pendentes ⏳'],['done','Responderam ✅']].map(([v,l])=>
+        h('button',{key:v,className:'btn '+(filter===v?'btn-primary':'btn-ghost')+' btn-sm',onClick:()=>setFilter(v)},l)
+      )
+    ),
+    loading?h('div',{style:{textAlign:'center',padding:'40px',color:'var(--ink3)'}},'Carregando...'):
+    displayed.length===0?h('div',{className:'empty'},h('div',{className:'empty-icon'},'📋'),h('div',{className:'empty-tt'},'Nenhum resultado')):
+    h('div',{style:{border:'1px solid var(--ink6)',borderRadius:'var(--radius-lg)',overflow:'hidden'}},
+      displayed.map(p=>h(PatCheckinCard,{
+        key:p.id,p,
+        weekCheckin:p.weekCheckin,
+        allCheckins:p.allCheckins,
+        patInvites:p.patInvites,
+        totalPts:p.totalPts,
+        onSendWA:handleSendWA
+      }))
+    )
+  );
+}
+// ─── CHECKIN DASH CARD ───
+function CheckinDashCard({pats,checkins,onNav}){
+  const{week,year}=getWeekNum();
+  const weekDone=new Set(checkins.filter(c=>c.week_number===week&&c.year===year).map(c=>c.patient_id));
+  const done=weekDone.size;
+  const pending=Math.max(0,pats.length-done);
+  const avgScore=done>0?Math.round(checkins.filter(c=>c.week_number===week&&c.year===year).reduce((s,c)=>s+(c.lapidados_score||0),0)/done):0;
+  return h('div',{className:'ac-dash-card'},
+    h('div',{className:'ac-dash-title'},'📲 Check-in · Semana atual'),
+    h('div',{className:'ac-dash-stats'},
+      h('div',{className:'ac-dash-stat hot'},h('div',{className:'ac-dash-num'},pending),h('div',{className:'ac-dash-lbl'},'Pendentes')),
+      h('div',{className:'ac-dash-stat cool'},h('div',{className:'ac-dash-num'},done),h('div',{className:'ac-dash-lbl'},'Responderam')),
+      h('div',{className:'ac-dash-stat warm'},h('div',{className:'ac-dash-num'},avgScore||'—'),h('div',{className:'ac-dash-lbl'},'Score médio'))
+    ),
+    h('button',{
+      className:'btn btn-primary',
+      style:{width:'100%',justifyContent:'center',fontSize:13},
+      onClick:()=>onNav('checkin')
+    },'Ver Check-in completo →')
+  );
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));
