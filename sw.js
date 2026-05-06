@@ -4,6 +4,8 @@ const CACHE = 'lapidados-v1';
 const STATIC = [
   '/',
   '/index.html',
+  '/manifest.json',
+  '/assets/logo_lapidados_control.svg',
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js',
   'https://unpkg.com/react@18/umd/react.production.min.js',
