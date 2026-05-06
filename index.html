@@ -967,7 +967,18 @@ function PatForm({init,pats,plans,onSave,onClose,saving}){
   const curPlan=plans&&plans.length>0?plans.find(p=>p.name===f.plan):null;
   const planInfo=curPlan?{days:curPlan.days,sessions:curPlan.sessions}:(PLANS[f.plan]||null);
   const ed=f.startDate&&planInfo?endDate(f.startDate,f.plan):null;
-  const go=()=>{if(!f.name.trim()||!f.plan||!f.startDate)return alert('Nome, plano e data de início são obrigatórios.');onSave(f)};
+  const[apt,sa]=useState({date:f.startDate||'',weight:'',evaluation:'',conduct:'',nextDate:''});
+  const[fin,sfin]=useState({totalValue:'',paidValue:'',payMethod:'PIX'});
+  const[addApt,setAddApt]=useState(false);
+  const[addFin,setAddFin]=useState(false);
+  const isNew=!init;
+  const go=()=>{
+    if(!f.name.trim()||!f.plan||!f.startDate)return alert('Nome, plano e data de início são obrigatórios.');
+    const payload={...f};
+    if(isNew&&addApt&&apt.date)payload._apt={...apt};
+    if(isNew&&addFin&&fin.totalValue){const pv=parseFloat(fin.paidValue)||0,tv=parseFloat(fin.totalValue)||0;payload._fin={...fin,status:pv<=0?'PENDENTE':pv>=tv?'PAGO':'PARCIAL'};}
+    onSave(payload);
+  };
   return h('div',null,
     h('div',{className:'fg'},
       h('div',{className:'fl fgf'},h('label',{className:'flb'},'Nome completo'),h('input',{className:'fi',value:f.name,onChange:s('name'),placeholder:'Ex: Ana Carolina Souza',autoFocus:true})),
@@ -981,6 +992,30 @@ function PatForm({init,pats,plans,onSave,onClose,saving}){
       h('div',{className:'fl'},h('label',{className:'flb'},'Término (automático)'),h('input',{className:'fi',readOnly:true,value:ed?fmt(ed):'Preencha acima'})),
       h('div',{className:'fl'},h('label',{className:'flb'},'Consultas no plano'),h('input',{className:'fi',readOnly:true,value:planInfo?planInfo.sessions+' consultas':'—'})),
       h('div',{className:'fl fgf'},h('label',{className:'flb'},'Observações'),h('textarea',{className:'fi',rows:2,value:f.notes||'',onChange:s('notes'),placeholder:'Objetivos, alergias...',style:{resize:'vertical'}}))
+    ),
+    isNew&&h('div',{style:{marginTop:16}},
+      h('div',{style:{fontSize:11,fontWeight:700,color:'var(--ink3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}},'Registros opcionais'),
+      h('div',{style:{display:'flex',gap:8,marginBottom:8}},
+        h('button',{className:'btn '+(addApt?'btn-primary':'btn-ghost')+' btn-sm',style:{flex:1,justifyContent:'center'},onClick:()=>setAddApt(a=>!a)},(addApt?'✓ ':'+ ')+'1º Atendimento'),
+        h('button',{className:'btn '+(addFin?'btn-primary':'btn-ghost')+' btn-sm',style:{flex:1,justifyContent:'center'},onClick:()=>setAddFin(a=>!a)},(addFin?'✓ ':'+ ')+'Financeiro')
+      ),
+      addApt&&h('div',{style:{background:'var(--ink7)',border:'1px solid var(--ink6)',borderRadius:10,padding:'12px 14px',marginBottom:8}},
+        h('div',{style:{fontSize:11,fontWeight:700,color:'var(--ink2)',marginBottom:10}},'📅 Primeiro atendimento'),
+        h('div',{className:'fg'},
+          h('div',{className:'fl'},h('label',{className:'flb'},'Data'),h('input',{type:'date',className:'fi',value:apt.date,onChange:e=>sa(a=>({...a,date:e.target.value}))})),
+          h('div',{className:'fl'},h('label',{className:'flb'},'Peso (kg)'),h('input',{type:'number',step:'0.1',className:'fi',value:apt.weight,onChange:e=>sa(a=>({...a,weight:e.target.value})),placeholder:'75.5'})),
+          h('div',{className:'fl fgf'},h('label',{className:'flb'},'Avaliação'),h('textarea',{className:'fi',rows:2,value:apt.evaluation,onChange:e=>sa(a=>({...a,evaluation:e.target.value})),placeholder:'Observações clínicas...',style:{resize:'vertical'}})),
+          h('div',{className:'fl fgf'},h('label',{className:'flb'},'Conduta'),h('textarea',{className:'fi',rows:2,value:apt.conduct,onChange:e=>sa(a=>({...a,conduct:e.target.value})),placeholder:'Plano alimentar...',style:{resize:'vertical'}}))
+        )
+      ),
+      addFin&&h('div',{style:{background:'var(--ink7)',border:'1px solid var(--ink6)',borderRadius:10,padding:'12px 14px'}},
+        h('div',{style:{fontSize:11,fontWeight:700,color:'var(--ink2)',marginBottom:10}},'💵 Financeiro'),
+        h('div',{className:'fg'},
+          h('div',{className:'fl'},h('label',{className:'flb'},'Valor total (R$)'),h('input',{type:'number',step:'0.01',className:'fi',value:fin.totalValue,onChange:e=>sfin(x=>({...x,totalValue:e.target.value})),placeholder:'0,00'})),
+          h('div',{className:'fl'},h('label',{className:'flb'},'Valor pago (R$)'),h('input',{type:'number',step:'0.01',className:'fi',value:fin.paidValue,onChange:e=>sfin(x=>({...x,paidValue:e.target.value})),placeholder:'0,00'})),
+          h('div',{className:'fl fgf'},h('label',{className:'flb'},'Forma de pagamento'),h('select',{className:'fi',value:fin.payMethod,onChange:e=>sfin(x=>({...x,payMethod:e.target.value}))},['PIX','Cartão de Crédito','Cartão de Débito','Dinheiro','Transferência','Boleto'].map(m=>h('option',{key:m,value:m},m))))
+        )
+      )
     ),
     h('div',{className:'mdl-ft'},h('button',{className:'btn btn-ghost',onClick:onClose},'Cancelar'),h('button',{className:'btn btn-primary',onClick:go,disabled:saving},saving?'Salvando...':'Salvar paciente'))
   )
@@ -1069,7 +1104,7 @@ function Profile({pat,apts,fin,onClose,onNewApt,onEditApt,onDelApt}){
       myApts.length===0?h('div',{className:'empty'},h('div',{className:'empty-icon'},'📋'),h('div',{className:'empty-tt'},'Sem consultas'),h('p',null,'Registre o primeiro atendimento.')):
       myApts.map(a=>h('div',{key:a.id,className:'hist-it'},
         h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}},
-          h('div',{className:'hist-date'},h('span',{className:'hist-num'},aptNums[a.id]),fmt(a.date)+(a.weight?' · '+a.weight+' kg':'')),
+          h('div',{className:'hist-date'},h('span',{className:'hist-num',title:'Atendimento '+aptNums[a.id]},'Atend. '+aptNums[a.id]),fmt(a.date)+(a.weight?' · '+a.weight+' kg':'')),
           h('div',{style:{display:'flex',gap:5}},h('button',{className:'btn btn-ghost btn-xs',onClick:()=>onEditApt(a)},'Editar'),h('button',{className:'btn btn-del btn-xs',onClick:()=>onDelApt(a.id)},'×'))
         ),
         (a.evaluation||a.conduct)&&h('div',{className:'hist-body'},
@@ -2101,7 +2136,7 @@ function App(){
         h('div',{className:'topbar-row'},
           h('div',{className:'logo',onClick:()=>st('home')},
             h('div',{className:'logo-mark'},
-              h('img',{src:'assets/3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
+              h('img',{src:'3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
             )
           ),
           h('div',{className:'topbar-right'},
@@ -2125,8 +2160,8 @@ function App(){
         h('div',{className:'snav-header'},
           h('button',{className:'snav-toggle',onClick:()=>sso(o=>!o),title:sideOpen?'Recolher':'Expandir'},
             sideOpen?
-              h('img',{src:'assets/seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
-              h('img',{src:'assets/seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
+              h('img',{src:'seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
+              h('img',{src:'seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
           )
         ),
         h('div',{className:'snav-list'},
@@ -2295,12 +2330,14 @@ function RankUpOverlay({rank,onClose}){
 // ─── SCORE BREAKDOWN ───
 function ScoreBreakdown({c}){
   const rows=[
-    {icon:'🥗',lbl:'Dieta',pts:Math.round((c.diet_score/10)*30),max:30},
-    {icon:'🏋️',lbl:'Treino',pts:Math.round((c.training_score/10)*25),max:25},
-    {icon:'⚡',lbl:'Energia',pts:Math.round((c.energy_level/10)*20),max:20},
-    {icon:'🏃',lbl:'Cardio',pts:c.cardio_done?10:0,max:10},
-    {icon:'🍽️',lbl:'Refeições',pts:Math.max(0,10-c.off_plan_meals*2),max:10},
-    {icon:'😋',lbl:'Fome ctrl',pts:Math.round(((10-c.hunger_level)/10)*5),max:5},
+    {icon:'🥗',lbl:'Dieta',pts:Math.round(((c.diet_score||0)/10)*25),max:25},
+    {icon:'🏋️',lbl:'Treino',pts:Math.round(((c.training_score||0)/10)*20),max:20},
+    {icon:'⚡',lbl:'Energia',pts:Math.round(((c.energy_level||0)/10)*15),max:15},
+    {icon:'🏃',lbl:'Cardio',pts:c.cardio_score??((c.cardio_done)?10:0),max:10},
+    {icon:'🍽️',lbl:'Aderência',pts:Math.max(0,10-(c.off_plan_meals||0)*2),max:10},
+    {icon:'😴',lbl:'Sono',pts:Math.round(((c.sleep_score||0)/10)*10),max:10},
+    {icon:'🫁',lbl:'Intestino',pts:c.bowel_score||0,max:5},
+    {icon:'😋',lbl:'Saciedade',pts:Math.round(((10-(c.hunger_level||5))/10)*5),max:5},
   ];
   return h('div',{style:{marginTop:12}},
     rows.map(r=>h('div',{key:r.lbl,style:{display:'flex',alignItems:'center',gap:8,marginBottom:5}},
@@ -2387,17 +2424,82 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
     ),
     expanded&&allCheckins.length>0&&h('div',{style:{marginBottom:10}},
       h('div',{style:{fontSize:10,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--ink3)',fontWeight:700,marginBottom:6}},'Histórico de semanas'),
-      allCheckins.slice(0,8).map(c=>{const t=getWeekTier(c.lapidados_score||0);return h('div',{key:c.id,style:{display:'flex',alignItems:'center',gap:8,padding:'5px 9px',background:'var(--ink7)',borderRadius:7,marginBottom:3}},
-        h('span',{style:{fontSize:10,color:'var(--ink3)',flex:1}},'Sem '+c.week_number+'/'+c.year),
-        h('span',{style:{fontWeight:700,fontSize:12,color:t.color}},c.lapidados_score+'pts'),
-        h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600}},t.name)
-      )})
+      allCheckins.slice(0,8).map(c=>{
+        const t=getWeekTier(c.lapidados_score||0);
+        const[hExp,setHExp]=useState(false);
+        const rows=[
+          {icon:'🥗',lbl:'Dieta',pts:Math.round((c.diet_score/10)*30),max:30},
+          {icon:'🏋️',lbl:'Treino',pts:Math.round((c.training_score/10)*25),max:25},
+          {icon:'⚡',lbl:'Energia',pts:Math.round((c.energy_level/10)*20),max:20},
+          {icon:'🏃',lbl:'Cardio',pts:c.cardio_done?10:0,max:10},
+          {icon:'🍽️',lbl:'Aderência',pts:Math.max(0,10-(c.off_plan_meals||0)*2),max:10},
+          {icon:'😋',lbl:'Saciedade',pts:Math.round(((10-(c.hunger_level||5))/10)*5),max:5},
+        ];
+        return h('div',{key:c.id,style:{marginBottom:6,border:'1px solid var(--ink6)',borderRadius:10,overflow:'hidden'}},
+          h('div',{
+            style:{display:'flex',alignItems:'center',gap:8,padding:'8px 12px',background:'var(--ink7)',cursor:'pointer'},
+            onClick:()=>setHExp(e=>!e)
+          },
+            h('span',{style:{fontSize:11,color:'var(--ink3)',flex:1}},'Sem '+c.week_number+'/'+c.year),
+            h('span',{style:{fontWeight:700,fontSize:13,color:t.color}},c.lapidados_score+'pts'),
+            h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600,marginLeft:4}},t.name),
+            h('span',{style:{fontSize:10,color:'var(--ink3)',marginLeft:6}},hExp?'▲':'▼')
+          ),
+          hExp&&h('div',{style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
+            h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6,marginBottom:8}},
+              rows.map(r=>h('div',{key:r.lbl,style:{display:'flex',alignItems:'center',gap:6}},
+                h('span',{style:{fontSize:11,width:14}},r.icon),
+                h('span',{style:{fontSize:10,color:'var(--ink3)',width:52,flexShrink:0}},r.lbl),
+                h('div',{style:{flex:1,height:4,background:'var(--ink6)',borderRadius:2,overflow:'hidden'}},
+                  h('div',{style:{height:'100%',width:(r.pts/r.max*100)+'%',background:'var(--or4)',borderRadius:2}})
+                ),
+                h('span',{style:{fontSize:9,fontWeight:700,color:'var(--ink2)',width:28,textAlign:'right'}},r.pts+'/'+r.max)
+              ))
+            ),
+            (c.wins||c.main_difficulty||c.needs_help)&&h('div',{style:{display:'flex',flexDirection:'column',gap:5,marginBottom:8}},
+              c.wins&&h('div',{style:{background:'rgba(34,197,94,.08)',borderRadius:7,padding:'6px 9px'}},
+                h('div',{style:{fontSize:9,textTransform:'uppercase',letterSpacing:'.4px',color:'var(--g4)',fontWeight:700,marginBottom:2}},'🏆 Vitórias'),
+                h('div',{style:{fontSize:11,color:'var(--ink2)'}},c.wins)
+              ),
+              c.main_difficulty&&h('div',{style:{background:'rgba(239,68,68,.08)',borderRadius:7,padding:'6px 9px'}},
+                h('div',{style:{fontSize:9,textTransform:'uppercase',letterSpacing:'.4px',color:'var(--r4)',fontWeight:700,marginBottom:2}},'⚠ Dificuldade'),
+                h('div',{style:{fontSize:11,color:'var(--ink2)'}},c.main_difficulty)
+              ),
+              c.needs_help&&c.needs_help.toLowerCase()!=='não'&&c.needs_help.toLowerCase()!=='nao'&&h('div',{style:{background:'rgba(232,93,4,.08)',border:'1px solid rgba(232,93,4,.2)',borderRadius:7,padding:'6px 9px'}},
+                h('div',{style:{fontSize:9,textTransform:'uppercase',letterSpacing:'.4px',color:'var(--or4)',fontWeight:700,marginBottom:2}},'🙋 Precisa de ajuda'),
+                h('div',{style:{fontSize:11,color:'var(--ink2)',fontWeight:500}},c.needs_help)
+              )
+            ),
+            h('div',{style:{display:'flex',gap:6,marginTop:4}},
+              p.phone&&h('a',{
+                href:'https://wa.me/55'+p.phone.replace(/\D/g,'')+'?text='+encodeURIComponent('Oi '+p.name.split(' ')[0]+'! 💪 Vi seus resultados da semana '+c.week_number+' e quero conversar sobre eles!'),
+                target:'_blank',
+                style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'8px 12px',background:'#25D366',color:'#fff',borderRadius:8,fontSize:12,fontWeight:700,textDecoration:'none'}
+              },'💬 WhatsApp — Semana '+c.week_number),
+              h('button',{
+                className:'btn btn-del btn-xs',
+                style:{flexShrink:0},
+                onClick:async(e)=>{
+                  e.stopPropagation();
+                  if(!confirm('Excluir check-in da semana '+c.week_number+'?'))return;
+                  if(!confirm('Confirmação: apagar permanentemente o check-in da semana '+c.week_number+' de '+p.name+'?'))return;
+                  try{
+                    const{error}=await SB.from('checkins').delete().eq('id',c.id);
+                    if(error)throw error;
+                    toast('Check-in removido.');
+                    reload();
+                  }catch(ex){alert('Erro: '+ex.message);}
+                }
+              },'🗑️')
+            )
+          )
+        )
+      })
     ),
     h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
-      p.phone&&h('button',{
-        className:'btn btn-primary btn-sm',style:{flex:1,justifyContent:'center'},
-        onClick:()=>onSendWA(p)
-      },'📲 Enviar Check-in'),
+      p.phone&&(wasSentThisWeek(p.id)
+        ?h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'8px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Check-in enviado esta semana')
+        :h('button',{className:'btn btn-primary btn-sm',style:{flex:1,justifyContent:'center'},onClick:()=>onSendWA(p)},'📲 Enviar Check-in')),
       !p.phone&&h('span',{style:{flex:1,fontSize:11,color:'var(--ink3)',display:'flex',alignItems:'center'}},'Cadastre o WhatsApp para enviar'),
       allCheckins.length>0&&h('button',{
         className:'btn btn-ghost btn-sm',style:{flexShrink:0},
@@ -2407,9 +2509,103 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
   );
 }
 
+
+// ─── PAT DETAIL MODAL ───
+function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload}){
+  if(!p)return null;
+  const[hExp,setHExp]=useState(null);
+  const{week,year}=getWeekNum();
+  const r=getRank(p.totalPts);
+  const prog=rankProgress(p.totalPts);
+  return h(Modal,{title:p.name,sub:p.id+' · '+p.allCheckins.length+' check-ins',onClose,wide:true},
+    h('div',{style:{display:'flex',alignItems:'center',gap:10,marginBottom:14,padding:'12px 14px',background:'var(--ink7)',borderRadius:10}},
+      h('div',{className:'ac-pat-av'},ini(p.name)),
+      h('div',{style:{flex:1}},
+        h('div',{style:{display:'flex',gap:6,flexWrap:'wrap',marginBottom:6}},
+          h('span',{className:'rank-badge '+r.cls},r.icon+' '+r.name),
+          p.phone&&h('span',{style:{fontSize:11,color:'var(--ink3)'}},p.phone)
+        ),
+        h('div',{style:{fontSize:17,fontWeight:800,color:'var(--or4)',letterSpacing:'-.3px'}},p.totalPts+' pts acumulados'),
+        h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:2}},prog.label),
+        h('div',{className:'pbar',style:{marginTop:4}},h('div',{className:'pfill',style:{width:prog.pct+'%'}}))
+      )
+    ),
+    p.weekCheckin&&h('div',{style:{marginBottom:14}},
+      h(ScoreBreakdown,{c:p.weekCheckin})
+    ),
+    h('div',{style:{marginBottom:10}},
+      h('div',{style:{fontSize:10,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--ink3)',fontWeight:700,marginBottom:6}},'Histórico de semanas'),
+      p.allCheckins.length===0?h('div',{style:{fontSize:12,color:'var(--ink3)',padding:'12px 0'}},'Sem check-ins registrados.'):
+      p.allCheckins.slice(0,10).map(ci=>{
+        const t=getWeekTier(ci.lapidados_score||0);
+        const exp=hExp===ci.id;
+        const rows=[
+          {icon:'🥗',lbl:'Dieta',pts:Math.round((ci.diet_score||0)/10*25),max:25},
+          {icon:'🏋️',lbl:'Treino',pts:Math.round((ci.training_score||0)/10*20),max:20},
+          {icon:'⚡',lbl:'Energia',pts:Math.round((ci.energy_level||0)/10*15),max:15},
+          {icon:'🏃',lbl:'Cardio',pts:ci.cardio_score??ci.cardio_done?10:0,max:10},
+          {icon:'🍽️',lbl:'Aderência',pts:Math.max(0,10-(ci.off_plan_meals||0)*2),max:10},
+          {icon:'😴',lbl:'Sono',pts:Math.round((ci.sleep_score||0)/10*10),max:10},
+          {icon:'🫁',lbl:'Intestino',pts:ci.bowel_score||0,max:5},
+          {icon:'😋',lbl:'Saciedade',pts:Math.round(((10-(ci.hunger_level||5))/10)*5),max:5},
+        ];
+        return h('div',{key:ci.id,style:{marginBottom:6,border:'1px solid var(--ink6)',borderRadius:10,overflow:'hidden'}},
+          h('div',{style:{display:'flex',alignItems:'center',gap:8,padding:'9px 12px',background:'var(--ink7)',cursor:'pointer'},onClick:()=>setHExp(exp?null:ci.id)},
+            h('span',{style:{fontSize:11,color:'var(--ink3)',flex:1}},'Semana '+ci.week_number+'/'+ci.year),
+            h('span',{style:{fontWeight:700,fontSize:13,color:t.color}},ci.lapidados_score+'pts'),
+            h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600,marginLeft:4}},t.name),
+            h('span',{style:{fontSize:10,color:'var(--ink3)',marginLeft:6}},exp?'▲':'▼')
+          ),
+          exp&&h('div',{style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
+            h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:5,marginBottom:8}},
+              rows.map(row=>h('div',{key:row.lbl,style:{display:'flex',alignItems:'center',gap:5}},
+                h('span',{style:{fontSize:11,width:14}},row.icon),
+                h('span',{style:{fontSize:9,color:'var(--ink3)',width:50,flexShrink:0}},row.lbl),
+                h('div',{style:{flex:1,height:4,background:'var(--ink6)',borderRadius:2,overflow:'hidden'}},
+                  h('div',{style:{height:'100%',width:(row.pts/row.max*100)+'%',background:'var(--or4)',borderRadius:2}})
+                ),
+                h('span',{style:{fontSize:9,fontWeight:700,width:26,textAlign:'right'}},row.pts+'/'+row.max)
+              ))
+            ),
+            ci.wins&&h('div',{style:{background:'rgba(34,197,94,.08)',borderRadius:7,padding:'6px 9px',marginBottom:4}},
+              h('div',{style:{fontSize:9,textTransform:'uppercase',color:'var(--g4)',fontWeight:700,marginBottom:2}},'🏆 Vitórias'),
+              h('div',{style:{fontSize:11,color:'var(--ink2)'}},ci.wins)
+            ),
+            ci.main_difficulty&&h('div',{style:{background:'rgba(239,68,68,.08)',borderRadius:7,padding:'6px 9px',marginBottom:4}},
+              h('div',{style:{fontSize:9,textTransform:'uppercase',color:'var(--r4)',fontWeight:700,marginBottom:2}},'⚠ Dificuldade'),
+              h('div',{style:{fontSize:11,color:'var(--ink2)'}},ci.main_difficulty)
+            ),
+            ci.needs_help&&ci.needs_help.toLowerCase().replace(/ã/g,'a')!=='nao'&&h('div',{style:{background:'rgba(232,93,4,.08)',border:'1px solid rgba(232,93,4,.2)',borderRadius:7,padding:'6px 9px',marginBottom:6}},
+              h('div',{style:{fontSize:9,textTransform:'uppercase',color:'var(--or4)',fontWeight:700,marginBottom:2}},'🙋 Precisa de ajuda'),
+              h('div',{style:{fontSize:11,color:'var(--ink2)',fontWeight:500}},ci.needs_help)
+            ),
+            h('div',{style:{display:'flex',gap:6}},
+              p.phone&&h('a',{href:'https://wa.me/55'+p.phone.replace(/\D/g,'')+'?text='+encodeURIComponent('Oi '+p.name.split(' ')[0]+'! 💪 Vi seus resultados da semana '+ci.week_number+' e quero conversar!'),target:'_blank',style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'7px',background:'#25D366',color:'#fff',borderRadius:7,fontSize:11,fontWeight:700,textDecoration:'none'}},'💬 WhatsApp'),
+              h('button',{className:'btn btn-del btn-xs',onClick:async()=>{
+                if(!confirm('Excluir check-in semana '+ci.week_number+'?'))return;
+                if(!confirm('Confirmar exclusão?'))return;
+                try{await SB.from('checkins').delete().eq('id',ci.id);toast('Removido.');reload();}catch(e){alert(e.message);}
+              }},'🗑️')
+            )
+          )
+        );
+      })
+    ),
+    h('div',{className:'mdl-ft'},
+      p.phone&&(wasSentThisWeek(p.id)
+        ?h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'10px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Check-in enviado esta semana')
+        :h('button',{className:'btn btn-primary',style:{flex:1,justifyContent:'center'},onClick:()=>{onSendWA(p);onClose();}},'📲 Enviar Check-in')),
+      h('button',{className:'btn btn-ghost',onClick:onClose},'Fechar')
+    )
+  );
+}
+
 // ─── MAIN CHECKIN HUB ───
 function CheckinHub({pats,db}){
   const{checkins,invites,loading,reload,logInvite}=useCheckins(db._userId);
+  const[showRankInfo,setShowRankInfo]=useState(false);
+  const[selectedPat,setSelectedPat]=useState(null);
+  const[search,setSearch]=useState('');
   const[filter,setFilter]=useState('all');
   const[rankUp,setRankUp]=useState(null);
   const{week,year}=getWeekNum();
@@ -2431,12 +2627,22 @@ function CheckinHub({pats,db}){
     return{...p,weekCheckin:weekCheckinByPat[p.id]||null,allCheckins:all,patInvites,totalPts,hasThisWeek:!!weekCheckinByPat[p.id]};
   }).sort((a,b)=>b.totalPts-a.totalPts);
 
-  const pending=enriched.filter(p=>!p.hasThisWeek);
-  const done=enriched.filter(p=>p.hasThisWeek).sort((a,b)=>(b.weekCheckin?.lapidados_score||0)-(a.weekCheckin?.lapidados_score||0));
-  const displayed=filter==='pending'?pending:filter==='done'?done:enriched;
+  const filtered=search?enriched.filter(p=>p.name.toLowerCase().includes(search.toLowerCase())):enriched;
+  const pending=filtered.filter(p=>!p.hasThisWeek);
+  const done=filtered.filter(p=>p.hasThisWeek).sort((a,b)=>(b.weekCheckin?.lapidados_score||0)-(a.weekCheckin?.lapidados_score||0));
+  const displayed=filter==='pending'?pending:filter==='done'?done:filtered;
 
   const totalDone=done.length;
   const avgScore=done.length?Math.round(done.reduce((s,p)=>s+(p.weekCheckin?.lapidados_score||0),0)/done.length):0;
+
+  const getSentKey=(pid)=>'lc_sent_'+pid+'_'+week+'_'+year;
+  const wasSentThisWeek=(pid)=>{
+    const k=getSentKey(pid);const v=localStorage.getItem(k);
+    if(!v)return false;
+    const d=Math.floor((Date.now()-parseInt(v))/86400000);
+    return d<6;
+  };
+  const markSent=(pid)=>localStorage.setItem(getSentKey(pid),Date.now());
 
   const handleSendWA=async(p)=>{
     const profName=db.profile?.fullName?.split(' ')[0]||'Leo';
@@ -2444,6 +2650,7 @@ function CheckinHub({pats,db}){
     const msg='Oi '+p.name.split(' ')[0]+'! 💪 Hora do seu Check-in semanal do Lapidados Club!\n\nResponde rapidinho e veja sua pontuação e RANK na gamificação 🎮🔥\n\n'+link;
     const prevTotal=p.totalPts;
     await logInvite(p.id,week,year).catch(()=>{});
+    markSent(p.id);
     const phone='55'+p.phone.replace(/\D/g,'');
     window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank');
   };
@@ -2463,26 +2670,92 @@ function CheckinHub({pats,db}){
       h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'⏳'),h('div',{className:'kpi-v'},pending.length),h('div',{className:'kpi-l'},'Pendentes')),
       h('div',{className:'kpi bl'},h('div',{className:'kpi-icon'},'📊'),h('div',{className:'kpi-v'},avgScore||'—'),h('div',{className:'kpi-l'},'Score médio'))
     ),
-    h('div',{style:{display:'flex',gap:6,marginBottom:16,flexWrap:'wrap'}},
+h('div',{style:{background:'var(--ink7)',border:'1px solid var(--ink6)',borderRadius:'var(--radius-lg)',padding:'14px 18px',marginBottom:18,cursor:'pointer'},
+      onClick:()=>setShowRankInfo(ri=>!ri)},
+      h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between'}},
+        h('div',{style:{fontSize:13,fontWeight:700}},'📊 Sistema de pontuação'),
+        h('span',{style:{fontSize:11,color:'var(--ink3)'}},showRankInfo?'▲ Fechar':'▼ Ver detalhes')
+      ),
+      showRankInfo&&h('div',{style:{marginTop:12}},
+        h('div',{style:{fontSize:12,color:'var(--ink3)',marginBottom:10}},'Score semanal máximo: 100pts · Acumule pontos para subir de rank'),
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}},
+          [['🥗','Dieta','25pts'],['🏋️','Treino','20pts'],['⚡','Energia','15pts'],
+           ['🏃','Cardio','10pts'],['🍽️','Aderência','10pts'],['😴','Sono','10pts'],
+           ['🫁','Intestino','5pts'],['😋','Saciedade','5pts']].map(([ic,lb,pt])=>
+            h('div',{key:lb,style:{display:'flex',alignItems:'center',gap:6,padding:'5px 8px',background:'var(--w)',borderRadius:7,border:'1px solid var(--ink6)'}},
+              h('span',{style:{fontSize:13}},ic),
+              h('span',{style:{fontSize:11,flex:1,color:'var(--ink2)',fontWeight:500}},lb),
+              h('span',{style:{fontSize:11,fontWeight:700,color:'var(--or4)'}},pt)
+            )
+          )
+        ),
+        h('div',{style:{marginTop:10,display:'grid',gridTemplateColumns:'1fr',gap:4}},
+          RANKS.map(r=>h('div',{key:r.id,style:{display:'flex',alignItems:'center',gap:8,padding:'6px 10px',borderRadius:8,border:'1px solid var(--ink6)',background:'var(--w)'}},
+            h('span',{style:{fontSize:16}},r.icon),
+            h('span',{style:{fontSize:11,fontWeight:700,flex:1}},r.name),
+            h('span',{style:{fontSize:10,color:'var(--ink3)'}},r.min===0?'0–199pts':r.max>=1e9?'2000+ pts':r.min+'–'+r.max+' pts')
+          ))
+        ),
+        h('div',{style:{marginTop:8,fontSize:11,color:'var(--ink3)',padding:'8px 10px',background:'var(--r1)',borderRadius:7}},
+          '⚠️ Semanas com link enviado sem resposta em 6 dias = −10pts do acumulado'
+        )
+      )
+    ),
+    h('div',{className:'tbar',style:{marginBottom:12}},
+      h('div',{className:'srch'},h('span',{className:'srch-ic'},'⌕'),h('input',{placeholder:'Buscar aluno...',value:search,onChange:e=>setSearch(e.target.value)})),
+      h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
       [['all','Todos'],['pending','Pendentes ⏳'],['done','Responderam ✅']].map(([v,l])=>
         h('button',{key:v,className:'btn '+(filter===v?'btn-primary':'btn-ghost')+' btn-sm',onClick:()=>setFilter(v)},l)
       )
     ),
     loading?h('div',{style:{textAlign:'center',padding:'40px',color:'var(--ink3)'}},'Carregando...'):
     displayed.length===0?h('div',{className:'empty'},h('div',{className:'empty-icon'},'📋'),h('div',{className:'empty-tt'},'Nenhum resultado')):
-    h('div',{style:{border:'1px solid var(--ink6)',borderRadius:'var(--radius-lg)',overflow:'hidden'}},
-      displayed.map(p=>h(PatCheckinCard,{
-        key:p.id,p,
-        weekCheckin:p.weekCheckin,
-        allCheckins:p.allCheckins,
-        patInvites:p.patInvites,
-        totalPts:p.totalPts,
-        onSendWA:handleSendWA
+    h('div',{className:'tw'},h('table',null,
+      h('thead',null,h('tr',null,
+        ['Aluno','Rank','Pts totais','Semana atual','Status',''].map(x=>h('th',{key:x},x))
+      )),
+      h('tbody',null,displayed.map(p=>{
+        const t=p.weekCheckin?getWeekTier(p.weekCheckin.lapidados_score||0):null;
+        const r=getRank(p.totalPts);
+        return h('tr',{key:p.id,style:{cursor:'pointer'},onClick:()=>setSelectedPat(p.id)},
+          h('td',null,
+            h('div',{style:{display:'flex',alignItems:'center',gap:8}},
+              h('div',{className:'ac-pat-av',style:{width:28,height:28,fontSize:10}},ini(p.name)),
+              h('div',null,
+                h('div',{className:'td-n'},p.name),
+                p.phone&&h('div',{className:'td-s'},p.phone)
+              )
+            )
+          ),
+          h('td',null,h('span',{className:'rank-badge '+r.cls},r.icon+' '+r.name)),
+          h('td',null,h('span',{style:{fontWeight:800,color:'var(--or4)'}},p.totalPts+'pts')),
+          h('td',null,p.weekCheckin
+            ?h('span',{style:{fontWeight:700,color:t.color}},p.weekCheckin.lapidados_score+'pts')
+            :h('span',{style:{fontSize:11,color:'var(--ink3)'}},'—')
+          ),
+          h('td',null,p.hasThisWeek
+            ?h('span',{className:'badge b-ok'},'✅ Respondeu')
+            :wasSentThisWeek(p.id)
+              ?h('span',{className:'badge b-warn'},'⏳ Enviado')
+              :h('span',{className:'badge b-muted'},'Não enviado')
+          ),
+          h('td',null,h('button',{
+            className:'btn btn-info btn-xs',
+            onClick:e=>{e.stopPropagation();setSelectedPat(p.id);}
+          },'Ver'))
+        );
       }))
-    )
+    )),
+    selectedPat&&h(PatDetailModal,{
+      p:enriched.find(x=>x.id===selectedPat),
+      onClose:()=>setSelectedPat(null),
+      onSendWA:handleSendWA,
+      wasSentThisWeek,
+      reload
+    })
+  )
   );
 }
-// ─── CHECKIN DASH CARD ───
 function CheckinDashCard({pats,checkins,onNav}){
   const{week,year}=getWeekNum();
   const weekDone=new Set(checkins.filter(c=>c.week_number===week&&c.year===year).map(c=>c.patient_id));
