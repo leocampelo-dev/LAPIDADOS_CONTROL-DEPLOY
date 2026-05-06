@@ -768,7 +768,7 @@ function SetupScreen({onDone}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
       h('div',{className:'auth-title'},'Conectar ao Supabase'),
       h('div',{className:'auth-sub'},'Para usar, você precisa colar as credenciais do seu projeto Supabase. São encontradas em: Project Settings → API.'),
       [['1','Acesse app.supabase.com e abra seu projeto'],['2','Vá em Settings → API'],['3','Copie a Project URL e a anon public key abaixo']].map(([n,t])=>
@@ -810,7 +810,7 @@ function AuthScreen({onLogin}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
       h('div',{className:'auth-tabs'},
         ['login','signup'].map(t=>h('button',{key:t,className:'auth-tab'+(tab===t?' on':''),onClick:()=>{st(t);serr('');sok('')}},{login:'Entrar',signup:'Criar conta'}[t]))
       ),
@@ -2136,7 +2136,7 @@ function App(){
         h('div',{className:'topbar-row'},
           h('div',{className:'logo',onClick:()=>st('home')},
             h('div',{className:'logo-mark'},
-              h('img',{src:'3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
+              h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
             )
           ),
           h('div',{className:'topbar-right'},
