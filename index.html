@@ -8,11 +8,6 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
-<link rel="shortcut icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
-<link rel="apple-touch-icon" href="assets/logo_lapidados_control.svg" sizes="any">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#E85D04">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -31,11 +26,11 @@ button,input,select,textarea{font-family:'Plus Jakarta Sans',sans-serif}
 /* ── AUTH / SETUP SCREENS ── */
 .auth-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ink7)}
 .auth-card{background:var(--w);border:1px solid var(--ink6);border-radius:var(--radius-xl);padding:40px;width:100%;max-width:420px}
-.auth-logo{display:flex;align-items:center;gap:0px;margin-bottom:12px}
-.auth-mark{width:100px;height:100x;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.auth-brand{font-size:22px;font-weight:800;letter-spacing:-.3px}
-.auth-brand span{color:var(--ink3);font-weight:500;font-size:15px;margin-left:4px}
-.auth-title{font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.auth-mark{width:36px;height:36px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.auth-brand{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.auth-brand span{color:var(--ink3);font-weight:400;font-size:13px;margin-left:4px}
+.auth-title{font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px}
 .auth-sub{font-size:13px;color:var(--ink3);margin-bottom:28px;line-height:1.5}
 .auth-tabs{display:flex;border-bottom:1.5px solid var(--ink6);margin-bottom:24px}
 .auth-tab{flex:1;padding:9px;font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .15s}
@@ -171,7 +166,7 @@ button,input,select,textarea{font-family:'Plus Jakarta Sans',sans-serif}
 .srch-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink4);font-size:14px;pointer-events:none}
 .fsel{padding:9px 11px;border:1.5px solid var(--ink5);border-radius:9px;font-size:13px;outline:none;background:var(--w);cursor:pointer;color:var(--ink);font-weight:500}
 .fsel:focus{border-color:var(--or4)}
-.tw{overflow-x:auto;background:var(--w);border:1px solid var(--ink6);border-radius:var(--radius-lg)}
+.tw{overflow-x:auto;background:var(--w);border:1px solid var(--ink6);border-radius:var(--radius-lg);width:100%}.tw table{width:100%}
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead tr{background:var(--ink7)}
 th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1px solid var(--ink6)}
@@ -668,7 +663,8 @@ td{padding:9px 10px;font-size:11px}
   .ac-actions.four{grid-template-columns:1fr 1fr}
   .ac-btn{font-size:10px;padding:7px 8px;min-height:48px}
   .ac-days{font-size:18px}
-}</style>
+}.hist-expand{animation:expandIn .2s ease}@keyframes expandIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+</style>
 <body>
 <div id="root"></div>
 <div class="toast" id="toast"></div>
@@ -773,7 +769,7 @@ function SetupScreen({onDone}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
       h('div',{className:'auth-title'},'Conectar ao Supabase'),
       h('div',{className:'auth-sub'},'Para usar, você precisa colar as credenciais do seu projeto Supabase. São encontradas em: Project Settings → API.'),
       [['1','Acesse app.supabase.com e abra seu projeto'],['2','Vá em Settings → API'],['3','Copie a Project URL e a anon public key abaixo']].map(([n,t])=>
@@ -815,7 +811,7 @@ function AuthScreen({onLogin}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
       h('div',{className:'auth-tabs'},
         ['login','signup'].map(t=>h('button',{key:t,className:'auth-tab'+(tab===t?' on':''),onClick:()=>{st(t);serr('');sok('')}},{login:'Entrar',signup:'Criar conta'}[t]))
       ),
@@ -1214,7 +1210,18 @@ function Patients({pats,apts,fin,db,plans}){
   const now=today();
   const enr=pats.map(p=>({...p,status:calcStatus(p,apts),ren:calcRen(p),last:lastC(p.id,apts),next:nextC(p.id,apts),cnt:cntC(p.id,apts)}));
   const filt=enr.filter(p=>{const s=q.toLowerCase();return(!s||p.name.toLowerCase().includes(s)||p.id.toLowerCase().includes(s)||(p.phone&&p.phone.includes(s)))&&(!f||p.status===f)});
-  const save=async d=>{ss(true);try{if(modal==='new'){await db.addPat(d);toast('Paciente cadastrado!');}else{await db.updPat({...d,id:modal.id});toast('Atualizado.');}sm(null);}catch(e){alert('Erro: '+e.message);}ss(false)};
+  const save=async d=>{ss(true);try{
+    if(modal==='new'){
+      const id=await getNextPatId(userId);
+      const pat={...d,id};
+      delete pat._apt;delete pat._fin;
+      await db.addPat(pat);
+      if(d._apt&&d._apt.date) await db.addApt({...d._apt,id:'AT-'+Date.now(),patientId:id});
+      if(d._fin&&d._fin.totalValue) await db.addFin({...d._fin,id:'FIN-'+Date.now(),patientId:id,date:d.startDate||new Date().toISOString().slice(0,10)});
+      toast('Paciente cadastrado!');
+    }else{await db.updPat({...d,id:modal.id});toast('Atualizado.');}
+    sm(null);
+  }catch(e){alert('Erro: '+e.message);}ss(false)};
   const del=async id=>{if(!confirm('Excluir paciente e todos seus dados?'))return;try{await db.delPat(id);toast('Removido.');}catch(e){alert('Erro: '+e.message)}};
   const curProf=prof?pats.find(p=>p.id===prof):null;
   const saveApt=async d=>{ss(true);try{if(aptM&&aptM._e)await db.updApt({...d,id:aptM.id});else await db.addApt({...d,id:'AT-'+Date.now()});sa(null);toast('Atendimento salvo.');}catch(e){alert('Erro: '+e.message);}ss(false)};
@@ -2141,7 +2148,7 @@ function App(){
         h('div',{className:'topbar-row'},
           h('div',{className:'logo',onClick:()=>st('home')},
             h('div',{className:'logo-mark'},
-              h('img',{src:'assets/3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
+              h('img',{src:'3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
             )
           ),
           h('div',{className:'topbar-right'},
@@ -2165,8 +2172,8 @@ function App(){
         h('div',{className:'snav-header'},
           h('button',{className:'snav-toggle',onClick:()=>sso(o=>!o),title:sideOpen?'Recolher':'Expandir'},
             sideOpen?
-              h('img',{src:'assets/seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
-              h('img',{src:'assets/seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
+              h('img',{src:'seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
+              h('img',{src:'seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
           )
         ),
         h('div',{className:'snav-list'},
@@ -2450,7 +2457,7 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
             h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600,marginLeft:4}},t.name),
             h('span',{style:{fontSize:10,color:'var(--ink3)',marginLeft:6}},hExp?'▲':'▼')
           ),
-          hExp&&h('div',{style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
+          hExp&&h('div',{className:'hist-expand',style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
             h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6,marginBottom:8}},
               rows.map(r=>h('div',{key:r.lbl,style:{display:'flex',alignItems:'center',gap:6}},
                 h('span',{style:{fontSize:11,width:14}},r.icon),
@@ -2503,7 +2510,10 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
     ),
     h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
       p.phone&&(wasSentThisWeek(p.id)
-        ?h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'8px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Check-in enviado esta semana')
+        ?h('div',{style:{flex:1,display:'flex',alignItems:'center',gap:6}},
+            h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'8px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Enviado esta semana'),
+            h('button',{className:'btn btn-ghost btn-sm',style:{flexShrink:0,fontSize:11},onClick:()=>onSendWA(p)},'↻ Reenviar')
+          )
         :h('button',{className:'btn btn-primary btn-sm',style:{flex:1,justifyContent:'center'},onClick:()=>onSendWA(p)},'📲 Enviar Check-in')),
       !p.phone&&h('span',{style:{flex:1,fontSize:11,color:'var(--ink3)',display:'flex',alignItems:'center'}},'Cadastre o WhatsApp para enviar'),
       allCheckins.length>0&&h('button',{
@@ -2561,7 +2571,7 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload}){
             h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600,marginLeft:4}},t.name),
             h('span',{style:{fontSize:10,color:'var(--ink3)',marginLeft:6}},exp?'▲':'▼')
           ),
-          exp&&h('div',{style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
+          exp&&h('div',{className:'hist-expand',style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
             h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:5,marginBottom:8}},
               rows.map(row=>h('div',{key:row.lbl,style:{display:'flex',alignItems:'center',gap:5}},
                 h('span',{style:{fontSize:11,width:14}},row.icon),
@@ -2598,7 +2608,10 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload}){
     ),
     h('div',{className:'mdl-ft'},
       p.phone&&(wasSentThisWeek(p.id)
-        ?h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'10px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Check-in enviado esta semana')
+        ?h('div',{style:{flex:1,display:'flex',alignItems:'center',gap:6}},
+            h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:4,padding:'9px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Enviado'),
+            h('button',{className:'btn btn-ghost btn-sm',style:{flexShrink:0,fontSize:11},onClick:()=>{onSendWA(p);onClose();}},'↻ Reenviar')
+          )
         :h('button',{className:'btn btn-primary',style:{flex:1,justifyContent:'center'},onClick:()=>{onSendWA(p);onClose();}},'📲 Enviar Check-in')),
       h('button',{className:'btn btn-ghost',onClick:onClose},'Fechar')
     )
@@ -2715,7 +2728,7 @@ h('div',{style:{background:'var(--ink7)',border:'1px solid var(--ink6)',borderRa
     ),
     loading?h('div',{style:{textAlign:'center',padding:'40px',color:'var(--ink3)'}},'Carregando...'):
     displayed.length===0?h('div',{className:'empty'},h('div',{className:'empty-icon'},'📋'),h('div',{className:'empty-tt'},'Nenhum resultado')):
-    h('div',{className:'tw'},h('table',null,
+    h('div',{className:'tw',style:{width:'100%'}},h('table',{style:{width:'100%'}},null,
       h('thead',null,h('tr',null,
         ['Aluno','Rank','Pts totais','Semana atual','Status',''].map(x=>h('th',{key:x},x))
       )),
