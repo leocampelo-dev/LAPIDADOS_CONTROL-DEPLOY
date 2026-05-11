@@ -8,11 +8,6 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
-<link rel="shortcut icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
-<link rel="apple-touch-icon" href="assets/logo_lapidados_control.svg" sizes="any">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#E85D04">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -774,7 +769,7 @@ function SetupScreen({onDone}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
       h('div',{className:'auth-title'},'Conectar ao Supabase'),
       h('div',{className:'auth-sub'},'Para usar, você precisa colar as credenciais do seu projeto Supabase. São encontradas em: Project Settings → API.'),
       [['1','Acesse app.supabase.com e abra seu projeto'],['2','Vá em Settings → API'],['3','Copie a Project URL e a anon public key abaixo']].map(([n,t])=>
@@ -816,7 +811,7 @@ function AuthScreen({onLogin}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
       h('div',{className:'auth-tabs'},
         ['login','signup'].map(t=>h('button',{key:t,className:'auth-tab'+(tab===t?' on':''),onClick:()=>{st(t);serr('');sok('')}},{login:'Entrar',signup:'Criar conta'}[t]))
       ),
@@ -2153,7 +2148,7 @@ function App(){
         h('div',{className:'topbar-row'},
           h('div',{className:'logo',onClick:()=>st('home')},
             h('div',{className:'logo-mark'},
-              h('img',{src:'assets/3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
+              h('img',{src:'3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
             )
           ),
           h('div',{className:'topbar-right'},
@@ -2177,8 +2172,8 @@ function App(){
         h('div',{className:'snav-header'},
           h('button',{className:'snav-toggle',onClick:()=>sso(o=>!o),title:sideOpen?'Recolher':'Expandir'},
             sideOpen?
-              h('img',{src:'assets/seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
-              h('img',{src:'assets/seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
+              h('img',{src:'seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
+              h('img',{src:'seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
           )
         ),
         h('div',{className:'snav-list'},
@@ -2262,6 +2257,18 @@ const WEEK_TIERS = [
   {min:0,  name:'🚨 ATENÇÃO',    color:'#ef4444', bg:'rgba(239,68,68,.1)'},
 ];
 
+
+// ─── PATIENT-RELATIVE WEEK CALCULATION ───
+// Week 1 = days 1-7 from start_date, Week 2 = days 8-14, etc.
+function calcPatientWeek(startDateStr) {
+  if (!startDateStr) return getWeekNum(); // fallback to ISO week
+  const start = new Date(startDateStr + 'T00:00:00');
+  const now   = new Date();
+  const daysDiff = Math.floor((now - start) / 86400000);
+  const week  = Math.max(1, Math.ceil((daysDiff + 1) / 7));
+  const year  = start.getFullYear();
+  return { week, year };
+}
 function getRank(totalPts){return RANKS.slice().reverse().find(r=>totalPts>=r.min)||RANKS[0]}
 function getWeekTier(score){return WEEK_TIERS.find(t=>score>=t.min)||WEEK_TIERS[4]}
 function getWeekNum(){
@@ -2637,8 +2644,14 @@ function CheckinHub({pats,db}){
     const m={};checkins.forEach(c=>{if(!m[c.patient_id])m[c.patient_id]=[];m[c.patient_id].push(c);});return m;
   },[checkins]);
   const weekCheckinByPat=useMemo(()=>{
-    const m={};checkins.forEach(c=>{if(c.week_number===week&&c.year===year)m[c.patient_id]=c;});return m;
-  },[checkins,week,year]);
+    const m={};
+    pats.forEach(p=>{
+      const{week:pw,year:py}=calcPatientWeek(p.startDate||p.start_date);
+      const ci=checkins.find(c=>c.patient_id===p.id&&c.week_number===pw&&c.year===py);
+      if(ci)m[p.id]=ci;
+    });
+    return m;
+  },[checkins,pats]);
   const invitesByPat=useMemo(()=>{
     const m={};invites.forEach(i=>{if(!m[i.patient_id])m[i.patient_id]=[];m[i.patient_id].push(i);});return m;
   },[invites]);
@@ -2658,7 +2671,11 @@ function CheckinHub({pats,db}){
   const totalDone=done.length;
   const avgScore=done.length?Math.round(done.reduce((s,p)=>s+(p.weekCheckin?.lapidados_score||0),0)/done.length):0;
 
-  const getSentKey=(pid)=>'lc_sent_'+pid+'_'+week+'_'+year;
+  const getSentKey=(pid)=>{
+    const p2=enriched.find(x=>x.id===pid);
+    const{week:pw,year:py}=calcPatientWeek(p2?.startDate||p2?.start_date);
+    return 'lc_sent_'+pid+'_'+pw+'_'+py;
+  };
   const wasSentThisWeek=(pid)=>{
     const k=getSentKey(pid);const v=localStorage.getItem(k);
     if(!v)return false;
@@ -2672,7 +2689,8 @@ function CheckinHub({pats,db}){
     const link=CHECKIN_URL+'?patient_id='+encodeURIComponent(p.id)+'&name='+encodeURIComponent(p.name.split(' ')[0]);
     const msg='Oi '+p.name.split(' ')[0]+'! 💪 Hora do seu Check-in semanal do Lapidados Club!\n\nResponde rapidinho e veja sua pontuação e RANK na gamificação 🎮🔥\n\n'+link;
     const prevTotal=p.totalPts;
-    await logInvite(p.id,week,year).catch(()=>{});
+    const{week:pw2,year:py2}=calcPatientWeek(p.startDate||p.start_date);
+    await logInvite(p.id,pw2,py2).catch(()=>{});
     markSent(p.id);
     const phone='55'+p.phone.replace(/\D/g,'');
     window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank');
