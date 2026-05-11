@@ -8,6 +8,11 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
+<link rel="shortcut icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
+<link rel="apple-touch-icon" href="assets/logo_lapidados_control.svg" sizes="any">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E85D04">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -890,7 +895,7 @@ function useData(userId){
 
   return{pats,apts,fin,plans,profile,loading,reload:loadAll,_userId:userId,
     async addPat(p){
-      const id=await getNextPatId(userId);
+      const id=await getNextPatId(db._userId);
       const{error}=await SB.from('patients').insert(fromPat({...p,id},userId));
       if(error)throw error;
       await loadPats();
@@ -1212,7 +1217,7 @@ function Patients({pats,apts,fin,db,plans}){
   const filt=enr.filter(p=>{const s=q.toLowerCase();return(!s||p.name.toLowerCase().includes(s)||p.id.toLowerCase().includes(s)||(p.phone&&p.phone.includes(s)))&&(!f||p.status===f)});
   const save=async d=>{ss(true);try{
     if(modal==='new'){
-      const id=await getNextPatId(userId);
+      const id=await getNextPatId(db._userId);
       const pat={...d,id};
       delete pat._apt;delete pat._fin;
       await db.addPat(pat);
