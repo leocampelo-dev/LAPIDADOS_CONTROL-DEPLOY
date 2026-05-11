@@ -895,7 +895,7 @@ function useData(userId){
 
   return{pats,apts,fin,plans,profile,loading,reload:loadAll,_userId:userId,
     async addPat(p){
-      const id=await getNextPatId(db._userId);
+      const id=await getNextPatId(userId);
       const{error}=await SB.from('patients').insert(fromPat({...p,id},userId));
       if(error)throw error;
       await loadPats();
