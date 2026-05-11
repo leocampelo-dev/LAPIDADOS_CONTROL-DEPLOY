@@ -26,8 +26,8 @@ button,input,select,textarea{font-family:'Plus Jakarta Sans',sans-serif}
 /* ── AUTH / SETUP SCREENS ── */
 .auth-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ink7)}
 .auth-card{background:var(--w);border:1px solid var(--ink6);border-radius:var(--radius-xl);padding:40px;width:100%;max-width:420px}
-.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
-.auth-mark{width:36px;height:36px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.auth-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.auth-mark{width:48px;height:48px;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .auth-brand{font-size:18px;font-weight:800;letter-spacing:-.3px}
 .auth-brand span{color:var(--ink3);font-weight:400;font-size:13px;margin-left:4px}
 .auth-title{font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px}
@@ -769,7 +769,7 @@ function SetupScreen({onDone}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')),h('div',{style:{fontSize:12,color:'var(--ink3)',marginTop:2}},'Configuração inicial'))),
       h('div',{className:'auth-title'},'Conectar ao Supabase'),
       h('div',{className:'auth-sub'},'Para usar, você precisa colar as credenciais do seu projeto Supabase. São encontradas em: Project Settings → API.'),
       [['1','Acesse app.supabase.com e abra seu projeto'],['2','Vá em Settings → API'],['3','Copie a Project URL e a anon public key abaixo']].map(([n,t])=>
@@ -811,7 +811,7 @@ function AuthScreen({onLogin}){
   };
   return h('div',{className:'auth-shell'},
     h('div',{className:'auth-card'},
-      h('div',{className:'auth-logo'},h('div',{className:'auth-mark',dangerouslySetInnerHTML:{__html:LOGO_SVG}}),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
+      h('div',{className:'auth-logo'},h('div',{className:'auth-mark'},h('img',{src:'assets/logo_lapidados_control.svg',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain'}})),h('div',null,h('div',{className:'auth-brand'},'Lapidados',h('span',null,'Control')))),
       h('div',{className:'auth-tabs'},
         ['login','signup'].map(t=>h('button',{key:t,className:'auth-tab'+(tab===t?' on':''),onClick:()=>{st(t);serr('');sok('')}},{login:'Entrar',signup:'Criar conta'}[t]))
       ),
@@ -2148,7 +2148,7 @@ function App(){
         h('div',{className:'topbar-row'},
           h('div',{className:'logo',onClick:()=>st('home')},
             h('div',{className:'logo-mark'},
-              h('img',{src:'3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
+              h('img',{src:'assets/3.png',alt:'Lapidados Control',style:{width:'100%',height:'100%',objectFit:'contain',objectPosition:'left'}})
             )
           ),
           h('div',{className:'topbar-right'},
@@ -2172,8 +2172,8 @@ function App(){
         h('div',{className:'snav-header'},
           h('button',{className:'snav-toggle',onClick:()=>sso(o=>!o),title:sideOpen?'Recolher':'Expandir'},
             sideOpen?
-              h('img',{src:'seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
-              h('img',{src:'seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
+              h('img',{src:'assets/seta_esquerda.png',alt:'Recolher',style:{width:'16px',height:'16px',objectFit:'contain'}}):
+              h('img',{src:'assets/seta_direita.png',alt:'Expandir',style:{width:'16px',height:'16px',objectFit:'contain'}})
           )
         ),
         h('div',{className:'snav-list'},
