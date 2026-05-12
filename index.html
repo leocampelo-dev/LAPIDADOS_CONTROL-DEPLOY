@@ -308,7 +308,9 @@ tr:hover td{background:#fafafa}
 .hist-month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:4px}
 .hist-month-card{background:var(--ink7);border:1px solid var(--ink6);border-radius:11px;padding:14px 16px;cursor:pointer;transition:all .15s}
 .hist-month-card:hover{border-color:var(--or4);background:var(--w)}
-.hist-month-card.active-month{border-color:var(--or4);background:var(--w)}
+.hist-month-card.active-month{border-color:var(--or2);background:var(--w)}
+.hist-month-card.filter-active{border-color:var(--or4);background:var(--or1);box-shadow:0 0 0 2px rgba(232,93,4,0.15)}
+.hist-month-card.filter-active .hmc-name{color:var(--or5)}
 .hmc-name{font-size:13px;font-weight:700;letter-spacing:-.2px;margin-bottom:10px;color:var(--ink);text-transform:capitalize}
 .hmc-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
 .hmc-lbl{color:var(--ink3)}
@@ -1536,7 +1538,9 @@ function Appointments({apts,pats,db}){
 // ─── FINANCIAL ───
 const GOAL_KEY='lapidados_goal';
 function Financial({fin,pats,db}){
-  const[modal,sm]=useState(null);const[q,sq]=useState('');const[fs,sfs]=useState('');const[mf,smf]=useState('');const[saving,ss]=useState(false);
+  const[modal,sm]=useState(null);const[q,sq]=useState('');const[fs,sfs]=useState('');
+  const[mf,smf]=useState(()=>new Date().toLocaleDateString('pt-BR',{month:'short',year:'numeric'}));
+  const[saving,ss]=useState(false);
   const[goal,setGoal]=useState(()=>parseFloat(localStorage.getItem(GOAL_KEY)||'0'));
   const[editGoal,sEG]=useState(false);const[goalInput,sGI]=useState('');
   const[histOpen,sHO]=useState(false);
@@ -1618,8 +1622,11 @@ function Financial({fin,pats,db}){
           (histOpen?monthSummaries:monthSummaries.slice(0,4)).map(ms=>{
             const barPct=Math.round(ms.fat/maxFat*100);
             const isCurrentMonth=ms.key===(y+'-'+String(m+1).padStart(2,'0'));
-            return h('div',{key:ms.key,className:'hist-month-card'+(isCurrentMonth?' active-month':''),
-              onClick:()=>smf(prev=>prev===new Date(ms.key+'-01T00:00:00').toLocaleDateString('pt-BR',{month:'short',year:'numeric'})?'':new Date(ms.key+'-01T00:00:00').toLocaleDateString('pt-BR',{month:'short',year:'numeric'}))},
+            const msLabel=new Date(ms.key+'-01T00:00:00').toLocaleDateString('pt-BR',{month:'short',year:'numeric'});
+            const isFiltered=mf===msLabel;
+            return h('div',{key:ms.key,
+              className:'hist-month-card'+(isCurrentMonth?' active-month':'')+(isFiltered?' filter-active':''),
+              onClick:()=>smf(isFiltered?'':msLabel)},
               h('div',{className:'hmc-name'},ms.label+(isCurrentMonth?' · atual':'')),
               h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Faturado'),h('span',{className:'hmc-val',style:{color:'var(--g4)'}},fmtM(ms.fat))),
               h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Pendente'),h('span',{className:'hmc-val',style:{color:ms.pend>0?'var(--r4)':'var(--ink4)'}},fmtM(ms.pend))),
@@ -1635,17 +1642,17 @@ function Financial({fin,pats,db}){
     ),
 
     h('div',{className:'kpi-grid',style:{gridTemplateColumns:'repeat(3,1fr)',marginBottom:18}},
-      h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'R$'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(fat)),h('div',{className:'kpi-l'},'Faturado (filtro)')),
-      h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'!'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(pend)),h('div',{className:'kpi-l'},'Pendente (filtro)')),
+      h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'R$'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(fat)),h('div',{className:'kpi-l'},mf?'Faturado · '+mf:'Faturado (todos)')),
+      h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'!'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(pend)),h('div',{className:'kpi-l'},mf?'Pendente · '+mf:'Pendente (todos)')),
       h('div',{className:'kpi or'},h('div',{className:'kpi-icon'},'#'),h('div',{className:'kpi-v'},filt.length),h('div',{className:'kpi-l'},'Registros'))
     ),
     h('div',{className:'tbar'},
       h('div',{className:'tbar-l'},
         h('div',{className:'srch'},h('span',{className:'srch-ic'},'⌕'),h('input',{placeholder:'Buscar paciente...',value:q,onChange:e=>sq(e.target.value)})),
         h('select',{className:'fsel',value:fs,onChange:e=>sfs(e.target.value)},h('option',{value:''},'Todos'),['PAGO','PENDENTE','PARCIAL'].map(s=>h('option',{key:s,value:s},s))),
-        months.length>0&&h('select',{className:'fsel',value:mf,onChange:e=>smf(e.target.value)},h('option',{value:''},'Todos os meses'),...months.map(m=>h('option',{key:m,value:m},m)))
+        months.length>0&&h('select',{className:'fsel',value:mf,onChange:e=>smf(e.target.value)},h('option',{value:''},'Todos os meses'),...months.map(mo=>h('option',{key:mo,value:mo},mo)))
       ),
-      mf&&h('button',{className:'btn btn-ghost btn-sm',onClick:()=>smf('')},'✕ Limpar filtro de mês')
+      mf&&h('button',{className:'btn btn-ghost btn-sm',onClick:()=>smf('')},'✕ Ver todos os meses')
     ),
     // ── DESKTOP: tabela ──
     h('div',{className:'tw'},h('table',null,
