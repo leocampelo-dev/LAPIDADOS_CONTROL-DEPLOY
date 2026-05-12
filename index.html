@@ -483,6 +483,35 @@ tr:hover td{background:#fafafa}
 /* Fin snapshot in home */
 .fin-snap-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ink6);font-size:13px}
 .fin-snap-row:last-child{border-bottom:none}
+
+/* ── TASK WIDGET ── */
+.task-input-row{display:flex;gap:8px;margin-bottom:14px}
+.task-input{flex:1;padding:10px 14px;border:1.5px solid var(--ink5);border-radius:10px;font-size:13px;outline:none;background:var(--w);color:var(--ink);transition:border .15s;font-family:inherit}
+.task-input:focus{border-color:var(--or4);box-shadow:0 0 0 3px rgba(232,93,4,.1)}
+.task-input::placeholder{color:var(--ink4)}
+.task-add-btn{width:40px;height:40px;border-radius:10px;background:var(--or4);border:none;color:#fff;font-size:22px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.task-add-btn:hover{background:var(--or5)}
+.task-tabs{display:flex;border-bottom:1.5px solid var(--ink6);margin-bottom:12px}
+.task-tab{padding:7px 16px;font-size:12px;font-weight:700;color:var(--ink3);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:inherit}
+.task-tab.on{color:var(--or4);border-bottom-color:var(--or4)}
+.task-tab-badge{background:var(--or4);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;min-width:16px;text-align:center}
+.task-list{display:flex;flex-direction:column;gap:5px;max-height:300px;overflow-y:auto;padding-right:2px}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--ink6);border-radius:10px;background:var(--w);transition:all .15s;position:relative}
+.task-item:hover{background:var(--ink7);border-color:var(--ink5)}
+.task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink5);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s;background:var(--w);margin-top:1px}
+.task-check:hover{border-color:var(--or4)}
+.task-check.checked{background:var(--g4);border-color:var(--g4);color:#fff;font-size:11px}
+.task-text{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;word-break:break-word}
+.task-item.done-item .task-text{text-decoration:line-through;color:var(--ink4)}
+.task-del{opacity:0;width:24px;height:24px;border-radius:6px;border:none;background:var(--r1);color:var(--r4);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.task-item:hover .task-del{opacity:1}
+.task-empty{text-align:center;padding:28px 16px;color:var(--ink3);font-size:13px}
+.task-empty-icon{font-size:24px;margin-bottom:8px}
+/* Hide-values toggle */
+.hide-val-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;border:1px solid var(--ink5);background:var(--w);color:var(--ink3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+.hide-val-btn:hover{border-color:var(--ink4);color:var(--ink2);background:var(--ink7)}
+.hide-val-btn.active{border-color:var(--or2);background:var(--or1);color:var(--or5)}
+.masked-val{letter-spacing:3px;color:var(--ink4)!important;font-size:14px!important}
 @media(max-width:760px){.cfg-layout{grid-template-columns:1fr}.cfg-nav{display:flex;flex-wrap:wrap;gap:3px;padding:4px}.cfg-nav-item{width:auto;padding:6px 9px;font-size:12px;border-radius:7px}.cfg-panel{padding:16px;border-radius:var(--mob-radius)}.cfg-section-title{font-size:14px;margin-bottom:3px}.cfg-section-sub{font-size:11px;margin-bottom:18px}.cfg-divider{margin:16px 0}.plan-card{padding:11px 13px;border-radius:10px;gap:10px;margin-bottom:6px}.plan-card-icon{width:34px;height:34px;font-size:13px}.plan-card-name{font-size:12px;margin-bottom:1px}.plan-card-meta{font-size:10px}.plan-card-price{font-size:13px}.av-upload-wrap{flex-direction:column;gap:14px;padding:12px}.av-preview{width:64px;height:64px;font-size:20px;border:2px solid var(--or2)}.av-upload-btns .hint{font-size:10px}.pe-controls{gap:4px}.cfg-schema{padding:10px 12px;font-size:11px}}
 
 :root{--mob-pad:14px;--mob-radius:12px;--mob-card-pad:12px 14px;--mob-trans:all .18s cubic-bezier(.4,0,.2,1)}
@@ -1615,7 +1644,7 @@ function Appointments({apts,pats,db}){
 
 // ─── FINANCIAL ───
 const GOAL_KEY='lapidados_goal';
-function Financial({fin,pats,db}){
+function Financial({fin,pats,db,hideV,setHideV}){
   const[modal,sm]=useState(null);const[q,sq]=useState('');const[fs,sfs]=useState('');
   const[mf,smf]=useState(()=>new Date().toLocaleDateString('pt-BR',{month:'short',year:'numeric'}));
   const[saving,ss]=useState(false);
@@ -1659,6 +1688,7 @@ function Financial({fin,pats,db}){
     h('div',{className:'pg-head'},
       h('div',null,h('div',{className:'pg-title'},'Financeiro'),h('div',{className:'pg-sub'},'Controle de pagamentos e receitas')),
       h('div',{style:{display:'flex',gap:8}},
+        h('button',{className:'hide-val-btn'+(hideV?' active':''),onClick:()=>setHideV(v=>!v),title:hideV?'Mostrar valores':'Ocultar valores'},hideV?'👁 Mostrar valores':'🙈 Ocultar valores'),
         h('button',{className:'btn btn-ghost',onClick:()=>exportCSV(filt.map(f=>{const p=pm[f.patientId];return{Data:fmt(f.date),Paciente:p?p.name:f.patientId,Plano:p?p.plan:'',Total:f.totalValue,Pago:f.paidValue,Forma:f.payMethod,Status:f.status,Vencimento:fmt(f.dueDate)}}),'financeiro.csv')},'Exportar CSV'),
         h('button',{className:'btn btn-primary',onClick:()=>sm('new')},'+ Novo lançamento')
       )
@@ -1706,8 +1736,8 @@ function Financial({fin,pats,db}){
               className:'hist-month-card'+(isCurrentMonth?' active-month':'')+(isFiltered?' filter-active':''),
               onClick:()=>smf(isFiltered?'':msLabel)},
               h('div',{className:'hmc-name'},ms.label+(isCurrentMonth?' · atual':'')),
-              h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Faturado'),h('span',{className:'hmc-val',style:{color:'var(--g4)'}},fmtM(ms.fat))),
-              h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Pendente'),h('span',{className:'hmc-val',style:{color:ms.pend>0?'var(--r4)':'var(--ink4)'}},fmtM(ms.pend))),
+              h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Faturado'),h('span',{className:'hmc-val',style:{color:'var(--g4)'}},hideV?'•••':fmtM(ms.fat))),
+              h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Pendente'),h('span',{className:'hmc-val',style:{color:ms.pend>0?'var(--r4)':'var(--ink4)'}},hideV?'•••':fmtM(ms.pend))),
               h('div',{className:'hmc-row'},h('span',{className:'hmc-lbl'},'Lançamentos'),h('span',{className:'hmc-val'},ms.count)),
               h('div',{className:'hmc-bar'},h('div',{className:'hmc-fill',style:{width:barPct+'%'}}))
             )
@@ -1720,8 +1750,8 @@ function Financial({fin,pats,db}){
     ),
 
     h('div',{className:'kpi-grid',style:{gridTemplateColumns:'repeat(3,1fr)',marginBottom:18}},
-      h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'R$'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(fat)),h('div',{className:'kpi-l'},mf?'Faturado · '+mf:'Faturado (todos)')),
-      h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'!'),h('div',{className:'kpi-v',style:{fontSize:18}},fmtM(pend)),h('div',{className:'kpi-l'},mf?'Pendente · '+mf:'Pendente (todos)')),
+      h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'R$'),h('div',{className:'kpi-v',style:{fontSize:18}},hideV?h('span',{className:'masked-val'},'••••••'):fmtM(fat)),h('div',{className:'kpi-l'},mf?'Faturado · '+mf:'Faturado (todos)')),
+      h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'!'),h('div',{className:'kpi-v',style:{fontSize:18}},hideV?h('span',{className:'masked-val'},'••••••'):fmtM(pend)),h('div',{className:'kpi-l'},mf?'Pendente · '+mf:'Pendente (todos)')),
       h('div',{className:'kpi or'},h('div',{className:'kpi-icon'},'#'),h('div',{className:'kpi-v'},filt.length),h('div',{className:'kpi-l'},'Registros'))
     ),
     h('div',{className:'tbar'},
@@ -1740,8 +1770,8 @@ function Financial({fin,pats,db}){
           h('td',{className:'td-m'},fmt(f.date)),
           h('td',null,h('div',{className:'td-n'},p?p.name:f.patientId),h('div',{style:{fontSize:11,color:'var(--ink4)'}},f.patientId)),
           h('td',null,p?h('span',{className:'badge b-brand'},p.plan):'—'),
-          h('td',{style:{fontWeight:600}},fmtM(f.totalValue)),
-          h('td',{style:{fontWeight:800,color:'var(--g4)'}},fmtM(f.paidValue)),
+          h('td',{style:{fontWeight:600}},hideV?h('span',{className:'masked-val'},'•••'):fmtM(f.totalValue)),
+          h('td',{style:{fontWeight:800,color:'var(--g4)'}},hideV?h('span',{className:'masked-val'},'•••'):fmtM(f.paidValue)),
           h('td',{className:'td-m'},f.payMethod||'—'),
           h('td',null,h(Bdg,{c:PYCLS[f.status]||'',l:f.status||'—'}),ov&&h('div',{style:{fontSize:10,color:'var(--r4)',fontWeight:700,marginTop:2}},'Vencido')),
           h('td',{className:'td-m'},fmt(f.dueDate)),
@@ -1769,11 +1799,11 @@ function Financial({fin,pats,db}){
           h('div',{className:'fin-card-values'},
             h('div',{className:'fin-card-val-box'},
               h('div',{className:'fin-card-val-l'},'Total'),
-              h('div',{className:'fin-card-val-v',style:{color:'var(--ink2)'}},fmtM(f.totalValue))
+              h('div',{className:'fin-card-val-v',style:{color:'var(--ink2)'}},hideV?h('span',{className:'masked-val'},'•••'):fmtM(f.totalValue))
             ),
             h('div',{className:'fin-card-val-box'},
               h('div',{className:'fin-card-val-l'},'Pago'),
-              h('div',{className:'fin-card-val-v',style:{color:'var(--g4)'}},fmtM(f.paidValue))
+              h('div',{className:'fin-card-val-v',style:{color:'var(--g4)'}},hideV?h('span',{className:'masked-val'},'•••'):fmtM(f.paidValue))
             )
           ),
           h('div',{className:'fin-card-meta'},
@@ -2109,9 +2139,73 @@ function Settings({db,onLogout}){
 }
 
 // ─── HOME PAGE ───
-function Home({pats,apts,fin,profile,db,plans,onNav,checkins}){
+// ─── TASK WIDGET ───
+function TaskWidget({taskDb,showOnHome,onToggleHome}){
+  const[tab,st]=useState('todo');
+  const[input,si]=useState('');
+  const[saving,ss]=useState(false);
+  const{tasks,loading,addTask,toggleTask,delTask}=taskDb;
+
+  const todo=tasks.filter(t=>!t.done);
+  const done=tasks.filter(t=>t.done);
+
+  const handleAdd=async()=>{
+    const txt=input.trim();if(!txt)return;
+    ss(true);try{await addTask(txt);si('');}catch(e){alert('Erro: '+e.message);}ss(false);
+  };
+
+  return h('div',null,
+    // Input
+    h('div',{className:'task-input-row'},
+      h('input',{className:'task-input',placeholder:'Nova tarefa... (Enter para adicionar)',value:input,
+        onChange:e=>si(e.target.value),
+        onKeyDown:e=>{if(e.key==='Enter'&&!saving)handleAdd();},
+        disabled:saving
+      }),
+      h('button',{className:'task-add-btn',onClick:handleAdd,disabled:saving||!input.trim(),title:'Adicionar'},'＋')
+    ),
+    // Tabs
+    h('div',{className:'task-tabs'},
+      h('button',{className:'task-tab'+(tab==='todo'?' on':''),onClick:()=>st('todo')},
+        'A fazer',todo.length>0&&h('span',{className:'task-tab-badge'},todo.length)
+      ),
+      h('button',{className:'task-tab'+(tab==='done'?' on':''),onClick:()=>st('done')},
+        'Feitas',done.length>0&&h('span',{className:'task-tab-badge',style:{background:'var(--g4)'}},done.length)
+      )
+    ),
+    // List
+    loading?h('div',{className:'task-empty'},h('div',{className:'spinner',style:{width:24,height:24,borderWidth:2}})):
+    tab==='todo'?h('div',{className:'task-list'},
+      todo.length===0
+        ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma tarefa pendente!'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima para começar'))
+        :todo.map(t=>h('div',{key:t.id,className:'task-item'},
+          h('div',{className:'task-check'+(t.done?' checked':''),onClick:()=>toggleTask(t.id,true)}),
+          h('div',{className:'task-text'},t.text),
+          h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
+        ))
+    ):h('div',{className:'task-list'},
+      done.length===0
+        ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'📋'),h('div',null,'Nenhuma tarefa concluída'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'As feitas ficam aqui por 7 dias'))
+        :done.map(t=>h('div',{key:t.id,className:'task-item done-item'},
+          h('div',{className:'task-check checked',onClick:()=>toggleTask(t.id,false)},'✓'),
+          h('div',{className:'task-text'},t.text),
+          h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
+        ))
+    ),
+    // Footer toggle
+    h('div',{style:{marginTop:10,paddingTop:10,borderTop:'1px solid var(--ink6)',display:'flex',alignItems:'center',justifyContent:'space-between'}},
+      h('span',{style:{fontSize:11,color:'var(--ink4)'}},todo.length+' pendente'+(todo.length!==1?'s':'')+' · '+done.length+' feita'+(done.length!==1?'s':'')+' (7d)'),
+      h('button',{className:'hide-val-btn'+(showOnHome?' active':''),onClick:onToggleHome},
+        showOnHome?'👁 Visível na home':'🙈 Oculto na home'
+      )
+    )
+  );
+}
+
+function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHideV}){
   const[modal,sm]=useState(null);
   const[saving,ss]=useState(false);
+  const[showTasks,setShowTasks]=useState(()=>localStorage.getItem('lapidados_tasks_home')!=='0');
   const now=today();
 
   // ── Enrich patients
@@ -2241,45 +2335,30 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins}){
     // ── TWO COLUMN
     h('div',{className:'grid2'},
 
-      // LEFT: Alertas feed
+      // LEFT: Task Widget
       h('div',{className:'card'},
         h('div',{className:'card-head'},
-          h('div',{className:'card-title'},'🔔 Alertas prioritários'),
-          alertItems.length>0&&h('span',{style:{fontSize:11,color:'var(--ink3)'}},alertItems.length+' item'+(alertItems.length!==1?'s':''))
+          h('div',{className:'card-title'},'✅ Tarefas & lembretes')
         ),
         h('div',{className:'card-body'},
-          alertItems.length===0
-            ?h('div',{className:'empty'},h('div',{className:'empty-icon'},'✓'),h('div',{className:'empty-tt'},'Tudo em ordem'),h('p',null,'Nenhum alerta urgente no momento.'))
-            :h('div',{className:'alerts-feed'},
-              alertItems.map(a=>h('div',{key:a.id,className:'afd-item'},
-                h('div',{className:'afd-icon '+a.cls},a.icon),
-                h('div',{className:'afd-body'},
-                  h('div',{className:'afd-msg'},a.msg),
-                  h('div',{className:'afd-sub'},a.sub)
-                ),
-                h('div',{className:'afd-action'},
-                  a.phone
-                    ?h(WaBtn,{phone:a.phone})
-                    :h(AgtBtn,null)
-                )
-              ))
-            )
+          h(TaskWidget,{taskDb,showOnHome:showTasks,onToggleHome:()=>{const v=!showTasks;setShowTasks(v);localStorage.setItem('lapidados_tasks_home',v?'1':'0')}})
         )
       ),
 
       // RIGHT: Check-in + Financeiro
       h('div',null,
-        // Check-in (new style, delegated to component)
         h(CheckinDashCard,{pats,checkins:checkins||[],onNav}),
-        // Financial snapshot
         h('div',{className:'card'},
           h('div',{className:'card-head'},
             h('div',{className:'card-title'},'💵 '+now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})),
-            h('button',{className:'btn btn-ghost btn-xs',onClick:()=>onNav('fin')},'Ver tudo')
+            h('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+              h('button',{className:'hide-val-btn'+(hideV?' active':''),onClick:()=>setHideV(v=>!v),title:hideV?'Mostrar valores':'Ocultar valores'},hideV?'👁 Mostrar':'🙈 Ocultar'),
+              h('button',{className:'btn btn-ghost btn-xs',onClick:()=>onNav('fin')},'Ver tudo')
+            )
           ),
           h('div',{className:'card-body'},
-            h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Faturado'),h('span',{style:{fontWeight:800,fontSize:15,color:'var(--g4)'}},fmtM(fat))),
-            h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Pendente'),h('span',{style:{fontWeight:800,fontSize:15,color:pend>0?'var(--r4)':'var(--ink4)'}},fmtM(pend))),
+            h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Faturado'),h('span',{style:{fontWeight:800,fontSize:15,color:'var(--g4)'}},hideV?h('span',{className:'masked-val'},'••••••'):fmtM(fat))),
+            h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Pendente'),h('span',{style:{fontWeight:800,fontSize:15,color:pend>0?'var(--r4)':'var(--ink4)'}},hideV?h('span',{className:'masked-val'},'••••••'):fmtM(pend))),
             h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Recebimentos'),h('span',{style:{fontWeight:700,fontSize:14,color:'var(--ink2)'}},qp+' pagamentos'))
           )
         )
@@ -2389,6 +2468,9 @@ function App(){
 
   const db=useData(session?.user?.id);
   const{checkins,loading:cLoading,reload:reloadCheckins}=useCheckins(session?.user?.id);
+  const taskDb=useTasks(session?.user?.id);
+  const[hideV,setHideVRaw]=useState(()=>localStorage.getItem('lapidados_hide_values')==='1');
+  const setHideV=fn=>{setHideVRaw(prev=>{const next=typeof fn==='function'?fn(prev):fn;localStorage.setItem('lapidados_hide_values',next?'1':'0');return next;});};
   const alerts=screen==='app'&&!db.loading&&db.pats?db.pats.filter(p=>{
     const last=lastC(p.id,db.apts||[]);
     const planEnd=endDate(p.startDate,p.plan);
@@ -2450,11 +2532,11 @@ function App(){
       h('div',{className:'main-content'},
         h('div',{className:'main'},
           db.loading?h('div',{className:'loading'},h('div',{className:'spinner'}),h('div',{style:{fontSize:13,fontWeight:600}},'Carregando dados...')):
-          tab==='home'?h(Home,{pats:db.pats,apts:db.apts,fin:db.fin,profile:db.profile,db,plans:db.plans,onNav:st,checkins}):
+          tab==='home'?h(Home,{pats:db.pats,apts:db.apts,fin:db.fin,profile:db.profile,db,plans:db.plans,onNav:st,checkins,taskDb,hideV,setHideV}):
           tab==='pats'?h(Patients,{pats:db.pats,apts:db.apts,fin:db.fin,db,plans:db.plans}):
           tab==='apts'?h(Appointments,{apts:db.apts,pats:db.pats,db}):
           tab==='checkin'?h(CheckinHub,{pats:db.pats,db,onNav:st}):
-          tab==='fin'?h(Financial,{fin:db.fin,pats:db.pats,db}):
+          tab==='fin'?h(Financial,{fin:db.fin,pats:db.pats,db,hideV,setHideV}):
           h(Settings,{db,onLogout:async()=>{await SB.auth.signOut();clearCfg();ss('setup')}})
         )
       )
@@ -2576,6 +2658,38 @@ function useCheckins(userId){
         {onConflict:'patient_id,week_number,year'}
       );
       await load();
+    }
+  };
+}
+
+// ─── TASKS DATA HOOK ───
+function useTasks(userId){
+  const[tasks,st]=useState([]);
+  const[loading,sl]=useState(true);
+
+  const load=useCallback(async()=>{
+    if(!SB||!userId)return;
+    // Auto-clean done tasks older than 7 days
+    const cutoff=new Date();cutoff.setDate(cutoff.getDate()-7);
+    await SB.from('tasks').delete().eq('user_id',userId).eq('done',true).lt('done_at',cutoff.toISOString());
+    const{data}=await SB.from('tasks').select('*').eq('user_id',userId).order('created_at',{ascending:true});
+    st(data||[]);sl(false);
+  },[userId]);
+
+  useEffect(()=>{load();},[load]);
+
+  return{tasks,loading,reload:load,
+    async addTask(text){
+      const{error}=await SB.from('tasks').insert({id:'TASK-'+Date.now(),user_id:userId,text:text.trim(),done:false});
+      if(error)throw error;await load();
+    },
+    async toggleTask(id,done){
+      const{error}=await SB.from('tasks').update({done,done_at:done?new Date().toISOString():null}).eq('id',id);
+      if(error)throw error;await load();
+    },
+    async delTask(id){
+      const{error}=await SB.from('tasks').delete().eq('id',id);
+      if(error)throw error;await load();
     }
   };
 }
