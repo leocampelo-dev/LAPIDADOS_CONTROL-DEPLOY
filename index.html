@@ -8,6 +8,7 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
 <link rel="shortcut icon" href="assets/logo_lapidados_control.svg" type="image/svg+xml" sizes="any">
 <link rel="apple-touch-icon" href="assets/logo_lapidados_control.svg" sizes="any">
@@ -484,6 +485,21 @@ tr:hover td{background:#fafafa}
 .fin-snap-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ink6);font-size:13px}
 .fin-snap-row:last-child{border-bottom:none}
 
+/* ── CUSTOM ALERT MODAL ── */
+.alert-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;animation:fadeIn .15s}
+.alert-box{background:var(--w);border-radius:18px;padding:28px 28px 22px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:slideUp .2s cubic-bezier(.4,0,.2,1)}
+.alert-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 14px}
+.alert-icon-wrap.success{background:var(--g1);color:var(--g4)}
+.alert-icon-wrap.error{background:var(--r1);color:var(--r4)}
+.alert-icon-wrap.info{background:var(--b1);color:var(--b4)}
+.alert-icon-wrap.confirm{background:var(--or1);color:var(--or4)}
+.alert-icon-wrap.warning{background:rgba(245,158,11,.1);color:#d97706}
+.alert-title{font-size:16px;font-weight:800;color:var(--ink);text-align:center;margin-bottom:8px}
+.alert-msg{font-size:13px;color:var(--ink3);text-align:center;line-height:1.6;margin-bottom:18px}
+.alert-btns{display:flex;gap:8px;justify-content:center}
+.alert-btns .btn{min-width:90px;justify-content:center}
+.nav-ic{font-size:16px;width:20px;text-align:center;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
+
 /* ── TASK WIDGET ── */
 .task-input-row{display:flex;gap:8px;margin-bottom:14px}
 .task-input{flex:1;padding:10px 14px;border:1.5px solid var(--ink5);border-radius:10px;font-size:13px;outline:none;background:var(--w);color:var(--ink);transition:border .15s;font-family:inherit}
@@ -951,6 +967,35 @@ function Modal({title,sub,onClose,wide,children}){
   )
 }
 
+// ─── GLOBAL ALERT SYSTEM ───
+let _alertFn=null;
+function showAlert(title,msg,type='info'){_alertFn&&_alertFn({title,msg,type,onConfirm:null});}
+function showSuccess(msg){showAlert('Sucesso!',msg,'success');}
+function showError(msg){showAlert('Erro',msg,'error');}
+function showConfirm(title,msg,onConfirm){_alertFn&&_alertFn({title,msg,type:'confirm',onConfirm});}
+const ALERT_ICONS={success:'bi bi-check-circle-fill',error:'bi bi-x-circle-fill',info:'bi bi-info-circle-fill',confirm:'bi bi-question-circle-fill',warning:'bi bi-exclamation-triangle-fill'};
+function AlertModal(){
+  const[data,sd]=useState(null);
+  useEffect(()=>{_alertFn=sd;return()=>{_alertFn=null;};},[]);
+  if(!data)return null;
+  const close=()=>sd(null);
+  return h('div',{className:'alert-ov',onClick:e=>{if(e.target.className==='alert-ov')close()}},
+    h('div',{className:'alert-box'},
+      h('div',{className:'alert-icon-wrap '+data.type},
+        h('i',{className:ALERT_ICONS[data.type]||ALERT_ICONS.info})
+      ),
+      h('div',{className:'alert-title'},data.title),
+      data.msg&&h('div',{className:'alert-msg'},data.msg),
+      h('div',{className:'alert-btns'},
+        data.type==='confirm'
+          ?[h('button',{key:'c',className:'btn btn-ghost',onClick:close},'Cancelar'),
+            h('button',{key:'o',className:'btn btn-primary',onClick:()=>{data.onConfirm?.();close();}},'Confirmar')]
+          :h('button',{className:'btn btn-primary',style:{minWidth:100,justifyContent:'center'},onClick:close},'OK')
+      )
+    )
+  );
+}
+
 // ─── SETUP SCREEN ───
 function SetupScreen({onDone}){
   const[url,su]=useState('');const[key,sk]=useState('');const[err,se]=useState('');const[loading,sl]=useState(false);
@@ -1173,7 +1218,7 @@ function PatForm({init,pats,plans,onSave,onClose,saving}){
   const[addFin,setAddFin]=useState(false);
   const isNew=!init;
   const go=()=>{
-    if(!f.name.trim()||!f.plan||!f.startDate)return alert('Nome, plano e data de início são obrigatórios.');
+    if(!f.name.trim()||!f.plan||!f.startDate)return showAlert('Campos obrigatórios','Preencha nome, plano e data de início.','warning');
     const payload={...f};
     if(isNew&&addApt&&apt.date)payload._apt={...apt};
     if(isNew&&addFin&&fin.totalValue){const pv=parseFloat(fin.paidValue)||0,tv=parseFloat(fin.totalValue)||0;payload._fin={...fin,status:pv<=0?'PENDENTE':pv>=tv?'PAGO':'PARCIAL'};}
@@ -1223,7 +1268,7 @@ function PatForm({init,pats,plans,onSave,onClose,saving}){
 function AptForm({init,pats,onSave,onClose,defPid,saving}){
   const[f,sf]=useState(init||{patientId:defPid||'',date:new Date().toISOString().slice(0,10),weight:'',evaluation:'',conduct:'',nextDate:'',notes:''});
   const s=k=>e=>sf(p=>({...p,[k]:e.target.value}));
-  const go=()=>{if(!f.patientId||!f.date)return alert('Selecione paciente e data.');onSave(f)};
+  const go=()=>{if(!f.patientId||!f.date)return showAlert('Campos obrigatórios','Selecione paciente e data.','warning');onSave(f)};
   return h('div',null,
     h('div',{className:'fg'},
       h('div',{className:'fl fgf'},h('label',{className:'flb'},'Paciente'),h('select',{className:'fi',value:f.patientId,onChange:s('patientId'),disabled:!!defPid},h('option',{value:''},'Selecionar...'),pats.map(p=>h('option',{key:p.id,value:p.id},p.name+' · '+p.id)))),
@@ -1242,7 +1287,7 @@ function FinForm({init,pats,onSave,onClose,saving}){
   const s=k=>e=>sf(p=>({...p,[k]:e.target.value}));
   const cs=()=>{const pv=parseFloat(f.paidValue)||0,tv=parseFloat(f.totalValue)||0;if(pv<=0)return'PENDENTE';if(pv>=tv)return'PAGO';return'PARCIAL'};
   const pend=(parseFloat(f.totalValue)||0)-(parseFloat(f.paidValue)||0);
-  const go=()=>{if(!f.patientId||!f.date)return alert('Selecione paciente e data.');onSave({...f,status:cs()})};
+  const go=()=>{if(!f.patientId||!f.date)return showAlert('Campos obrigatórios','Selecione paciente e data.','warning');onSave({...f,status:cs()})};
   const pat=f.patientId?pats.find(p=>p.id===f.patientId):null;
   return h('div',null,
     h('div',{className:'fg'},
@@ -1328,7 +1373,7 @@ function Profile({pat,apts,fin,onClose,onNewApt,onEditApt,onDelApt}){
 }
 
 function exportCSV(data,name){
-  if(!data.length)return alert('Nada para exportar.');
+  if(!data.length)return showAlert('Nada para exportar','Não há dados para exportar.','info');
   const ks=Object.keys(data[0]);
   const rows=[ks,...data.map(r=>ks.map(k=>JSON.stringify(r[k]??'')))];
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv'}));a.download=name;a.click();
@@ -1420,10 +1465,10 @@ function Patients({pats,apts,fin,db,plans}){
       toast('Paciente cadastrado!');
     }else{await db.updPat({...d,id:modal.id});toast('Atualizado.');}
     sm(null);
-  }catch(e){alert('Erro: '+e.message);}ss(false)};
-  const del=async id=>{if(!confirm('Excluir paciente e todos seus dados?'))return;try{await db.delPat(id);toast('Removido.');}catch(e){alert('Erro: '+e.message)}};
+  }catch(e){showError(e.message);}ss(false)};
+  const del=async id=>{if(!window.confirm('Excluir paciente e todos seus dados?'))return;try{await db.delPat(id);toast('Removido.');}catch(e){showError(e.message)}};
   const curProf=prof?pats.find(p=>p.id===prof):null;
-  const saveApt=async d=>{ss(true);try{if(aptM&&aptM._e)await db.updApt({...d,id:aptM.id});else await db.addApt({...d,id:'AT-'+Date.now()});sa(null);toast('Atendimento salvo.');}catch(e){alert('Erro: '+e.message);}ss(false)};
+  const saveApt=async d=>{ss(true);try{if(aptM&&aptM._e)await db.updApt({...d,id:aptM.id});else await db.addApt({...d,id:'AT-'+Date.now()});sa(null);toast('Atendimento salvo.');}catch(e){showError(e.message);}ss(false)};
   const mob=typeof window!=='undefined'&&window.innerWidth<=768;
   return h('div',null,
     h('div',{className:'pg-head'},
@@ -1492,7 +1537,7 @@ function Patients({pats,apts,fin,db,plans}){
             )))
           )),
     modal&&h(Modal,{title:modal==='new'?'Novo paciente':'Editar paciente',onClose:()=>sm(null)},h(PatForm,{init:modal==='new'?null:modal,pats,plans,onSave:save,onClose:()=>sm(null),saving})),
-    curProf&&h(Profile,{pat:curProf,apts,fin,onClose:()=>sp(null),onNewApt:()=>sa(curProf),onEditApt:a=>sa({...a,_e:true}),onDelApt:async id=>{if(!confirm('Excluir atendimento?'))return;try{await db.delApt(id);toast('Removido.');}catch(e){alert(e.message)}}}),
+    curProf&&h(Profile,{pat:curProf,apts,fin,onClose:()=>sp(null),onNewApt:()=>sa(curProf),onEditApt:a=>sa({...a,_e:true}),onDelApt:async id=>{if(!window.confirm('Excluir atendimento?'))return;try{await db.delApt(id);toast('Removido.');}catch(e){showError(e.message)}}}),
     aptM&&h(Modal,{title:aptM._e?'Editar atendimento':'Novo atendimento',sub:curProf?.name,onClose:()=>sa(null)},h(AptForm,{init:aptM._e?aptM:null,pats,defPid:aptM.id||aptM.patientId,onSave:saveApt,onClose:()=>sa(null),saving}))
   )
 }
@@ -1636,8 +1681,8 @@ function Appointments({apts,pats,db}){
 
   const togglePat=id=>sop(prev=>{const n=new Set(prev);n.has(id)?n.delete(id):n.add(id);return n});
 
-  const save=async d=>{ss(true);try{if(modal==='new')await db.addApt({...d,id:'AT-'+Date.now()});else await db.updApt({...d,id:modal.id});sm(null);toast('Atendimento salvo.');}catch(e){alert('Erro: '+e.message);}ss(false)};
-  const del=async id=>{if(!confirm('Excluir atendimento?'))return;try{await db.delApt(id);toast('Removido.');}catch(e){alert(e.message)}};
+  const save=async d=>{ss(true);try{if(modal==='new')await db.addApt({...d,id:'AT-'+Date.now()});else await db.updApt({...d,id:modal.id});sm(null);toast('Atendimento salvo.');}catch(e){showError(e.message);}ss(false)};
+  const del=async id=>{if(!window.confirm('Excluir atendimento?'))return;try{await db.delApt(id);toast('Removido.');}catch(e){showError(e.message)}};
   const patOpts=[...new Set(apts.map(a=>a.patientId))].map(id=>pm[id]).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name));
 
   return h('div',null,
@@ -1766,8 +1811,8 @@ function Financial({fin,pats,db,hideV,setHideV}){
   const pct=goal>0?Math.min(100,Math.round(monthFat/goal*100)):0;
   const goalColor=pct>=100?'var(--g4)':pct>=70?'var(--or4)':pct>=40?'var(--y4)':'var(--r4)';
   const saveGoal=()=>{const v=parseFloat(goalInput)||0;setGoal(v);localStorage.setItem(GOAL_KEY,v);sEG(false);toast('Meta atualizada!')};
-  const save=async d=>{ss(true);try{if(modal==='new')await db.addFin({...d,id:'FIN-'+Date.now()});else await db.updFin({...d,id:modal.id});sm(null);toast('Lançamento salvo.');}catch(e){alert('Erro: '+e.message);}ss(false)};
-  const del=async id=>{if(!confirm('Excluir lançamento?'))return;try{await db.delFin(id);toast('Removido.');}catch(e){alert(e.message)}};
+  const save=async d=>{ss(true);try{if(modal==='new')await db.addFin({...d,id:'FIN-'+Date.now()});else await db.updFin({...d,id:modal.id});sm(null);toast('Lançamento salvo.');}catch(e){showError(e.message);}ss(false)};
+  const del=async id=>{if(!window.confirm('Excluir lançamento?'))return;try{await db.delFin(id);toast('Removido.');}catch(e){showError(e.message)}};
 
   return h('div',null,
     h('div',{className:'pg-head'},
@@ -1919,7 +1964,7 @@ function PlanForm({init,onSave,onClose,saving}){
   });
   const totalDays=f.durMode==='months'?(parseInt(f.months)||1)*30:(parseInt(f.days)||30);
   const go=()=>{
-    if(!f.name.trim())return alert('Nome do plano é obrigatório.');
+    if(!f.name.trim())return showAlert('Campo obrigatório','Digite o nome do plano.','warning');
     if(totalDays<1)return alert('Duração deve ser pelo menos 1 dia.');
     if(!f.sessions||parseInt(f.sessions)<1)return alert('Número de consultas deve ser pelo menos 1.');
     onSave({...f,days:String(totalDays)});
@@ -1962,12 +2007,12 @@ function SettingsPlans({plans,db}){
       if(modal==='new'){await db.addPlan(d);toast('Plano criado!');}
       else{await db.updPlan({...d,id:modal.id});toast('Plano atualizado.');}
       sm(null);
-    }catch(e){alert('Erro: '+e.message);}
+    }catch(e){showError(e.message);}
     ss(false);
   };
   const del=async id=>{
-    if(!confirm('Excluir este plano? Pacientes existentes não serão afetados.'))return;
-    try{await db.delPlan(id);toast('Plano removido.');}catch(e){alert('Erro: '+e.message);}
+    if(!window.confirm('Excluir este plano? Pacientes existentes não serão afetados.'))return;
+    try{await db.delPlan(id);toast('Plano removido.');}catch(e){showError(e.message);}
   };
   return h('div',null,
     h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}},
@@ -2123,8 +2168,17 @@ function SettingsProfile({profile,db}){
   };
 
   const save=async()=>{
+    const keyChanged=f.gemini_api_key&&f.gemini_api_key!==(profile?.gemini_api_key||'');
+    if(keyChanged){
+      ss(true);
+      try{
+        const r=await callGemini(f.gemini_api_key,'Responda apenas: OK');
+        if(r&&r.trim().length>0)showSuccess('Chave Gemini válida! IA pronta para uso.');
+        else{showAlert('Chave inválida','Nenhuma resposta recebida. Verifique a chave.','warning');ss(false);return;}
+      }catch(e){showError('Chave Gemini inválida: '+e.message);ss(false);return;}
+    }
     ss(true);
-    try{await db.saveProfile(f);toast('Perfil atualizado!');}catch(e){alert('Erro: '+e.message);}
+    try{await db.saveProfile(f);toast('Perfil atualizado!');}catch(e){showError(e.message);}
     ss(false);
   };
 
@@ -2202,7 +2256,7 @@ function SettingsSistema({onLogout}){
     ),
     h('div',{style:{marginTop:24,paddingTop:20,borderTop:'1px solid var(--ink6)'}},
       h('div',{style:{fontWeight:700,fontSize:12,marginBottom:12,color:'var(--r4)'}},'Zona de risco'),
-      h('button',{className:'btn btn-del',onClick:()=>{if(confirm('Tem certeza que deseja fazer logout? Você será desconectado do sistema.'))onLogout()}},'🚪 Sair da conta')
+      h('button',{className:'btn btn-del',onClick:()=>{if(window.confirm('Tem certeza que deseja fazer logout? Você será desconectado do sistema.'))onLogout()}},'🚪 Sair da conta')
     )
   )
 }
@@ -2242,7 +2296,7 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
 
   const handleAdd=async()=>{
     const txt=input.trim();if(!txt)return;
-    ss(true);try{await addTask(txt);si('');}catch(e){alert('Erro: '+e.message);}ss(false);
+    ss(true);try{await addTask(txt);si('');}catch(e){showError(e.message);}ss(false);
   };
 
   return h('div',null,
@@ -2264,30 +2318,36 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
         'Feitas',done.length>0&&h('span',{className:'task-tab-badge',style:{background:'var(--g4)'}},done.length)
       )
     ),
-    // List
-    loading?h('div',{className:'task-empty'},h('div',{className:'spinner',style:{width:24,height:24,borderWidth:2}})):
-    tab==='todo'?h('div',{className:'task-list'},
-      todo.length===0
-        ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma tarefa pendente!'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima para começar'))
-        :todo.map(t=>h('div',{key:t.id,className:'task-item'},
-          h('div',{className:'task-check'+(t.done?' checked':''),onClick:()=>toggleTask(t.id,true)}),
-          h('div',{className:'task-text'},t.text),
-          h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
-        ))
-    ):h('div',{className:'task-list'},
-      done.length===0
-        ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'📋'),h('div',null,'Nenhuma tarefa concluída'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'As feitas ficam aqui por 7 dias'))
-        :done.map(t=>h('div',{key:t.id,className:'task-item done-item'},
-          h('div',{className:'task-check checked',onClick:()=>toggleTask(t.id,false)},'✓'),
-          h('div',{className:'task-text'},t.text),
-          h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
-        ))
+    // List - only show when not hidden
+    showOnHome?(
+      loading?h('div',{className:'task-empty'},h('div',{className:'spinner',style:{width:24,height:24,borderWidth:2}})):
+      tab==='todo'?h('div',{className:'task-list'},
+        todo.length===0
+          ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma nota pendente!'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima para começar'))
+          :todo.map(t=>h('div',{key:t.id,className:'task-item'},
+            h('div',{className:'task-check'+(t.done?' checked':''),onClick:()=>toggleTask(t.id,true)}),
+            h('div',{className:'task-text'},t.text),
+            h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
+          ))
+      ):h('div',{className:'task-list'},
+        done.length===0
+          ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'📋'),h('div',null,'Nenhuma nota concluída'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'As feitas ficam aqui por 7 dias'))
+          :done.map(t=>h('div',{key:t.id,className:'task-item done-item'},
+            h('div',{className:'task-check checked',onClick:()=>toggleTask(t.id,false)},h('i',{className:'bi bi-check'})),
+            h('div',{className:'task-text'},t.text),
+            h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
+          ))
+      )
+    ):h('div',{className:'task-empty',style:{padding:'14px 0'}},
+      h('i',{className:'bi bi-eye-slash',style:{fontSize:20,color:'var(--ink4)'}}),
+      h('div',{style:{fontSize:11,color:'var(--ink4)',marginTop:6}},'Notas ocultas na home')
     ),
     // Footer toggle
     h('div',{style:{marginTop:10,paddingTop:10,borderTop:'1px solid var(--ink6)',display:'flex',alignItems:'center',justifyContent:'space-between'}},
       h('span',{style:{fontSize:11,color:'var(--ink4)'}},todo.length+' pendente'+(todo.length!==1?'s':'')+' · '+done.length+' feita'+(done.length!==1?'s':'')+' (7d)'),
       h('button',{className:'hide-val-btn'+(showOnHome?' active':''),onClick:onToggleHome},
-        showOnHome?'👁 Visível na home':'🙈 Oculto na home'
+        h('i',{className:'bi bi-'+(showOnHome?'eye':'eye-slash')}),
+        showOnHome?' Notas visíveis':' Notas ocultas'
       )
     )
   );
@@ -2359,9 +2419,9 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
   },[atrasados,renovacoes,proximos]);
 
   // ── Quick action saves
-  const savePat=async d=>{ss(true);try{await db.addPat(d);sm(null);toast('Paciente cadastrado!');}catch(e){alert('Erro: '+e.message);}ss(false)};
-  const saveApt=async d=>{ss(true);try{await db.addApt({...d,id:'AT-'+Date.now()});sm(null);toast('Atendimento salvo!');}catch(e){alert('Erro: '+e.message);}ss(false)};
-  const saveFin=async d=>{ss(true);try{await db.addFin(d);sm(null);toast('Lançamento salvo!');}catch(e){alert('Erro: '+e.message);}ss(false)};
+  const savePat=async d=>{ss(true);try{await db.addPat(d);sm(null);toast('Paciente cadastrado!');}catch(e){showError(e.message);}ss(false)};
+  const saveApt=async d=>{ss(true);try{await db.addApt({...d,id:'AT-'+Date.now()});sm(null);toast('Atendimento salvo!');}catch(e){showError(e.message);}ss(false)};
+  const saveFin=async d=>{ss(true);try{await db.addFin(d);sm(null);toast('Lançamento salvo!');}catch(e){showError(e.message);}ss(false)};
 
   // ── Modal list renderer
   const DmlRow=({p,sub,acts})=>h('div',{className:'dml-row'},
@@ -2429,7 +2489,7 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
       // LEFT: Task Widget
       h('div',{className:'card'},
         h('div',{className:'card-head'},
-          h('div',{className:'card-title'},'✅ Tarefas & lembretes')
+          h('div',{className:'card-title'},h('i',{className:'bi bi-check2-square',style:{marginRight:6}}),'Notas & lembretes')
         ),
         h('div',{className:'card-body'},
           h(TaskWidget,{taskDb,showOnHome:showTasks,onToggleHome:()=>{const v=!showTasks;setShowTasks(v);localStorage.setItem('lapidados_tasks_home',v?'1':'0')}})
@@ -2573,7 +2633,7 @@ function App(){
   if(screen==='setup')return h(SetupScreen,{onDone:()=>ss('auth')});
   if(screen==='auth')return h(AuthScreen,{onLogin:s=>{sse(s);ss('app')}});
 
-  const TABS=[['home','🏠','Início'],['pats','👥','Pacientes'],['apts','📅','Atendimentos'],['checkin','📲','Check-in'],['fin','💵','Financeiro'],['cfg','⚙','Configurações']];
+  const TABS=[['home','bi-house','Início'],['pats','bi-people','Pacientes'],['apts','bi-calendar-check','Atendimentos'],['checkin','bi-phone-vibrate','Check-in'],['fin','bi-cash-stack','Financeiro'],['cfg','bi-gear','Configurações']];
   const prof=db.profile;
   const profName=prof&&prof.fullName?prof.fullName.trim().split(' ')[0]:'Profissional';
   const profInitials=prof&&prof.fullName?ini(prof.fullName):'P';
@@ -2614,7 +2674,7 @@ function App(){
         ),
         h('div',{className:'snav-list'},
           TABS.map(([id,icon,lbl])=>h('button',{key:id,className:'snav-item'+(tab===id?' on':''),onClick:()=>st(id)},
-            h('span',{className:'snav-icon'},icon),
+            h('i',{className:'bi '+icon,style:{fontSize:16,width:20,textAlign:'center',flexShrink:0}}),
             h('span',{className:'snav-lbl'},lbl),
             id==='home'&&alerts>0?h('span',{className:'snav-badge'},alerts):null
           ))
@@ -2634,7 +2694,7 @@ function App(){
     ),
     h('nav',{className:'mob-nav'},
       TABS.map(([id,icon,lbl])=>h('button',{key:id,className:'mob-nav-item'+(tab===id?' on':''),onClick:()=>st(id)},
-        h('span',{className:'mob-nav-icon'},icon),
+        h('span',{className:'mob-nav-icon'},h('i',{className:'bi '+icon})),
         h('span',{className:'mob-nav-lbl'},lbl),
         id==='home'&&alerts>0?h('span',{className:'mob-nav-badge'},alerts):null
       ))
@@ -2973,8 +3033,8 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
                 style:{flexShrink:0},
                 onClick:async(e)=>{
                   e.stopPropagation();
-                  if(!confirm('Excluir check-in da semana '+c.week_number+'?'))return;
-                  if(!confirm('Confirmação: apagar permanentemente o check-in da semana '+c.week_number+' de '+p.name+'?'))return;
+                  if(!window.confirm('Excluir check-in da semana '+c.week_number+'?'))return;
+                  
                   try{
                     const{error}=await SB.from('checkins').delete().eq('id',c.id);
                     if(error)throw error;
@@ -3010,28 +3070,34 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
   if(!p)return null;
   const[exp,setExp]=useState(null);
   const[aiLoading,setAiL]=useState(false);
-  const[aiData,setAiData]=useState(p.weekCheckin?.ai_summary?{
-    summary:p.weekCheckin.ai_summary,
-    focus:p.weekCheckin.ai_focus,
-    risk:p.weekCheckin.ai_risk,
-    insights:p.weekCheckin.ai_insights||[],
-    reply:p.weekCheckin.ai_reply
+  // Use weekCheckin OR most recent checkin as fallback for AI
+  const ci=p.weekCheckin||(p.allCheckins&&p.allCheckins.length>0?p.allCheckins[0]:null);
+  const prevCi=p.allCheckins?.[ci&&ci===p.allCheckins[0]?1:0]||null;
+  const[aiData,setAiData]=useState(ci?.ai_summary?{
+    summary:ci.ai_summary,focus:ci.ai_focus,risk:ci.ai_risk,
+    insights:ci.ai_insights||[],reply:ci.ai_reply
   }:null);
   const r=getRank(p.totalPts);
   const prog=rankProgress(p.totalPts);
-  const ci=p.weekCheckin;
-  const prevCi=p.allCheckins?.[1]||null;
   const ws=getWeeklyStatus(ci,prevCi);
+  const RANK_GRADIENTS={
+    'rank-bruto':'linear-gradient(135deg,#374151,#1f2937)',
+    'rank-destravado':'linear-gradient(135deg,#1e3a5f,#0f2042)',
+    'rank-afiado':'linear-gradient(135deg,#312e81,#4338ca)',
+    'rank-imparavel':'linear-gradient(135deg,#7c2d12,#b91c1c)',
+    'rank-lapidado':'linear-gradient(135deg,#78350f,#b45309)',
+  };
+  const rankBg=RANK_GRADIENTS[r.cls]||RANK_GRADIENTS['rank-bruto'];
   const metrics=[
-    {key:'diet_score',icon:'🥗',label:'Dieta'},
-    {key:'training_score',icon:'🏋️',label:'Treino'},
-    {key:'sleep_score',icon:'😴',label:'Sono'},
-    {key:'energy_level',icon:'⚡',label:'Energia'},
+    {key:'diet_score',icon:'bi bi-egg-fried',label:'Dieta'},
+    {key:'training_score',icon:'bi bi-lightning-charge',label:'Treino'},
+    {key:'sleep_score',icon:'bi bi-moon-stars',label:'Sono'},
+    {key:'energy_level',icon:'bi bi-battery-half',label:'Energia'},
   ];
 
   const handleAi=async()=>{
-    if(!geminiKey)return alert('Configure sua chave Gemini em Configurações para usar a IA.');
-    if(!ci)return alert('Este paciente não tem check-in nesta semana ainda.');
+    if(!geminiKey)return showAlert('Chave não configurada','Acesse Configurações → Perfil e adicione sua chave Gemini API.','warning');
+    if(!ci)return showAlert('Sem check-in','Este paciente não tem check-in registrado ainda.','info');
     setAiL(true);
     try{
       const res=await generateAiAnalysis(geminiKey,ci,prevCi,{...p,total_points:p.totalPts});
@@ -3041,14 +3107,14 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
         ai_summary:res.summary,ai_focus:res.focus,ai_risk:res.risk,
         ai_insights:res.insights,ai_reply:res.reply
       }).eq('id',ci.id);
-      toast('Análise IA salva!');
-    }catch(e){alert('Erro na IA: '+e.message);}
+      toast('Análise IA salva!');showSuccess('Análise IA gerada com sucesso!');
+    }catch(e){showError('Erro na IA: '+e.message);}
     setAiL(false);
   };
 
   return h(Modal,{title:'',onClose,wide:true},
     // ── Premium rank header
-    h('div',{className:'ci-mhdr '+(r.cls||'rank-bruto')},
+    h('div',{className:'ci-mhdr',style:{background:rankBg}},
       h('div',{className:'ci-mhdr-top'},
         h('div',{className:'ci-mhdr-av'},ini(p.name)),
         h('div',null,
@@ -3173,7 +3239,7 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
               h('button',{className:'btn btn-del btn-xs',onClick:async()=>{
                 if(!confirm('Excluir check-in semana '+c.week_number+'?'))return;
                 try{await SB.from('checkins').delete().eq('id',c.id);toast('Removido.');reload();}
-                catch(e){alert(e.message);}
+                catch(e){showError(e.message);}
               }},'🗑️')
             )
           )
@@ -3455,7 +3521,7 @@ function CheckinDashCard({pats,checkins,onNav}){
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',null,h(AlertModal),h(App)));
 </script>
 </body>
 </html>
