@@ -956,7 +956,7 @@ function Bdg({c,l}){return h('span',{className:'badge '+c},l)}
 function Tip({text,children}){return h('span',{className:'tip-wrap'},children,h('span',{className:'tip-box'},text))}
 function InfoDot({text}){return h(Tip,{text},h('span',{className:'info-dot'},'?'))}
 function Modal({title,sub,onClose,wide,children}){
-  return h('div',{className:'ov',onClick:e=>e.target===e.currentTarget&&onClose()},
+  return h('div',{className:'ov'},
     h('div',{className:'mdl'+(wide?' mdl-lg':'')},
       h('div',{className:'mdl-top'},
         h('div',null,h('div',{className:'mdl-ttl'},title),sub&&h('div',{className:'mdl-sub'},sub)),
@@ -2447,9 +2447,13 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
 
     // ── QUICK ACTIONS
     h('div',{className:'home-qa'},
-      [['👥','Novo paciente','pat'],['📅','Novo atendimento','apt'],['💵','Novo lançamento','fin']].map(([icon,lbl,key])=>
+      [
+        ['bi-person-plus','var(--or1)','var(--or4)','Novo paciente','pat'],
+        ['bi-calendar-plus','var(--b1)','var(--b4)','Novo atendimento','apt'],
+        ['bi-cash-coin','var(--g1)','var(--g4)','Novo lançamento','fin'],
+      ].map(([icon,bg,color,lbl,key])=>
         h('button',{key,className:'home-qa-btn',onClick:()=>sm(key)},
-          h('div',{className:'home-qa-icon'},icon),
+          h('div',{className:'home-qa-icon',style:{background:bg}},h('i',{className:'bi '+icon,style:{fontSize:16,color}})),
           h('div',{className:'home-qa-lbl'},lbl)
         )
       )
@@ -2458,25 +2462,25 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
     // ── 4 ACTION CARDS
     h('div',{className:'dash-cards'},
       h('button',{className:'dash-card'+(atrasados.length>0?' dc-red':' dc-neutral'),onClick:()=>sm('atrasados')},
-        h('div',{className:'dash-card-icon'},atrasados.length>0?'⏰':'✓'),
+        h('div',{className:'dash-card-icon'},h('i',{className:'bi bi-clock-history',style:{fontSize:18,color:atrasados.length>0?'var(--r4)':'var(--ink4)'}})),
         h('div',{className:'dash-card-count'},atrasados.length),
         h('div',{className:'dash-card-label'},'Atrasados'),
         h('div',{className:'dash-card-sub'},'sem consulta há +30 dias')
       ),
       h('button',{className:'dash-card'+(proximos.length>0?' dc-blue':' dc-neutral'),onClick:()=>sm('proximos')},
-        h('div',{className:'dash-card-icon'},'📅'),
+        h('div',{className:'dash-card-icon'},h('i',{className:'bi bi-calendar-week',style:{fontSize:18,color:proximos.length>0?'var(--b4)':'var(--ink4)'}})),
         h('div',{className:'dash-card-count'},proximos.length),
         h('div',{className:'dash-card-label'},'Próximos 7 dias'),
         h('div',{className:'dash-card-sub'},'consultas previstas')
       ),
       h('button',{className:'dash-card'+(renovacoes.length>0?' dc-orange':' dc-neutral'),onClick:()=>sm('renovacoes')},
-        h('div',{className:'dash-card-icon'},'🔁'),
+        h('div',{className:'dash-card-icon'},h('i',{className:'bi bi-arrow-repeat',style:{fontSize:18,color:renovacoes.length>0?'var(--or4)':'var(--ink4)'}})),
         h('div',{className:'dash-card-count'},renovacoes.length),
         h('div',{className:'dash-card-label'},'Renovações'),
         h('div',{className:'dash-card-sub'},'planos a renovar')
       ),
       h('button',{className:'dash-card dc-neutral',onClick:()=>sm('todos')},
-        h('div',{className:'dash-card-icon'},'👥'),
+        h('div',{className:'dash-card-icon'},h('i',{className:'bi bi-people',style:{fontSize:18,color:'var(--ink3)'}})),
         h('div',{className:'dash-card-count'},pats.length),
         h('div',{className:'dash-card-label'},'Total de pacientes'),
         h('div',{className:'dash-card-sub'},'ativos no sistema')
@@ -2489,7 +2493,7 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
       // LEFT: Task Widget
       h('div',{className:'card'},
         h('div',{className:'card-head'},
-          h('div',{className:'card-title'},h('i',{className:'bi bi-check2-square',style:{marginRight:6}}),'Notas & lembretes')
+          h('div',{className:'card-title'},h('i',{className:'bi bi-check2-square',style:{marginRight:6,color:'var(--or4)'}},''),'Notas & lembretes')
         ),
         h('div',{className:'card-body'},
           h(TaskWidget,{taskDb,showOnHome:showTasks,onToggleHome:()=>{const v=!showTasks;setShowTasks(v);localStorage.setItem('lapidados_tasks_home',v?'1':'0')}})
@@ -2633,7 +2637,7 @@ function App(){
   if(screen==='setup')return h(SetupScreen,{onDone:()=>ss('auth')});
   if(screen==='auth')return h(AuthScreen,{onLogin:s=>{sse(s);ss('app')}});
 
-  const TABS=[['home','bi-house','Início'],['pats','bi-people','Pacientes'],['apts','bi-calendar-check','Atendimentos'],['checkin','bi-phone-vibrate','Check-in'],['fin','bi-cash-stack','Financeiro'],['cfg','bi-gear','Configurações']];
+  const TABS=[['home','🏠','Início'],['pats','👥','Pacientes'],['apts','📅','Atendimentos'],['checkin','📲','Check-in'],['fin','💵','Financeiro'],['cfg','⚙️','Configurações']];
   const prof=db.profile;
   const profName=prof&&prof.fullName?prof.fullName.trim().split(' ')[0]:'Profissional';
   const profInitials=prof&&prof.fullName?ini(prof.fullName):'P';
@@ -2674,7 +2678,7 @@ function App(){
         ),
         h('div',{className:'snav-list'},
           TABS.map(([id,icon,lbl])=>h('button',{key:id,className:'snav-item'+(tab===id?' on':''),onClick:()=>st(id)},
-            h('i',{className:'bi '+icon,style:{fontSize:16,width:20,textAlign:'center',flexShrink:0}}),
+            h('span',{className:'snav-icon'},icon),
             h('span',{className:'snav-lbl'},lbl),
             id==='home'&&alerts>0?h('span',{className:'snav-badge'},alerts):null
           ))
@@ -2694,7 +2698,7 @@ function App(){
     ),
     h('nav',{className:'mob-nav'},
       TABS.map(([id,icon,lbl])=>h('button',{key:id,className:'mob-nav-item'+(tab===id?' on':''),onClick:()=>st(id)},
-        h('span',{className:'mob-nav-icon'},h('i',{className:'bi '+icon})),
+        h('span',{className:'mob-nav-icon'},icon),
         h('span',{className:'mob-nav-lbl'},lbl),
         id==='home'&&alerts>0?h('span',{className:'mob-nav-badge'},alerts):null
       ))
@@ -2755,15 +2759,27 @@ const WEEK_TIERS = [
 
 
 // ─── PATIENT-RELATIVE WEEK CALCULATION ───
-// Week 1 = days 1-7 from start_date, Week 2 = days 8-14, etc.
+// Returns the patient's relative week number from their start date
 function calcPatientWeek(startDateStr) {
-  if (!startDateStr) return getWeekNum(); // fallback to ISO week
+  if (!startDateStr) return getWeekNum();
   const start = new Date(startDateStr + 'T00:00:00');
   const now   = new Date();
   const daysDiff = Math.floor((now - start) / 86400000);
   const week  = Math.max(1, Math.ceil((daysDiff + 1) / 7));
   const year  = start.getFullYear();
   return { week, year };
+}
+// Converts a stored calendar week+year to patient-relative week label
+// e.g. calWeek=20, patientStart=2026-05-01 → "Semana 3"
+function patWeekLabel(calWeek, calYear, startDateStr) {
+  if (!startDateStr) return 'Semana '+calWeek;
+  const start = new Date(startDateStr + 'T00:00:00');
+  const jan1  = new Date(calYear, 0, 1);
+  const weekDate = new Date(jan1.getTime() + (calWeek - 1) * 7 * 86400000);
+  const daysDiff = Math.floor((weekDate - start) / 86400000);
+  if (daysDiff < 0) return 'Semana 1';
+  const relWeek = Math.max(1, Math.ceil((daysDiff + 1) / 7));
+  return 'Semana ' + relWeek;
 }
 function getRank(totalPts){return RANKS.slice().reverse().find(r=>totalPts>=r.min)||RANKS[0]}
 function getWeekTier(score){return WEEK_TIERS.find(t=>score>=t.min)||WEEK_TIERS[4]}
@@ -3089,10 +3105,10 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
   };
   const rankBg=RANK_GRADIENTS[r.cls]||RANK_GRADIENTS['rank-bruto'];
   const metrics=[
-    {key:'diet_score',icon:'bi bi-egg-fried',label:'Dieta'},
-    {key:'training_score',icon:'bi bi-lightning-charge',label:'Treino'},
-    {key:'sleep_score',icon:'bi bi-moon-stars',label:'Sono'},
-    {key:'energy_level',icon:'bi bi-battery-half',label:'Energia'},
+    {key:'diet_score',icon:'🥗',label:'Dieta'},
+    {key:'training_score',icon:'🏋️',label:'Treino'},
+    {key:'sleep_score',icon:'😴',label:'Sono'},
+    {key:'energy_level',icon:'⚡',label:'Energia'},
   ];
 
   const handleAi=async()=>{
@@ -3212,9 +3228,12 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
       p.allCheckins.slice(0,8).map((c,idx)=>{
         const t=getWeekTier(c.lapidados_score||0);
         const isOpen=exp===c.id;
+        const wLabel=patWeekLabel(c.week_number,c.year,p.startDate||p.start_date);
+        const{week:gw,year:gy}=getWeekNum();
+        const isCurrentWeek=c.week_number===gw&&c.year===gy;
         return h('div',{key:c.id,className:'ci-tl-item'},
           h('div',{className:'ci-tl-head',onClick:()=>setExp(isOpen?null:c.id)},
-            h('span',{className:'ci-tl-week'},'Semana '+c.week_number+' / '+c.year+(idx===0?' · Esta semana':'')),
+            h('span',{className:'ci-tl-week'},wLabel+(isCurrentWeek?' · Esta semana':'')),
             h('span',{className:'ci-tl-score',style:{color:t.color}},c.lapidados_score+'pts'),
             h('span',{className:'ci-tl-tier',style:{background:t.bg,color:t.color}},t.name),
             h('span',{style:{fontSize:10,color:'var(--ink4)',marginLeft:4}},isOpen?'▲':'▼')
@@ -3308,13 +3327,22 @@ function getDelta(cur,prev,field){
   return{cls:'same',label:'='};
 }
 async function callGemini(apiKey,prompt){
-  const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+apiKey,{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:600}})
-  });
-  if(!res.ok)throw new Error('Gemini error: '+res.status);
-  const data=await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  // Try gemini-2.0-flash first, fallback to gemini-1.5-flash
+  const models=['gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-flash-latest'];
+  let lastErr=null;
+  for(const model of models){
+    try{
+      const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:600}})
+      });
+      if(res.status===404){lastErr=new Error('Modelo '+model+' não disponível');continue;}
+      if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+res.status);}
+      const data=await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+    }catch(e){if(e.message.includes('não disponível')){lastErr=e;continue;}throw e;}
+  }
+  throw lastErr||new Error('Nenhum modelo Gemini disponível');
 }
 async function generateAiAnalysis(apiKey,ci,prevCi,pat){
   const prev_block=prevCi?'Semana anterior:\n- Dieta: '+(prevCi.diet_score||0)+'/10, Treino: '+(prevCi.training_score||0)+'/10, Sono: '+(prevCi.sleep_score||0)+'/10, Score: '+(prevCi.lapidados_score||0)+'/100':'Primeira semana registrada.';
@@ -3339,9 +3367,9 @@ function CheckinHub({pats,db}){
   },[checkins]);
   const weekCheckinByPat=useMemo(()=>{
     const m={};
+    const{week:gw,year:gy}=getWeekNum(); // check-ins are stored with calendar week
     pats.forEach(p=>{
-      const{week:pw,year:py}=calcPatientWeek(p.startDate||p.start_date);
-      const ci=checkins.find(c=>c.patient_id===p.id&&c.week_number===pw&&c.year===py);
+      const ci=checkins.find(c=>c.patient_id===p.id&&c.week_number===gw&&c.year===gy);
       if(ci)m[p.id]=ci;
     });
     return m;
@@ -3367,7 +3395,7 @@ function CheckinHub({pats,db}){
   const filtereds=search?enriched.filter(p=>p.name.toLowerCase().includes(search.toLowerCase())):enriched;
   const displayed=filter==='pending'?filtereds.filter(p=>!p.hasThisWeek):filter==='done'?filtereds.filter(p=>p.hasThisWeek).sort((a,b)=>(b.weekCheckin?.lapidados_score||0)-(a.weekCheckin?.lapidados_score||0)):filtereds;
 
-  const getSentKey=pid=>{const p2=enriched.find(x=>x.id===pid);const{week:pw,year:py}=calcPatientWeek(p2?.startDate||p2?.start_date);return 'lc_sent_'+pid+'_'+pw+'_'+py;};
+  const getSentKey=pid=>{const{week:gw,year:gy}=getWeekNum();return 'lc_sent_'+pid+'_'+gw+'_'+gy;};
   const wasSentThisWeek=pid=>{const v=localStorage.getItem(getSentKey(pid));if(!v)return false;return Math.floor((Date.now()-parseInt(v))/86400000)<6;};
   const markSent=pid=>localStorage.setItem(getSentKey(pid),Date.now());
 
@@ -3467,7 +3495,11 @@ function CheckinHub({pats,db}){
             p.hasThisWeek
               ?h('div',{style:{fontWeight:800,fontSize:16,color:'var(--or4)'}},(p.weekCheckin?.lapidados_score||0)+'pts')
               :h('div',{style:{fontSize:11,color:'var(--ink3)'}},'—'),
-            h('div',{style:{fontSize:9,color:'var(--ink4)',marginTop:1}},p.hasThisWeek?'esta semana':'sem check-in')
+            h('div',{style:{fontSize:9,color:'var(--ink4)',marginTop:1}},
+              p.hasThisWeek
+                ?patWeekLabel(p.weekCheckin?.week_number,p.weekCheckin?.year,p.startDate||p.start_date)
+                :'sem check-in'
+            )
           )
         ),
         h('div',{className:'ci-pat-badges'},
@@ -3496,7 +3528,7 @@ function CheckinHub({pats,db}){
 }
 
 function CheckinDashCard({pats,checkins,onNav}){
-  const{week,year}=getWeekNum();
+  const{week,year}=getWeekNum(); // calendar week — same as stored in checkins
   const weekDone=new Set(checkins.filter(c=>c.week_number===week&&c.year===year).map(c=>c.patient_id));
   const done=weekDone.size;
   const total=pats.length;
