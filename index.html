@@ -2172,13 +2172,24 @@ function SettingsProfile({profile,db}){
     if(keyChanged){
       ss(true);
       try{
-        const r=await callGemini(f.gemini_api_key,'Responda apenas: OK');
-        if(r&&r.trim().length>0)showSuccess('Chave Gemini válida! IA pronta para uso.');
-        else{showAlert('Chave inválida','Nenhuma resposta recebida. Verifique a chave.','warning');ss(false);return;}
-      }catch(e){showError('Chave Gemini inválida: '+e.message);ss(false);return;}
+        await callGemini(f.gemini_api_key,'OK');
+        showSuccess('Chave Gemini válida! IA pronta para uso.');
+      }catch(e){
+        if(e.message==='quota_exceeded'||e.message==='all_failed'){
+          // Quota issue — key is probably valid, save anyway with warning
+          showAlert('Chave salva com aviso',
+            'A chave foi salva, mas a cota gratuita está temporariamente esgotada. '+
+            'Aguarde até 24h para renovar ou verifique seu plano em aistudio.google.com.',
+            'warning');
+        } else {
+          showError(aiErrMsg(e));
+          ss(false);return; // Only block on real key errors
+        }
+      }
     }
     ss(true);
-    try{await db.saveProfile(f);toast('Perfil atualizado!');}catch(e){showError(e.message);}
+    try{await db.saveProfile(f);if(!keyChanged)toast('Perfil atualizado!');}
+    catch(e){showError(e.message);}
     ss(false);
   };
 
@@ -3124,7 +3135,9 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
         ai_insights:res.insights,ai_reply:res.reply
       }).eq('id',ci.id);
       toast('Análise IA salva!');showSuccess('Análise IA gerada com sucesso!');
-    }catch(e){showError('Erro na IA: '+e.message);}
+    }catch(e){
+      showError(aiErrMsg(e));
+    }
     setAiL(false);
   };
 
@@ -3326,23 +3339,49 @@ function getDelta(cur,prev,field){
   if(d<0)return{cls:'down',label:''+d};
   return{cls:'same',label:'='};
 }
+function aiErrMsg(e){
+  const m=e.message||'';
+  if(m==='quota_exceeded'||m==='all_failed')
+    return 'Cota gratuita esgotada. Acesse aistudio.google.com → Settings → verifique seu plano, ou aguarde a cota renovar (geralmente em 24h).';
+  if(m==='invalid_key')
+    return 'Chave de API inválida. Verifique se copiou corretamente em Configurações → Perfil.';
+  if(m==='no_permission')
+    return 'Chave sem permissão. Certifique-se de que a Gemini API está ativada no projeto.';
+  return 'Erro ao conectar com a IA. Verifique sua conexão e tente novamente.';
+}
 async function callGemini(apiKey,prompt){
-  // Try gemini-2.0-flash first, fallback to gemini-1.5-flash
-  const models=['gemini-2.0-flash','gemini-1.5-flash','gemini-1.5-flash-latest'];
+  const models=['gemini-1.5-flash','gemini-1.5-flash-latest','gemini-1.5-pro-latest','gemini-pro'];
   let lastErr=null;
   for(const model of models){
     try{
-      const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey,{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:600}})
-      });
-      if(res.status===404){lastErr=new Error('Modelo '+model+' não disponível');continue;}
-      if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+res.status);}
-      const data=await res.json();
+      const res=await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey,
+        {method:'POST',headers:{'Content-Type':'application/json'},
+         body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:600}})}
+      );
+      const data=await res.json().catch(()=>({}));
+      const code=data.error?.code||res.status;
+      const raw=data.error?.message||'';
+      const msgLow=raw.toLowerCase();
+      // Skip to next model on quota/rate limit/not found
+      if(code===429||code===404||msgLow.includes('quota')||msgLow.includes('limit: 0')||msgLow.includes('rate limit')){
+        lastErr={isQuota:true,model};continue;
+      }
+      if(!res.ok){
+        if(code===400||code===401)throw new Error('invalid_key');
+        if(code===403)throw new Error('no_permission');
+        throw new Error('http_'+code);
+      }
       return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
-    }catch(e){if(e.message.includes('não disponível')){lastErr=e;continue;}throw e;}
+    }catch(e){
+      if(e.message==='invalid_key')throw e;
+      if(e.message==='no_permission')throw e;
+      if(!e.message.startsWith('http_'))lastErr={isQuota:false,raw:e.message};
+      else lastErr={isQuota:false,raw:e.message};
+    }
   }
-  throw lastErr||new Error('Nenhum modelo Gemini disponível');
+  if(lastErr?.isQuota)throw new Error('quota_exceeded');
+  throw new Error('all_failed');
 }
 async function generateAiAnalysis(apiKey,ci,prevCi,pat){
   const prev_block=prevCi?'Semana anterior:\n- Dieta: '+(prevCi.diet_score||0)+'/10, Treino: '+(prevCi.training_score||0)+'/10, Sono: '+(prevCi.sleep_score||0)+'/10, Score: '+(prevCi.lapidados_score||0)+'/100':'Primeira semana registrada.';
