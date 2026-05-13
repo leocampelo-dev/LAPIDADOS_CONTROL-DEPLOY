@@ -512,6 +512,91 @@ tr:hover td{background:#fafafa}
 .hide-val-btn:hover{border-color:var(--ink4);color:var(--ink2);background:var(--ink7)}
 .hide-val-btn.active{border-color:var(--or2);background:var(--or1);color:var(--or5)}
 .masked-val{letter-spacing:3px;color:var(--ink4)!important;font-size:14px!important}
+/* ── CHECK-IN REDESIGN ── */
+.ci-hdr{background:var(--w);border:1px solid var(--ink6);border-radius:16px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ci-hdr-title{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--ink)}
+.ci-hdr-meta{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.ci-hdr-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;background:var(--ink7);color:var(--ink3)}
+.ci-hdr-badge.hl{background:var(--or1);color:var(--or5)}.ci-hdr-badge.green{background:var(--g1);color:var(--g6)}
+.ci-filter-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.ci-fc{background:var(--w);border:1.5px solid var(--ink6);border-radius:14px;padding:16px 14px;cursor:pointer;transition:all .2s;text-align:left;width:100%}
+.ci-fc:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.ci-fc.active{border-color:var(--or4);background:var(--or1)}
+.ci-fc.active .ci-fc-label{color:var(--or5)}
+.ci-fc-count{font-size:30px;font-weight:900;letter-spacing:-1.5px;line-height:1;margin-bottom:4px}
+.ci-fc-label{font-size:11px;font-weight:600;color:var(--ink3)}
+.ci-pat-list{display:flex;flex-direction:column;gap:8px}
+.ci-pat-card{background:var(--w);border:1px solid var(--ink6);border-radius:14px;padding:16px;transition:all .18s;cursor:pointer}
+.ci-pat-card:hover{border-color:var(--ink4);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-1px)}
+.ci-pat-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.ci-pat-av{width:42px;height:42px;border-radius:12px;background:var(--or1);color:var(--or5);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--or2)}
+.ci-pat-name{font-weight:800;font-size:14px;color:var(--ink);line-height:1.2}
+.ci-pat-meta{font-size:11px;color:var(--ink3);margin-top:2px;display:flex;gap:6px;align-items:center}
+.ci-pat-badges{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ci-ws{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
+.ci-ws.green{background:var(--g1);color:var(--g6)}.ci-ws.yellow{background:rgba(245,158,11,.1);color:#d97706}.ci-ws.red{background:var(--r1);color:var(--r6)}.ci-ws.gray{background:var(--ink7);color:var(--ink3)}
+.ci-risk{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700}
+.ci-risk.green{background:var(--g1);color:var(--g6)}.ci-risk.orange{background:var(--or1);color:var(--or5)}.ci-risk.red{background:var(--r1);color:var(--r6)}
+.ci-insights{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;min-height:18px}
+.ci-insight{padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600}
+.ci-insight.green{background:var(--g1);color:var(--g6)}.ci-insight.red{background:var(--r1);color:var(--r6)}.ci-insight.orange{background:var(--or1);color:var(--or5)}.ci-insight.gray{background:var(--ink7);color:var(--ink3)}
+.ci-pat-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ci-mhdr{border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.ci-mhdr.rank-bruto{background:linear-gradient(135deg,#374151,#1f2937)}
+.ci-mhdr.rank-destravado{background:linear-gradient(135deg,#1e3a5f,#0f2042)}
+.ci-mhdr.rank-afiado{background:linear-gradient(135deg,#312e81,#4338ca)}
+.ci-mhdr.rank-imparavel{background:linear-gradient(135deg,#7c2d12,#b91c1c)}
+.ci-mhdr.rank-lapidado{background:linear-gradient(135deg,#78350f,#b45309)}
+.ci-mhdr-top{display:flex;align-items:center;gap:14px;margin-bottom:12px;color:#fff}
+.ci-mhdr-av{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.15);color:#fff;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid rgba(255,255,255,.25)}
+.ci-mhdr-name{font-size:18px;font-weight:900;letter-spacing:-.3px;line-height:1.1;color:#fff}
+.ci-mhdr-rank{font-size:11px;color:rgba(255,255,255,.6);margin-top:3px}
+.ci-mhdr-pts{font-size:28px;font-weight:900;letter-spacing:-1px;color:#fff;line-height:1}
+.ci-mhdr-pts-lbl{font-size:9px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.ci-rank-bar{height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:10px;overflow:hidden}
+.ci-rank-fill{height:100%;border-radius:2px;background:rgba(255,255,255,.65);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.ci-rank-bar-lbl{font-size:9px;color:rgba(255,255,255,.4);margin-top:4px}
+.ci-ai-card{border-radius:12px;padding:14px 16px;margin-bottom:14px;border:1px solid var(--ink6);background:var(--ink7)}
+.ci-ai-card.has-data{background:linear-gradient(135deg,rgba(232,93,4,.04),rgba(37,99,235,.04));border-color:var(--or2)}
+.ci-ai-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--or4);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:5px}
+.ci-ai-summary{font-size:13px;color:var(--ink);line-height:1.65;margin-bottom:8px}
+.ci-ai-focus{font-size:12px;color:var(--or5);font-weight:600;padding:7px 10px;background:var(--or1);border-radius:8px;margin-top:6px;border-left:3px solid var(--or4)}
+.ci-ai-chips{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.ci-ai-chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--ink6);color:var(--ink2)}
+.ci-ai-chip.up{background:var(--g1);color:var(--g6)}.ci-ai-chip.down{background:var(--r1);color:var(--r6)}.ci-ai-chip.warn{background:var(--or1);color:var(--or5)}
+.ci-ai-reply{font-size:12px;color:var(--ink2);line-height:1.6;padding:10px 12px;background:var(--w);border:1px solid var(--ink5);border-radius:8px;margin-top:8px;font-style:italic}
+.ci-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.ci-metric{background:var(--ink7);border-radius:10px;padding:12px 10px}
+.ci-m-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.ci-m-lbl{font-size:10px;font-weight:700;color:var(--ink3)}
+.ci-m-delta{font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px}
+.ci-m-delta.up{background:var(--g1);color:var(--g6)}.ci-m-delta.down{background:var(--r1);color:var(--r6)}.ci-m-delta.same{background:var(--ink6);color:var(--ink3)}
+.ci-m-val{font-size:22px;font-weight:900;letter-spacing:-1px;color:var(--ink);line-height:1}
+.ci-m-bar{height:3px;background:var(--ink6);border-radius:2px;margin-top:6px;overflow:hidden}
+.ci-m-fill{height:100%;border-radius:2px;background:var(--or4)}
+.ci-tl-item{border:1px solid var(--ink6);border-radius:10px;overflow:hidden;margin-bottom:6px}
+.ci-tl-head{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink7);cursor:pointer;transition:background .12s}
+.ci-tl-head:hover{background:var(--ink6)}
+.ci-tl-week{font-size:11px;color:var(--ink3);font-weight:600;flex:1}
+.ci-tl-score{font-weight:800;font-size:13px}
+.ci-tl-tier{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px}
+.ci-tl-body{padding:12px;background:var(--w);border-top:1px solid var(--ink6)}
+.ci-tl-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.ci-tl-row{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)}
+.ci-tl-rbar{flex:1;height:3px;background:var(--ink6);border-radius:2px;overflow:hidden}
+.ci-tl-rfill{height:100%;border-radius:2px;background:var(--or4)}
+.ci-reflection{border-radius:9px;padding:8px 10px;margin-bottom:6px;font-size:12px;line-height:1.5}
+.ci-reflection.win{background:rgba(34,197,94,.07);border-left:3px solid var(--g4)}
+.ci-reflection.diff{background:rgba(239,68,68,.07);border-left:3px solid var(--r4)}
+.ci-reflection.help{background:rgba(232,93,4,.07);border-left:3px solid var(--or4)}
+.ci-reflection-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.ci-reflection.win .ci-reflection-title{color:var(--g4)}.ci-reflection.diff .ci-reflection-title{color:var(--r4)}.ci-reflection.help .ci-reflection-title{color:var(--or4)}
+@media(max-width:768px){
+.ci-filter-cards{grid-template-columns:1fr 1fr;gap:8px}
+.ci-fc{padding:12px}.ci-fc-count{font-size:24px}
+.ci-hdr{padding:14px 16px;flex-direction:column;align-items:flex-start}
+.ci-metrics{grid-template-columns:1fr 1fr}
+}
 @media(max-width:760px){.cfg-layout{grid-template-columns:1fr}.cfg-nav{display:flex;flex-wrap:wrap;gap:3px;padding:4px}.cfg-nav-item{width:auto;padding:6px 9px;font-size:12px;border-radius:7px}.cfg-panel{padding:16px;border-radius:var(--mob-radius)}.cfg-section-title{font-size:14px;margin-bottom:3px}.cfg-section-sub{font-size:11px;margin-bottom:18px}.cfg-divider{margin:16px 0}.plan-card{padding:11px 13px;border-radius:10px;gap:10px;margin-bottom:6px}.plan-card-icon{width:34px;height:34px;font-size:13px}.plan-card-name{font-size:12px;margin-bottom:1px}.plan-card-meta{font-size:10px}.plan-card-price{font-size:13px}.av-upload-wrap{flex-direction:column;gap:14px;padding:12px}.av-preview{width:64px;height:64px;font-size:20px;border:2px solid var(--or2)}.av-upload-btns .hint{font-size:10px}.pe-controls{gap:4px}.cfg-schema{padding:10px 12px;font-size:11px}}
 
 :root{--mob-pad:14px;--mob-radius:12px;--mob-card-pad:12px 14px;--mob-trans:all .18s cubic-bezier(.4,0,.2,1)}
@@ -808,8 +893,8 @@ let PLANS=DEFAULT_PLANS; // will be overridden by DB plans
 
 const toPlan=r=>r?({id:r.id,name:r.name,days:r.duration_days,sessions:r.sessions,price:r.price||null}):null;
 const fromPlan=(p,uid)=>({id:p.id||undefined,user_id:uid,name:p.name,duration_days:parseInt(p.days)||30,sessions:parseInt(p.sessions)||1,price:p.price?parseFloat(p.price):null});
-const toProfile=r=>r?({userId:r.user_id,fullName:r.full_name||'',instagram:r.instagram||'',whatsapp:r.whatsapp||'',avatarData:r.avatar_data||null}):null;
-const fromProfile=(p,uid)=>({user_id:uid,full_name:p.fullName||'',instagram:p.instagram||'',whatsapp:p.whatsapp||'',avatar_data:p.avatarData||null});
+const toProfile=r=>r?({userId:r.user_id,fullName:r.full_name||'',instagram:r.instagram||'',whatsapp:r.whatsapp||'',avatarData:r.avatar_data||null,gemini_api_key:r.gemini_api_key||''}):null;
+const fromProfile=(p,uid)=>({user_id:uid,full_name:p.fullName||'',instagram:p.instagram||'',whatsapp:p.whatsapp||'',avatar_data:p.avatarData||null,gemini_api_key:p.gemini_api_key||''});
 const fmt=d=>{if(!d)return'—';const dt=d instanceof Date?d:new Date(d+'T00:00:00');return isNaN(dt)?'—':dt.toLocaleDateString('pt-BR')};
 const fmtM=v=>v!=null&&v!==''?new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(parseFloat(v)||0):'—';
 const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
@@ -2019,7 +2104,7 @@ function PhotoEditor({src,onConfirm,onCancel}){
 }
 
 function SettingsProfile({profile,db}){
-  const[f,sf]=useState(profile||{fullName:'',instagram:'',whatsapp:'',avatarData:null});
+  const[f,sf]=useState(profile||{fullName:'',instagram:'',whatsapp:'',avatarData:null,gemini_api_key:''});
   const[saving,ss]=useState(false);
   const[editing,se]=useState(null);
   const fileRef=useRef(null);
@@ -2067,7 +2152,13 @@ function SettingsProfile({profile,db}){
     h('div',{className:'fg'},
       h('div',{className:'fl fgf'},h('label',{className:'flb'},'Seu nome'),h('input',{className:'fi',value:f.fullName,onChange:s('fullName'),placeholder:'Ex: Dr. João Silva'})),
       h('div',{className:'fl'},h('label',{className:'flb'},'Instagram'),h('input',{className:'fi',value:f.instagram||'',onChange:s('instagram'),placeholder:'@seuperfil'})),
-      h('div',{className:'fl'},h('label',{className:'flb'},'WhatsApp'),h('input',{className:'fi',value:f.whatsapp||'',onChange:s('whatsapp'),placeholder:'(xx) 9xxxx-xxxx'}))
+      h('div',{className:'fl'},h('label',{className:'flb'},'WhatsApp'),h('input',{className:'fi',value:f.whatsapp||'',onChange:s('whatsapp'),placeholder:'(xx) 9xxxx-xxxx'})),
+      h('div',{className:'cfg-divider'}),
+      h('div',{className:'fl fgf'},
+        h('label',{className:'flb'},'🤖 Chave Gemini API'),
+        h('input',{className:'fi',type:'password',value:f.gemini_api_key||'',onChange:s('gemini_api_key'),placeholder:'AIza... (Google AI Studio)'}),
+        h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:5}},'Usada na análise IA dos check-ins. Obtenha gratuitamente em ',h('a',{href:'https://aistudio.google.com/apikey',target:'_blank',style:{color:'var(--or4)'}},'aistudio.google.com'))
+      )
     ),
     h('div',{style:{marginTop:16}},h('button',{className:'btn btn-primary',onClick:save,disabled:saving},saving?'Salvando...':'Salvar perfil')),
     editing&&h(PhotoEditor,{src:editing,onConfirm:data=>{sf(p=>({...p,avatarData:data}));se(null)},onCancel:()=>se(null)})
@@ -2915,107 +3006,267 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
 
 
 // ─── PAT DETAIL MODAL ───
-function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload}){
+function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
   if(!p)return null;
-  const[hExp,setHExp]=useState(null);
-  const{week,year}=getWeekNum();
+  const[exp,setExp]=useState(null);
+  const[aiLoading,setAiL]=useState(false);
+  const[aiData,setAiData]=useState(p.weekCheckin?.ai_summary?{
+    summary:p.weekCheckin.ai_summary,
+    focus:p.weekCheckin.ai_focus,
+    risk:p.weekCheckin.ai_risk,
+    insights:p.weekCheckin.ai_insights||[],
+    reply:p.weekCheckin.ai_reply
+  }:null);
   const r=getRank(p.totalPts);
   const prog=rankProgress(p.totalPts);
-  return h(Modal,{title:p.name,sub:p.id+' · '+p.allCheckins.length+' check-ins',onClose,wide:true},
-    h('div',{style:{display:'flex',alignItems:'center',gap:10,marginBottom:14,padding:'12px 14px',background:'var(--ink7)',borderRadius:10}},
-      h('div',{className:'ac-pat-av'},ini(p.name)),
-      h('div',{style:{flex:1}},
-        h('div',{style:{display:'flex',gap:6,flexWrap:'wrap',marginBottom:6}},
-          h('span',{className:'rank-badge '+r.cls},r.icon+' '+r.name),
-          p.phone&&h('span',{style:{fontSize:11,color:'var(--ink3)'}},p.phone)
+  const ci=p.weekCheckin;
+  const prevCi=p.allCheckins?.[1]||null;
+  const ws=getWeeklyStatus(ci,prevCi);
+  const metrics=[
+    {key:'diet_score',icon:'🥗',label:'Dieta'},
+    {key:'training_score',icon:'🏋️',label:'Treino'},
+    {key:'sleep_score',icon:'😴',label:'Sono'},
+    {key:'energy_level',icon:'⚡',label:'Energia'},
+  ];
+
+  const handleAi=async()=>{
+    if(!geminiKey)return alert('Configure sua chave Gemini em Configurações para usar a IA.');
+    if(!ci)return alert('Este paciente não tem check-in nesta semana ainda.');
+    setAiL(true);
+    try{
+      const res=await generateAiAnalysis(geminiKey,ci,prevCi,{...p,total_points:p.totalPts});
+      setAiData(res);
+      // Save to Supabase
+      await SB.from('checkins').update({
+        ai_summary:res.summary,ai_focus:res.focus,ai_risk:res.risk,
+        ai_insights:res.insights,ai_reply:res.reply
+      }).eq('id',ci.id);
+      toast('Análise IA salva!');
+    }catch(e){alert('Erro na IA: '+e.message);}
+    setAiL(false);
+  };
+
+  return h(Modal,{title:'',onClose,wide:true},
+    // ── Premium rank header
+    h('div',{className:'ci-mhdr '+(r.cls||'rank-bruto')},
+      h('div',{className:'ci-mhdr-top'},
+        h('div',{className:'ci-mhdr-av'},ini(p.name)),
+        h('div',null,
+          h('div',{className:'ci-mhdr-name'},p.name),
+          h('div',{className:'ci-mhdr-rank'},r.icon+' '+r.name+(p.phone?' · '+p.phone:''))
         ),
-        h('div',{style:{fontSize:17,fontWeight:800,color:'var(--or4)',letterSpacing:'-.3px'}},p.totalPts+' pts acumulados'),
-        h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:2}},prog.label),
-        h('div',{className:'pbar',style:{marginTop:4}},h('div',{className:'pfill',style:{width:prog.pct+'%'}}))
+        h('div',{style:{marginLeft:'auto',textAlign:'right'}},
+          h('div',{className:'ci-mhdr-pts'},p.totalPts),
+          h('div',{className:'ci-mhdr-pts-lbl'},'pontos totais')
+        )
+      ),
+      h('div',{className:'ci-rank-bar'},h('div',{className:'ci-rank-fill',style:{width:prog.pct+'%'}})),
+      h('div',{className:'ci-rank-bar-lbl'},prog.label)
+    ),
+
+    // ── Status geral da semana
+    ci&&h('div',{style:{display:'flex',gap:8,alignItems:'center',marginBottom:14,padding:'10px 14px',background:'var(--ink7)',borderRadius:10}},
+      h('span',{className:'ci-ws '+ws.cls},ws.icon+' '+ws.label),
+      h('span',{style:{fontSize:12,color:'var(--ink3)',flex:1}},'Score: '+(ci.lapidados_score||0)+' pts · Sem. '+ci.week_number),
+      h('span',{style:{fontSize:11,color:'var(--ink3)'}},p.allCheckins.length+' check-ins')
+    ),
+
+    // ── AI Card
+    h('div',{className:'ci-ai-card'+(aiData?' has-data':'')},
+      h('div',{className:'ci-ai-title'},
+        h('span',null,'🤖 Análise IA'+(aiData?' · Gerado':' · Clique para gerar')),
+        ci&&h('button',{className:'btn btn-ghost btn-xs',onClick:handleAi,disabled:aiLoading},
+          aiLoading?'Analisando...':aiData?'↻ Reanalisar':'Gerar análise')
+      ),
+      aiData?h('div',null,
+        h('div',{className:'ci-ai-summary'},aiData.summary),
+        aiData.insights&&aiData.insights.length>0&&h('div',{className:'ci-ai-chips'},
+          aiData.insights.map((ins,i)=>{
+            const cls=ins.includes('evoluiu')||ins.includes('ótim')||ins.includes('melhor')?'up':
+              ins.includes('caiu')||ins.includes('fraco')||ins.includes('baixo')?'down':'warn';
+            return h('span',{key:i,className:'ci-ai-chip '+cls},ins);
+          })
+        ),
+        aiData.focus&&h('div',{className:'ci-ai-focus'},'🎯 '+aiData.focus),
+        aiData.reply&&h('div',null,
+          h('div',{className:'ci-ai-reply'},'"'+aiData.reply+'"'),
+          h('div',{style:{display:'flex',gap:6,marginTop:6}},
+            h('button',{className:'btn btn-ghost btn-xs',onClick:()=>{navigator.clipboard.writeText(aiData.reply);toast('Copiado!');}},
+              '📋 Copiar'),
+            p.phone&&h('a',{className:'btn btn-ghost btn-xs',style:{textDecoration:'none'},
+              href:'https://wa.me/55'+p.phone.replace(/\D/g,'')+'?text='+encodeURIComponent(aiData.reply),
+              target:'_blank'},'💬 WhatsApp')
+          )
+        )
+      ):h('div',{style:{fontSize:12,color:'var(--ink3)',textAlign:'center',padding:'8px 0'}},
+        ci?'Clique em "Gerar análise" para usar IA no check-in desta semana.':'Nenhum check-in esta semana.'
       )
     ),
-    p.weekCheckin&&h('div',{style:{marginBottom:14}},
-      h(ScoreBreakdown,{c:p.weekCheckin})
+
+    // ── Métricas comparativas
+    ci&&h('div',null,
+      h('div',{style:{fontSize:10,fontWeight:800,textTransform:'uppercase',letterSpacing:'.4px',color:'var(--ink3)',marginBottom:8}},'Métricas desta semana'),
+      h('div',{className:'ci-metrics'},
+        metrics.map(m=>{
+          const val=ci[m.key]||0;
+          const delta=getDelta(ci,prevCi,m.key);
+          return h('div',{key:m.key,className:'ci-metric'},
+            h('div',{className:'ci-m-top'},
+              h('span',{className:'ci-m-lbl'},m.icon+' '+m.label),
+              delta&&h('span',{className:'ci-m-delta '+delta.cls},delta.label)
+            ),
+            h('div',{className:'ci-m-val'},val+'/10'),
+            h('div',{className:'ci-m-bar'},h('div',{className:'ci-m-fill',style:{width:(val*10)+'%'}}))
+          );
+        })
+      )
     ),
-    h('div',{style:{marginBottom:10}},
-      h('div',{style:{fontSize:10,textTransform:'uppercase',letterSpacing:'.5px',color:'var(--ink3)',fontWeight:700,marginBottom:6}},'Histórico de semanas'),
-      p.allCheckins.length===0?h('div',{style:{fontSize:12,color:'var(--ink3)',padding:'12px 0'}},'Sem check-ins registrados.'):
-      p.allCheckins.slice(0,10).map(ci=>{
-        const t=getWeekTier(ci.lapidados_score||0);
-        const exp=hExp===ci.id;
-        const rows=[
-          {icon:'🥗',lbl:'Dieta',pts:Math.round((ci.diet_score||0)/10*25),max:25},
-          {icon:'🏋️',lbl:'Treino',pts:Math.round((ci.training_score||0)/10*20),max:20},
-          {icon:'⚡',lbl:'Energia',pts:Math.round((ci.energy_level||0)/10*15),max:15},
-          {icon:'🏃',lbl:'Cardio',pts:ci.cardio_score??ci.cardio_done?10:0,max:10},
-          {icon:'🍽️',lbl:'Aderência',pts:Math.max(0,10-(ci.off_plan_meals||0)*2),max:10},
-          {icon:'😴',lbl:'Sono',pts:Math.round((ci.sleep_score||0)/10*10),max:10},
-          {icon:'🫁',lbl:'Intestino',pts:ci.bowel_score||0,max:5},
-          {icon:'😋',lbl:'Saciedade',pts:Math.round(((10-(ci.hunger_level||5))/10)*5),max:5},
-        ];
-        return h('div',{key:ci.id,style:{marginBottom:6,border:'1px solid var(--ink6)',borderRadius:10,overflow:'hidden'}},
-          h('div',{style:{display:'flex',alignItems:'center',gap:8,padding:'9px 12px',background:'var(--ink7)',cursor:'pointer'},onClick:()=>setHExp(exp?null:ci.id)},
-            h('span',{style:{fontSize:11,color:'var(--ink3)',flex:1}},'Semana '+ci.week_number+'/'+ci.year),
-            h('span',{style:{fontWeight:700,fontSize:13,color:t.color}},ci.lapidados_score+'pts'),
-            h('span',{style:{fontSize:9,padding:'2px 6px',borderRadius:10,background:t.bg,color:t.color,fontWeight:600,marginLeft:4}},t.name),
-            h('span',{style:{fontSize:10,color:'var(--ink3)',marginLeft:6}},exp?'▲':'▼')
+
+    // ── Reflexões da semana
+    ci&&(ci.wins||ci.main_difficulty||ci.needs_help)&&h('div',{style:{marginBottom:14}},
+      h('div',{style:{fontSize:10,fontWeight:800,textTransform:'uppercase',letterSpacing:'.4px',color:'var(--ink3)',marginBottom:8}},'Reflexões'),
+      ci.wins&&h('div',{className:'ci-reflection win'},
+        h('div',{className:'ci-reflection-title'},'🏆 Vitória'),
+        ci.wins
+      ),
+      ci.main_difficulty&&h('div',{className:'ci-reflection diff'},
+        h('div',{className:'ci-reflection-title'},'⚠️ Dificuldade'),
+        ci.main_difficulty
+      ),
+      ci.needs_help&&ci.needs_help.toLowerCase().replace(/ã/g,'a')!=='nao'&&h('div',{className:'ci-reflection help'},
+        h('div',{className:'ci-reflection-title'},'🙋 Pediu ajuda'),
+        ci.needs_help
+      )
+    ),
+
+    // ── Timeline histórico
+    p.allCheckins.length>0&&h('div',{style:{marginBottom:14}},
+      h('div',{style:{fontSize:10,fontWeight:800,textTransform:'uppercase',letterSpacing:'.4px',color:'var(--ink3)',marginBottom:8}},
+        '📈 Timeline de evolução ('+p.allCheckins.length+' semanas)'),
+      p.allCheckins.slice(0,8).map((c,idx)=>{
+        const t=getWeekTier(c.lapidados_score||0);
+        const isOpen=exp===c.id;
+        return h('div',{key:c.id,className:'ci-tl-item'},
+          h('div',{className:'ci-tl-head',onClick:()=>setExp(isOpen?null:c.id)},
+            h('span',{className:'ci-tl-week'},'Semana '+c.week_number+' / '+c.year+(idx===0?' · Esta semana':'')),
+            h('span',{className:'ci-tl-score',style:{color:t.color}},c.lapidados_score+'pts'),
+            h('span',{className:'ci-tl-tier',style:{background:t.bg,color:t.color}},t.name),
+            h('span',{style:{fontSize:10,color:'var(--ink4)',marginLeft:4}},isOpen?'▲':'▼')
           ),
-          exp&&h('div',{className:'hist-expand',style:{padding:'10px 12px',background:'var(--w)',borderTop:'1px solid var(--ink6)'}},
-            h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:5,marginBottom:8}},
-              rows.map(row=>h('div',{key:row.lbl,style:{display:'flex',alignItems:'center',gap:5}},
-                h('span',{style:{fontSize:11,width:14}},row.icon),
-                h('span',{style:{fontSize:9,color:'var(--ink3)',width:50,flexShrink:0}},row.lbl),
-                h('div',{style:{flex:1,height:4,background:'var(--ink6)',borderRadius:2,overflow:'hidden'}},
-                  h('div',{style:{height:'100%',width:(row.pts/row.max*100)+'%',background:'var(--or4)',borderRadius:2}})
-                ),
-                h('span',{style:{fontSize:9,fontWeight:700,width:26,textAlign:'right'}},row.pts+'/'+row.max)
-              ))
+          isOpen&&h('div',{className:'ci-tl-body'},
+            h('div',{className:'ci-tl-grid'},
+              [{k:'diet_score',ic:'🥗',l:'Dieta'},{k:'training_score',ic:'🏋️',l:'Treino'},
+               {k:'sleep_score',ic:'😴',l:'Sono'},{k:'energy_level',ic:'⚡',l:'Energia'}].map(m=>
+                h('div',{key:m.k,className:'ci-tl-row'},
+                  h('span',null,m.ic+' '+m.l),
+                  h('div',{className:'ci-tl-rbar'},h('div',{className:'ci-tl-rfill',style:{width:((c[m.k]||0)*10)+'%'}})),
+                  h('span',{style:{fontWeight:700,color:'var(--ink2)',flexShrink:0}},(c[m.k]||0)+'/10')
+                )
+              )
             ),
-            ci.wins&&h('div',{style:{background:'rgba(34,197,94,.08)',borderRadius:7,padding:'6px 9px',marginBottom:4}},
-              h('div',{style:{fontSize:9,textTransform:'uppercase',color:'var(--g4)',fontWeight:700,marginBottom:2}},'🏆 Vitórias'),
-              h('div',{style:{fontSize:11,color:'var(--ink2)'}},ci.wins)
+            (c.wins||c.main_difficulty||c.needs_help)&&h('div',{style:{display:'flex',flexDirection:'column',gap:5}},
+              c.wins&&h('div',{className:'ci-reflection win'},h('div',{className:'ci-reflection-title'},'🏆 Vitória'),c.wins),
+              c.main_difficulty&&h('div',{className:'ci-reflection diff'},h('div',{className:'ci-reflection-title'},'⚠️ Dificuldade'),c.main_difficulty)
             ),
-            ci.main_difficulty&&h('div',{style:{background:'rgba(239,68,68,.08)',borderRadius:7,padding:'6px 9px',marginBottom:4}},
-              h('div',{style:{fontSize:9,textTransform:'uppercase',color:'var(--r4)',fontWeight:700,marginBottom:2}},'⚠ Dificuldade'),
-              h('div',{style:{fontSize:11,color:'var(--ink2)'}},ci.main_difficulty)
-            ),
-            ci.needs_help&&ci.needs_help.toLowerCase().replace(/ã/g,'a')!=='nao'&&h('div',{style:{background:'rgba(232,93,4,.08)',border:'1px solid rgba(232,93,4,.2)',borderRadius:7,padding:'6px 9px',marginBottom:6}},
-              h('div',{style:{fontSize:9,textTransform:'uppercase',color:'var(--or4)',fontWeight:700,marginBottom:2}},'🙋 Precisa de ajuda'),
-              h('div',{style:{fontSize:11,color:'var(--ink2)',fontWeight:500}},ci.needs_help)
-            ),
-            h('div',{style:{display:'flex',gap:6}},
-              p.phone&&h('a',{href:'https://wa.me/55'+p.phone.replace(/\D/g,'')+'?text='+encodeURIComponent('Oi '+p.name.split(' ')[0]+'! 💪 Vi seus resultados da semana '+ci.week_number+' e quero conversar!'),target:'_blank',style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:6,padding:'7px',background:'#25D366',color:'#fff',borderRadius:7,fontSize:11,fontWeight:700,textDecoration:'none'}},'💬 WhatsApp'),
+            h('div',{style:{display:'flex',gap:6,marginTop:8}},
+              p.phone&&h('a',{href:'https://wa.me/55'+p.phone.replace(/\D/g,'')+'?text='+encodeURIComponent('Oi '+p.name.split(' ')[0]+'! Vi seus resultados da semana '+c.week_number+' 💪'),target:'_blank',className:'btn btn-ghost btn-xs',style:{textDecoration:'none'}},'💬 WhatsApp'),
               h('button',{className:'btn btn-del btn-xs',onClick:async()=>{
-                if(!confirm('Excluir check-in semana '+ci.week_number+'?'))return;
-                if(!confirm('Confirmar exclusão?'))return;
-                try{await SB.from('checkins').delete().eq('id',ci.id);toast('Removido.');reload();}catch(e){alert(e.message);}
+                if(!confirm('Excluir check-in semana '+c.week_number+'?'))return;
+                try{await SB.from('checkins').delete().eq('id',c.id);toast('Removido.');reload();}
+                catch(e){alert(e.message);}
               }},'🗑️')
             )
           )
         );
       })
     ),
+
+    // ── Footer
     h('div',{className:'mdl-ft'},
       p.phone&&(wasSentThisWeek(p.id)
         ?h('div',{style:{flex:1,display:'flex',alignItems:'center',gap:6}},
-            h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:4,padding:'9px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Enviado'),
-            h('button',{className:'btn btn-ghost btn-sm',style:{flexShrink:0,fontSize:11},onClick:()=>{onSendWA(p);onClose();}},'↻ Reenviar')
+            h('div',{style:{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:4,padding:'9px',background:'var(--g1)',border:'1px solid #86efac',borderRadius:9,fontSize:12,fontWeight:700,color:'var(--g4)'}},'✅ Enviado esta semana'),
+            h('button',{className:'btn btn-ghost btn-sm',onClick:()=>onSendWA(p)},'↻ Reenviar')
           )
-        :h('button',{className:'btn btn-primary',style:{flex:1,justifyContent:'center'},onClick:()=>{onSendWA(p);onClose();}},'📲 Enviar Check-in')),
+        :h('button',{className:'btn btn-primary',style:{flex:1,justifyContent:'center'},onClick:()=>{onSendWA(p);onClose();}},'📲 Enviar Check-in')
+      ),
       h('button',{className:'btn btn-ghost',onClick:onClose},'Fechar')
     )
   );
 }
 
+// ─── CHECKIN INTELLIGENCE ───
+function getWeeklyStatus(ci,prevCi){
+  if(!ci)return{label:'Sem check-in',icon:'⬜',cls:'gray'};
+  const s=ci.lapidados_score||0,ps=prevCi?prevCi.lapidados_score||0:s,delta=s-ps;
+  if(s>=75||delta>=10)return{label:'Evoluindo',icon:'🟢',cls:'green'};
+  if(s>=55||delta>-10)return{label:'Oscilando',icon:'🟡',cls:'yellow'};
+  return{label:'Precisa atenção',icon:'🔴',cls:'red'};
+}
+function getRiskLevel(allPatCheckins,hasThisWeek){
+  if(!hasThisWeek&&allPatCheckins.length===0)return{level:'evasao',label:'Risco evasão',cls:'red'};
+  const recent=allPatCheckins.slice(0,4);
+  const avg=recent.length?Math.round(recent.reduce((s,c)=>s+(c.lapidados_score||0),0)/recent.length):0;
+  if(!hasThisWeek||avg<40)return{level:'evasao',label:'Risco evasão',cls:'red'};
+  if(avg<60)return{level:'medio',label:'Risco médio',cls:'orange'};
+  return{level:'baixo',label:'Risco baixo',cls:'green'};
+}
+function getMiniInsights(ci,prevCi){
+  if(!ci)return[];
+  const items=[];
+  const t=ci.training_score||0,pt=prevCi?prevCi.training_score||0:t;
+  const d=ci.diet_score||0,pd=prevCi?prevCi.diet_score||0:d;
+  const s=ci.sleep_score||0,ps=prevCi?prevCi.sleep_score||0:s;
+  const e=ci.energy_level||0;
+  if(t>=8)items.push({text:'treino evoluiu',cls:'green'});
+  else if(t<=4)items.push({text:'treino fraco',cls:'red'});
+  else if(t>pt+1)items.push({text:'treino melhorou',cls:'green'});
+  if(d>=8)items.push({text:'ótima dieta',cls:'green'});
+  else if(d<=4)items.push({text:'baixa adesão',cls:'red'});
+  else if(d<pd-1)items.push({text:'dieta caiu',cls:'orange'});
+  if(s<=4)items.push({text:'sono ruim',cls:'red'});
+  else if(s<ps-1)items.push({text:'sono caiu',cls:'orange'});
+  else if(s>=8)items.push({text:'sono ótimo',cls:'green'});
+  if(e>=8)items.push({text:'alta energia',cls:'green'});
+  else if(e<=3)items.push({text:'baixa energia',cls:'red'});
+  const nh=ci.needs_help;
+  if(nh&&nh.trim().toLowerCase().replace(/[ãâàáä]/g,'a').replace(/[ç]/g,'c')!=='nao'&&nh.trim()!=='')
+    items.push({text:'pediu ajuda',cls:'orange'});
+  return items.slice(0,3);
+}
+function getDelta(cur,prev,field){
+  if(!prev)return null;
+  const d=(cur[field]||0)-(prev[field]||0);
+  if(d>0)return{cls:'up',label:'+'+d};
+  if(d<0)return{cls:'down',label:''+d};
+  return{cls:'same',label:'='};
+}
+async function callGemini(apiKey,prompt){
+  const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+apiKey,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:600}})
+  });
+  if(!res.ok)throw new Error('Gemini error: '+res.status);
+  const data=await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+async function generateAiAnalysis(apiKey,ci,prevCi,pat){
+  const prev_block=prevCi?'Semana anterior:\n- Dieta: '+(prevCi.diet_score||0)+'/10, Treino: '+(prevCi.training_score||0)+'/10, Sono: '+(prevCi.sleep_score||0)+'/10, Score: '+(prevCi.lapidados_score||0)+'/100':'Primeira semana registrada.';
+  const prompt='Você é um assistente de nutrição analisando o check-in semanal de um paciente.\n\nPaciente: '+pat.name+'\nPlano: '+(pat.plan||'N/A')+'\nRank: '+getRank(pat.total_points||0).name+'\nPontos: '+(pat.total_points||0)+'\n\nCheck-in desta semana:\n- Dieta: '+(ci.diet_score||0)+'/10\n- Treino: '+(ci.training_score||0)+'/10\n- Sono: '+(ci.sleep_score||0)+'/10\n- Cardio: '+(ci.cardio_score||0)+'/10\n- Energia: '+(ci.energy_level||0)+'/10\n- Score: '+(ci.lapidados_score||0)+'/100\n- Vitória: "'+(ci.wins||ci.weekly_win||'N/A')+'"\n- Dificuldade: "'+(ci.main_difficulty||ci.weekly_difficulty||'N/A')+'"\n- Ajuda: "'+(ci.needs_help||'N/A')+'"\n\n'+prev_block+'\n\nResponda APENAS em JSON válido:\n{"summary":"2-3 frases encorajadoras","focus":"foco principal próxima semana","risk":"baixo|medio|evasao","insights":["insight1","insight2","insight3"],"reply":"mensagem WhatsApp 2-3 frases, tom pessoal"}';
+  const raw=await callGemini(apiKey,prompt);
+  return JSON.parse(raw.replace(/```json|```/g,'').trim());
+}
+
 // ─── MAIN CHECKIN HUB ───
 function CheckinHub({pats,db}){
   const{checkins,invites,loading,reload,logInvite}=useCheckins(db._userId);
-  const[showRankInfo,setShowRankInfo]=useState(false);
+  const[showScoring,setShowScoring]=useState(false);
   const[selectedPat,setSelectedPat]=useState(null);
   const[search,setSearch]=useState('');
   const[filter,setFilter]=useState('all');
   const[rankUp,setRankUp]=useState(null);
   const{week,year}=getWeekNum();
+  const geminiKey=db.profile?.gemini_api_key||'';
 
   const checkinByPat=useMemo(()=>{
     const m={};checkins.forEach(c=>{if(!m[c.patient_id])m[c.patient_id]=[];m[c.patient_id].push(c);});return m;
@@ -3033,147 +3284,151 @@ function CheckinHub({pats,db}){
     const m={};invites.forEach(i=>{if(!m[i.patient_id])m[i.patient_id]=[];m[i.patient_id].push(i);});return m;
   },[invites]);
 
-  const enriched=pats.map(p=>{
+  const enriched=useMemo(()=>pats.map(p=>{
     const all=checkinByPat[p.id]||[];
     const patInvites=invitesByPat[p.id]||[];
     const totalPts=calcPatientTotal(all,patInvites);
-    return{...p,weekCheckin:weekCheckinByPat[p.id]||null,allCheckins:all,patInvites,totalPts,hasThisWeek:!!weekCheckinByPat[p.id]};
-  }).sort((a,b)=>b.totalPts-a.totalPts);
+    const weekCi=weekCheckinByPat[p.id]||null;
+    const prevCi=all.find(c=>c!==weekCi)||null;
+    return{...p,weekCheckin:weekCi,allCheckins:all,patInvites,totalPts,hasThisWeek:!!weekCi,prevCi};
+  }).sort((a,b)=>b.totalPts-a.totalPts),[pats,checkinByPat,weekCheckinByPat,invitesByPat]);
 
-  const filtered=search?enriched.filter(p=>p.name.toLowerCase().includes(search.toLowerCase())):enriched;
-  const pending=filtered.filter(p=>!p.hasThisWeek);
-  const done=filtered.filter(p=>p.hasThisWeek).sort((a,b)=>(b.weekCheckin?.lapidados_score||0)-(a.weekCheckin?.lapidados_score||0));
-  const displayed=filter==='pending'?pending:filter==='done'?done:filtered;
+  const allDone=enriched.filter(p=>p.hasThisWeek);
+  const allPending=enriched.filter(p=>!p.hasThisWeek);
+  const avgScore=allDone.length?Math.round(allDone.reduce((s,p)=>s+(p.weekCheckin?.lapidados_score||0),0)/allDone.length):0;
+  const pct=pats.length?Math.round(allDone.length/pats.length*100):0;
 
-  const totalDone=done.length;
-  const avgScore=done.length?Math.round(done.reduce((s,p)=>s+(p.weekCheckin?.lapidados_score||0),0)/done.length):0;
+  const filtereds=search?enriched.filter(p=>p.name.toLowerCase().includes(search.toLowerCase())):enriched;
+  const displayed=filter==='pending'?filtereds.filter(p=>!p.hasThisWeek):filter==='done'?filtereds.filter(p=>p.hasThisWeek).sort((a,b)=>(b.weekCheckin?.lapidados_score||0)-(a.weekCheckin?.lapidados_score||0)):filtereds;
 
-  const getSentKey=(pid)=>{
-    const p2=enriched.find(x=>x.id===pid);
-    const{week:pw,year:py}=calcPatientWeek(p2?.startDate||p2?.start_date);
-    return 'lc_sent_'+pid+'_'+pw+'_'+py;
-  };
-  const wasSentThisWeek=(pid)=>{
-    const k=getSentKey(pid);const v=localStorage.getItem(k);
-    if(!v)return false;
-    const d=Math.floor((Date.now()-parseInt(v))/86400000);
-    return d<6;
-  };
-  const markSent=(pid)=>localStorage.setItem(getSentKey(pid),Date.now());
+  const getSentKey=pid=>{const p2=enriched.find(x=>x.id===pid);const{week:pw,year:py}=calcPatientWeek(p2?.startDate||p2?.start_date);return 'lc_sent_'+pid+'_'+pw+'_'+py;};
+  const wasSentThisWeek=pid=>{const v=localStorage.getItem(getSentKey(pid));if(!v)return false;return Math.floor((Date.now()-parseInt(v))/86400000)<6;};
+  const markSent=pid=>localStorage.setItem(getSentKey(pid),Date.now());
 
-  const handleSendWA=async(p)=>{
-    const profName=db.profile?.fullName?.split(' ')[0]||'Leo';
+  const handleSendWA=async p=>{
+    const profName=db.profile?.fullName?.split(' ')[0]||'';
     const link=CHECKIN_URL+'?patient_id='+encodeURIComponent(p.id)+'&name='+encodeURIComponent(p.name.split(' ')[0]);
     const msg='Oi '+p.name.split(' ')[0]+'! 💪 Hora do seu Check-in semanal do Lapidados Club!\n\nResponde rapidinho e veja sua pontuação e RANK na gamificação 🎮🔥\n\n'+link;
-    const prevTotal=p.totalPts;
     const{week:pw2,year:py2}=calcPatientWeek(p.startDate||p.start_date);
     await logInvite(p.id,pw2,py2).catch(()=>{});
     markSent(p.id);
-    const phone='55'+p.phone.replace(/\D/g,'');
-    window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank');
+    window.open('https://wa.me/55'+p.phone.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
   };
 
   return h('div',null,
     rankUp&&h(RankUpOverlay,{rank:rankUp,onClose:()=>setRankUp(null)}),
-    h('div',{className:'pg-head'},
+
+    // ── Premium Header
+    h('div',{className:'ci-hdr'},
       h('div',null,
-        h('div',{className:'pg-title'},'Check-in · Lapidados'),
-        h('div',{className:'pg-sub'},'Semana '+week+' · '+year+' · '+totalDone+'/'+pats.length+' respondidos')
+        h('div',{className:'ci-hdr-title'},'📲 Check-in Inteligente'),
+        h('div',{className:'ci-hdr-meta'},
+          h('span',{className:'ci-hdr-badge hl'},'Semana '+week+' · '+year),
+          h('span',{className:'ci-hdr-badge green'},pct+'% respondidos'),
+          avgScore>0&&h('span',{className:'ci-hdr-badge'},'Score médio: '+avgScore+'pts')
+        )
       ),
       h('button',{className:'btn btn-ghost btn-sm',onClick:reload},'↻ Atualizar')
     ),
-    h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:10,marginBottom:20}},
-      h('div',{className:'kpi or'},h('div',{className:'kpi-icon'},'📲'),h('div',{className:'kpi-v'},pats.length),h('div',{className:'kpi-l'},'Total alunos')),
-      h('div',{className:'kpi gr'},h('div',{className:'kpi-icon'},'✅'),h('div',{className:'kpi-v'},totalDone),h('div',{className:'kpi-l'},'Responderam')),
-      h('div',{className:'kpi re'},h('div',{className:'kpi-icon'},'⏳'),h('div',{className:'kpi-v'},pending.length),h('div',{className:'kpi-l'},'Pendentes')),
-      h('div',{className:'kpi bl'},h('div',{className:'kpi-icon'},'📊'),h('div',{className:'kpi-v'},avgScore||'—'),h('div',{className:'kpi-l'},'Score médio'))
+
+    // ── 4 Filter Cards
+    h('div',{className:'ci-filter-cards'},
+      [
+        {key:'all',count:pats.length,label:'Total de alunos',color:'var(--ink)'},
+        {key:'done',count:allDone.length,label:'Responderam ✅',color:'var(--g4)'},
+        {key:'pending',count:allPending.length,label:'Pendentes ⏳',color:'var(--r4)'},
+        {key:'score',count:avgScore||'—',label:'Score médio 📊',color:'var(--or4)'},
+      ].map(fc=>h('button',{key:fc.key,className:'ci-fc'+(filter===fc.key?' active':''),
+        onClick:()=>fc.key!=='score'&&setFilter(filter===fc.key?'all':fc.key)},
+        h('div',{className:'ci-fc-count',style:{color:fc.color}},fc.count),
+        h('div',{className:'ci-fc-label'},fc.label)
+      ))
     ),
-h('div',{style:{background:'var(--ink7)',border:'1px solid var(--ink6)',borderRadius:'var(--radius-lg)',padding:'14px 18px',marginBottom:18,cursor:'pointer'},
-      onClick:()=>setShowRankInfo(ri=>!ri)},
-      h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between'}},
-        h('div',{style:{fontSize:13,fontWeight:700}},'📊 Sistema de pontuação'),
-        h('span',{style:{fontSize:11,color:'var(--ink3)'}},showRankInfo?'▲ Fechar':'▼ Ver detalhes')
+
+    // ── Scoring panel (collapsible)
+    h('div',{className:'ci-scoring',onClick:()=>setShowScoring(s=>!s)},
+      h('div',{className:'ci-scoring-head'},
+        h('span',{style:{fontSize:13,fontWeight:700}},'📊 Sistema de pontuação'),
+        h('span',{style:{fontSize:11,color:'var(--ink3)'}},(showScoring?'▲ Fechar':'▼ Ver detalhes'))
       ),
-      showRankInfo&&h('div',{style:{marginTop:12}},
-        h('div',{style:{fontSize:12,color:'var(--ink3)',marginBottom:10}},'Score semanal máximo: 100pts · Acumule pontos para subir de rank'),
-        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}},
+      showScoring&&h('div',{onClick:e=>e.stopPropagation(),style:{marginTop:12}},
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6,marginBottom:10}},
           [['🥗','Dieta','25pts'],['🏋️','Treino','20pts'],['⚡','Energia','15pts'],
            ['🏃','Cardio','10pts'],['🍽️','Aderência','10pts'],['😴','Sono','10pts'],
            ['🫁','Intestino','5pts'],['😋','Saciedade','5pts']].map(([ic,lb,pt])=>
             h('div',{key:lb,style:{display:'flex',alignItems:'center',gap:6,padding:'5px 8px',background:'var(--w)',borderRadius:7,border:'1px solid var(--ink6)'}},
-              h('span',{style:{fontSize:13}},ic),
-              h('span',{style:{fontSize:11,flex:1,color:'var(--ink2)',fontWeight:500}},lb),
-              h('span',{style:{fontSize:11,fontWeight:700,color:'var(--or4)'}},pt)
+              h('span',null,ic),h('span',{style:{fontSize:11,flex:1,color:'var(--ink2)'}},lb),h('span',{style:{fontSize:11,fontWeight:700,color:'var(--or4)'}},pt)
             )
           )
         ),
-        h('div',{style:{marginTop:10,display:'grid',gridTemplateColumns:'1fr',gap:4}},
-          RANKS.map(r=>h('div',{key:r.id,style:{display:'flex',alignItems:'center',gap:8,padding:'6px 10px',borderRadius:8,border:'1px solid var(--ink6)',background:'var(--w)'}},
-            h('span',{style:{fontSize:16}},r.icon),
-            h('span',{style:{fontSize:11,fontWeight:700,flex:1}},r.name),
-            h('span',{style:{fontSize:10,color:'var(--ink3)'}},r.min===0?'0–199pts':r.max>=1e9?'2000+ pts':r.min+'–'+r.max+' pts')
+        h('div',{style:{display:'flex',gap:6}},
+          RANKS.map(r=>h('div',{key:r.id,style:{flex:1,padding:'5px 8px',borderRadius:8,border:'1px solid var(--ink6)',background:'var(--w)',textAlign:'center'}},
+            h('div',{style:{fontSize:14}},r.icon),
+            h('div',{style:{fontSize:9,fontWeight:700,marginTop:2}},r.name),
+            h('div',{style:{fontSize:8,color:'var(--ink3)'}},r.min===0?'0–199':r.max>=1e9?'2000+':r.min+'–'+r.max)
           ))
         ),
-        h('div',{style:{marginTop:8,fontSize:11,color:'var(--ink3)',padding:'8px 10px',background:'var(--r1)',borderRadius:7}},
-          '⚠️ Semanas com link enviado sem resposta em 6 dias = −10pts do acumulado'
+        h('div',{style:{marginTop:8,fontSize:11,color:'var(--or5)',padding:'7px 10px',background:'var(--or1)',borderRadius:7,marginTop:8}},
+          '⚠️ Link enviado sem resposta em 6 dias = −10pts do acumulado'
         )
       )
     ),
-    h('div',{className:'tbar',style:{marginBottom:12}},
-      h('div',{className:'srch'},h('span',{className:'srch-ic'},'⌕'),h('input',{placeholder:'Buscar aluno...',value:search,onChange:e=>setSearch(e.target.value)})),
-      h('div',{style:{display:'flex',gap:6,flexWrap:'wrap'}},
-      [['all','Todos'],['pending','Pendentes ⏳'],['done','Responderam ✅']].map(([v,l])=>
-        h('button',{key:v,className:'btn '+(filter===v?'btn-primary':'btn-ghost')+' btn-sm',onClick:()=>setFilter(v)},l)
-      )
+
+    // ── Search
+    h('div',{className:'tbar',style:{marginBottom:16}},
+      h('div',{className:'srch'},h('span',{className:'srch-ic'},'⌕'),h('input',{placeholder:'Buscar aluno...',value:search,onChange:e=>setSearch(e.target.value)}))
     ),
+
+    // ── Patient Cards List
     loading?h('div',{style:{textAlign:'center',padding:'40px',color:'var(--ink3)'}},'Carregando...'):
     displayed.length===0?h('div',{className:'empty'},h('div',{className:'empty-icon'},'📋'),h('div',{className:'empty-tt'},'Nenhum resultado')):
-    h('div',{className:'tw',style:{width:'100%'}},h('table',{style:{width:'100%'}},null,
-      h('thead',null,h('tr',null,
-        ['Aluno','Rank','Pts totais','Semana atual','Status',''].map(x=>h('th',{key:x},x))
-      )),
-      h('tbody',null,displayed.map(p=>{
-        const t=p.weekCheckin?getWeekTier(p.weekCheckin.lapidados_score||0):null;
-        const r=getRank(p.totalPts);
-        return h('tr',{key:p.id,style:{cursor:'pointer'},onClick:()=>setSelectedPat(p.id)},
-          h('td',null,
-            h('div',{style:{display:'flex',alignItems:'center',gap:8}},
-              h('div',{className:'ac-pat-av',style:{width:28,height:28,fontSize:10}},ini(p.name)),
-              h('div',null,
-                h('div',{className:'td-n'},p.name),
-                p.phone&&h('div',{className:'td-s'},p.phone)
-              )
+    h('div',{className:'ci-pat-list'},displayed.map(p=>{
+      const r=getRank(p.totalPts);
+      const ws=getWeeklyStatus(p.weekCheckin,p.prevCi);
+      const risk=getRiskLevel(p.allCheckins,p.hasThisWeek);
+      const insights=getMiniInsights(p.weekCheckin,p.prevCi);
+      return h('div',{key:p.id,className:'ci-pat-card',onClick:()=>setSelectedPat(p.id)},
+        h('div',{className:'ci-pat-card-top'},
+          h('div',{className:'ci-pat-av'},ini(p.name)),
+          h('div',{style:{flex:1,minWidth:0}},
+            h('div',{className:'ci-pat-name'},p.name),
+            h('div',{className:'ci-pat-meta'},
+              h('span',{className:'rank-badge '+r.cls,style:{fontSize:10,padding:'1px 6px'}},r.icon+' '+r.name),
+              h('span',null,p.totalPts+'pts')
             )
           ),
-          h('td',null,h('span',{className:'rank-badge '+r.cls},r.icon+' '+r.name)),
-          h('td',null,h('span',{style:{fontWeight:800,color:'var(--or4)'}},p.totalPts+'pts')),
-          h('td',null,p.weekCheckin
-            ?h('span',{style:{fontWeight:700,color:t.color}},p.weekCheckin.lapidados_score+'pts')
-            :h('span',{style:{fontSize:11,color:'var(--ink3)'}},'—')
-          ),
-          h('td',null,p.hasThisWeek
-            ?h('span',{className:'badge b-ok'},'✅ Respondeu')
-            :wasSentThisWeek(p.id)
-              ?h('span',{className:'badge b-warn'},'⏳ Enviado')
-              :h('span',{className:'badge b-muted'},'Não enviado')
-          ),
-          h('td',null,h('button',{
-            className:'btn btn-info btn-xs',
-            onClick:e=>{e.stopPropagation();setSelectedPat(p.id);}
-          },'Ver'))
-        );
-      }))
-    )),
+          h('div',{style:{textAlign:'right',flexShrink:0}},
+            p.hasThisWeek
+              ?h('div',{style:{fontWeight:800,fontSize:16,color:'var(--or4)'}},(p.weekCheckin?.lapidados_score||0)+'pts')
+              :h('div',{style:{fontSize:11,color:'var(--ink3)'}},'—'),
+            h('div',{style:{fontSize:9,color:'var(--ink4)',marginTop:1}},p.hasThisWeek?'esta semana':'sem check-in')
+          )
+        ),
+        h('div',{className:'ci-pat-badges'},
+          h('span',{className:'ci-ws '+ws.cls},ws.icon+' '+ws.label),
+          h('span',{className:'ci-risk '+risk.cls},'● '+risk.label),
+          wasSentThisWeek(p.id)&&!p.hasThisWeek&&h('span',{className:'ci-risk orange'},'📤 Enviado')
+        ),
+        insights.length>0&&h('div',{className:'ci-insights'},
+          insights.map((ins,i)=>h('span',{key:i,className:'ci-insight '+ins.cls},ins.text))
+        ),
+        h('div',{className:'ci-pat-actions'},
+          h('button',{className:'btn btn-ghost btn-xs',onClick:e=>{e.stopPropagation();setSelectedPat(p.id);}},'Ver evolução'),
+          p.phone&&h('a',{className:'btn btn-ghost btn-xs',style:{textDecoration:'none'},href:'https://wa.me/55'+p.phone.replace(/\D/g,''),target:'_blank',onClick:e=>e.stopPropagation()},'💬 WhatsApp'),
+          p.phone&&!p.hasThisWeek&&h('button',{className:'btn btn-primary btn-xs',onClick:e=>{e.stopPropagation();handleSendWA(p);}},'📲 Enviar')
+        )
+      );
+    })),
+
     selectedPat&&h(PatDetailModal,{
       p:enriched.find(x=>x.id===selectedPat),
       onClose:()=>setSelectedPat(null),
       onSendWA:handleSendWA,
-      wasSentThisWeek,
-      reload
+      wasSentThisWeek,reload,geminiKey
     })
-  )
   );
 }
+
 function CheckinDashCard({pats,checkins,onNav}){
   const{week,year}=getWeekNum();
   const weekDone=new Set(checkins.filter(c=>c.week_number===week&&c.year===year).map(c=>c.patient_id));
