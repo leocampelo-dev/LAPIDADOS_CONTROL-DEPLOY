@@ -3123,21 +3123,18 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
   ];
 
   const handleAi=async()=>{
-    if(!geminiKey)return showAlert('Chave não configurada','Acesse Configurações → Perfil e adicione sua chave Gemini API.','warning');
     if(!ci)return showAlert('Sem check-in','Este paciente não tem check-in registrado ainda.','info');
     setAiL(true);
     try{
       const res=await generateAiAnalysis(geminiKey,ci,prevCi,{...p,total_points:p.totalPts});
       setAiData(res);
-      // Save to Supabase
       await SB.from('checkins').update({
         ai_summary:res.summary,ai_focus:res.focus,ai_risk:res.risk,
         ai_insights:res.insights,ai_reply:res.reply
       }).eq('id',ci.id);
-      toast('Análise IA salva!');showSuccess('Análise IA gerada com sucesso!');
-    }catch(e){
-      showError(aiErrMsg(e));
-    }
+      if(res.isOffline)toast('Análise local gerada!');
+      else{toast('Análise Gemini salva!');showSuccess('Análise IA gerada com sucesso!');}
+    }catch(e){showError(aiErrMsg(e));}
     setAiL(false);
   };
 
@@ -3169,7 +3166,7 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
     // ── AI Card
     h('div',{className:'ci-ai-card'+(aiData?' has-data':'')},
       h('div',{className:'ci-ai-title'},
-        h('span',null,'🤖 Análise IA'+(aiData?' · Gerado':' · Clique para gerar')),
+        h('span',null,'🤖 Análise'+(aiData?(aiData.isOffline?' · Local inteligente':' · Gemini IA'):' · Clique para gerar')),
         ci&&h('button',{className:'btn btn-ghost btn-xs',onClick:handleAi,disabled:aiLoading},
           aiLoading?'Analisando...':aiData?'↻ Reanalisar':'Gerar análise')
       ),
@@ -3383,11 +3380,93 @@ async function callGemini(apiKey,prompt){
   if(lastErr?.isQuota)throw new Error('quota_exceeded');
   throw new Error('all_failed');
 }
+// ─── SMART OFFLINE ANALYSIS (no API needed) ───
+function generateOfflineAnalysis(ci,prevCi,pat){
+  const nome=pat.name.split(' ')[0];
+  const d=ci.diet_score||0,t=ci.training_score||0,s=ci.sleep_score||0,
+        e=ci.energy_level||0,c=ci.cardio_score||0,score=ci.lapidados_score||0;
+  const pd=prevCi?prevCi.diet_score||0:d,pt=prevCi?prevCi.training_score||0:t,
+        ps=prevCi?prevCi.sleep_score||0:s,prevScore=prevCi?prevCi.lapidados_score||0:score;
+  const delta=score-prevScore;
+
+  // Build insights
+  const ins=[];
+  if(t>=8)ins.push('treino excelente');
+  else if(t>pt+1)ins.push('treino evoluiu');
+  else if(t<=4)ins.push('treino fraco');
+  if(d>=8)ins.push('dieta em dia');
+  else if(d<pd-1)ins.push('dieta caiu');
+  else if(d<=4)ins.push('baixa adesão alimentar');
+  if(s>=8)ins.push('sono ótimo');
+  else if(s<ps-1)ins.push('sono piorou');
+  else if(s<=4)ins.push('sono ruim');
+  if(e>=8)ins.push('alta energia');
+  else if(e<=3)ins.push('energia baixa');
+  if(c>=7)ins.push('cardio consistente');
+  const nh=ci.needs_help||'';
+  const nhLow=nh.toLowerCase().replace(/[ãâàá]/g,'a').replace(/ç/g,'c');
+  if(nh&&nhLow!=='nao'&&nh.trim())ins.push('pediu suporte');
+
+  // Summary
+  let summary='';
+  if(delta>=10)summary=nome+' teve uma semana de evolução expressiva! Score subiu '+delta+' pontos em relação à semana anterior. ';
+  else if(delta>0)summary=nome+' manteve boa consistência e avançou '+delta+' pontos esta semana. ';
+  else if(delta===0)summary=nome+' manteve o mesmo nível da semana anterior, com score de '+score+' pontos. ';
+  else summary=nome+' teve uma semana mais desafiadora, com queda de '+Math.abs(delta)+' pontos. ';
+  const best=ins.filter(i=>i.includes('excelente')||i.includes('evoluiu')||i.includes('em dia')||i.includes('ótimo')||i.includes('alta')||i.includes('consistente'));
+  const weak=ins.filter(i=>i.includes('fraco')||i.includes('caiu')||i.includes('baixa')||i.includes('piorou')||i.includes('ruim'));
+  if(best.length)summary+='Destaque positivo: '+best[0]+'.';
+  if(weak.length)summary+=(best.length?' Ponto de atenção: ':' Foco necessário: ')+weak[0]+'.';
+
+  // Focus for next week
+  let focus='';
+  if(s<=5)focus='Melhorar a qualidade do sono — impacta diretamente energia e resultados.';
+  else if(d<=5)focus='Fortalecer a adesão alimentar durante a semana.';
+  else if(t<=5)focus='Aumentar consistência nos treinos.';
+  else if(e<=4)focus='Trabalhar energia — pode indicar subalimentação ou recuperação insuficiente.';
+  else focus='Manter o ritmo e buscar evoluir pelo menos 1 ponto nas métricas mais baixas.';
+
+  // Risk
+  const risk=score<40||(!prevCi&&score<50)?'evasao':score<60||delta<-10?'medio':'baixo';
+
+  // WhatsApp reply
+  const win=ci.wins||ci.weekly_win||'';
+  const diff=ci.main_difficulty||ci.weekly_difficulty||'';
+  let reply='Oi '+nome+'! Vi seu check-in desta semana. ';
+  if(win&&win.toLowerCase()!=='n/a')reply+='Adorei sua vitória: "'+win.substring(0,50)+'". ';
+  if(weak.length)reply+='Vou prestar mais atenção no '+weak[0]+'. ';
+  reply+=delta>=0?'Continue assim, você está no caminho certo! 💪':'Semana difícil acontece, o importante é não desistir. Vamos juntos! 💪';
+
+  return{
+    summary:summary.trim(),
+    focus,
+    risk,
+    insights:ins.slice(0,4),
+    reply,
+    isOffline:true
+  };
+}
+
 async function generateAiAnalysis(apiKey,ci,prevCi,pat){
-  const prev_block=prevCi?'Semana anterior:\n- Dieta: '+(prevCi.diet_score||0)+'/10, Treino: '+(prevCi.training_score||0)+'/10, Sono: '+(prevCi.sleep_score||0)+'/10, Score: '+(prevCi.lapidados_score||0)+'/100':'Primeira semana registrada.';
-  const prompt='Você é um assistente de nutrição analisando o check-in semanal de um paciente.\n\nPaciente: '+pat.name+'\nPlano: '+(pat.plan||'N/A')+'\nRank: '+getRank(pat.total_points||0).name+'\nPontos: '+(pat.total_points||0)+'\n\nCheck-in desta semana:\n- Dieta: '+(ci.diet_score||0)+'/10\n- Treino: '+(ci.training_score||0)+'/10\n- Sono: '+(ci.sleep_score||0)+'/10\n- Cardio: '+(ci.cardio_score||0)+'/10\n- Energia: '+(ci.energy_level||0)+'/10\n- Score: '+(ci.lapidados_score||0)+'/100\n- Vitória: "'+(ci.wins||ci.weekly_win||'N/A')+'"\n- Dificuldade: "'+(ci.main_difficulty||ci.weekly_difficulty||'N/A')+'"\n- Ajuda: "'+(ci.needs_help||'N/A')+'"\n\n'+prev_block+'\n\nResponda APENAS em JSON válido:\n{"summary":"2-3 frases encorajadoras","focus":"foco principal próxima semana","risk":"baixo|medio|evasao","insights":["insight1","insight2","insight3"],"reply":"mensagem WhatsApp 2-3 frases, tom pessoal"}';
-  const raw=await callGemini(apiKey,prompt);
-  return JSON.parse(raw.replace(/```json|```/g,'').trim());
+  // Try Gemini if key provided
+  if(apiKey){
+    try{
+      const prev_block=prevCi
+        ?'Semana anterior: Dieta '+(prevCi.diet_score||0)+'/10, Treino '+(prevCi.training_score||0)+'/10, Sono '+(prevCi.sleep_score||0)+'/10, Score '+(prevCi.lapidados_score||0)+'/100'
+        :'Primeira semana registrada.';
+      const prompt='Você é um assistente de nutrição analisando check-in semanal.\n\nPaciente: '+pat.name+'\nPlano: '+(pat.plan||'N/A')+'\nRank: '+getRank(pat.total_points||0).name+'\n\nCheck-in:\n- Dieta: '+(ci.diet_score||0)+'/10\n- Treino: '+(ci.training_score||0)+'/10\n- Sono: '+(ci.sleep_score||0)+'/10\n- Cardio: '+(ci.cardio_score||0)+'/10\n- Energia: '+(ci.energy_level||0)+'/10\n- Score: '+(ci.lapidados_score||0)+'/100\n- Vitória: "'+(ci.wins||ci.weekly_win||'N/A')+'"\n- Dificuldade: "'+(ci.main_difficulty||ci.weekly_difficulty||'N/A')+'"\n- Ajuda: "'+(ci.needs_help||'N/A')+'"\n'+prev_block+'\n\nResponda APENAS em JSON válido sem markdown:\n{"summary":"2-3 frases encorajadoras","focus":"foco principal próxima semana","risk":"baixo|medio|evasao","insights":["insight1","insight2","insight3"],"reply":"mensagem WhatsApp 2-3 frases tom pessoal"}';
+      const raw=await callGemini(apiKey,prompt);
+      const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      result.isOffline=false;
+      return result;
+    }catch(e){
+      if(e.message!=='quota_exceeded'&&e.message!=='all_failed'&&e.message!=='no_permission')throw e;
+      // Fall through to offline analysis
+      toast('Gemini indisponível — usando análise inteligente local');
+    }
+  }
+  // Offline fallback — always works
+  return generateOfflineAnalysis(ci,prevCi,pat);
 }
 
 // ─── MAIN CHECKIN HUB ───
