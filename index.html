@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lapidados Control</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -506,22 +505,38 @@ tr:hover td{background:#fafafa}
 .task-input{flex:1;padding:10px 14px;border:1.5px solid var(--ink5);border-radius:10px;font-size:13px;outline:none;background:var(--w);color:var(--ink);transition:border .15s;font-family:inherit}
 .task-input:focus{border-color:var(--or4);box-shadow:0 0 0 3px rgba(232,93,4,.1)}
 .task-input::placeholder{color:var(--ink4)}
-.task-add-btn{width:40px;height:40px;border-radius:10px;background:var(--or4);border:none;color:#fff;font-size:22px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
-.task-add-btn:hover{background:var(--or5)}
+.task-add-btn{width:40px;height:40px;border-radius:10px;background:var(--or4);border:none;color:#fff;font-size:22px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .1s}
+.task-add-btn:hover{background:var(--or5)}.task-add-btn:active{transform:scale(.9)}
 .task-tabs{display:flex;border-bottom:1.5px solid var(--ink6);margin-bottom:12px}
 .task-tab{padding:7px 16px;font-size:12px;font-weight:700;color:var(--ink3);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:inherit}
 .task-tab.on{color:var(--or4);border-bottom-color:var(--or4)}
 .task-tab-badge{background:var(--or4);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;min-width:16px;text-align:center}
 .task-list{display:flex;flex-direction:column;gap:5px;max-height:300px;overflow-y:auto;padding-right:2px}
-.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--ink6);border-radius:10px;background:var(--w);transition:all .15s;position:relative}
-.task-item:hover{background:var(--ink7);border-color:var(--ink5)}
-.task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink5);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s;background:var(--w);margin-top:1px}
+/* Item enter animation */
+@keyframes taskIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* Item exit animation */
+@keyframes taskOut{from{opacity:1;transform:translateX(0);max-height:60px}to{opacity:0;transform:translateX(16px);max-height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0}}
+/* Check pop animation */
+@keyframes checkPop{0%{transform:scale(1)}35%{transform:scale(1.45)}65%{transform:scale(.88)}100%{transform:scale(1)}}
+/* Ripple from checkbox */
+@keyframes ripple{from{transform:scale(1);opacity:.5}to{transform:scale(2.8);opacity:0}}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--ink6);border-radius:10px;background:var(--w);position:relative;animation:taskIn .22s cubic-bezier(.4,0,.2,1)}
+.task-item:hover{background:var(--ink7);border-color:var(--ink5);transition:background .15s,border-color .15s}
+.task-item.removing{animation:taskOut .22s cubic-bezier(.4,0,.6,1) forwards;overflow:hidden;pointer-events:none}
+.task-item.done-item{opacity:.72}
+/* Checkbox */
+.task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink5);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:border-color .15s,background .2s;background:var(--w);margin-top:1px;position:relative}
 .task-check:hover{border-color:var(--or4)}
 .task-check.checked{background:var(--g4);border-color:var(--g4);color:#fff;font-size:11px}
-.task-text{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;word-break:break-word}
+.task-check.popping{animation:checkPop .3s cubic-bezier(.175,.885,.32,1.275)}
+/* Ripple el */
+.task-ripple{position:absolute;width:20px;height:20px;border-radius:50%;background:rgba(34,197,94,.45);pointer-events:none;animation:ripple .38s ease-out forwards}
+/* Text */
+.task-text{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;word-break:break-word;transition:color .25s}
 .task-item.done-item .task-text{text-decoration:line-through;color:var(--ink4)}
-.task-del{opacity:0;width:24px;height:24px;border-radius:6px;border:none;background:var(--r1);color:var(--r4);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.task-item:hover .task-del{opacity:1}
+/* Delete btn */
+.task-del{opacity:0;width:24px;height:24px;border-radius:6px;border:none;background:var(--r1);color:var(--r4);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s,transform .1s}
+.task-item:hover .task-del{opacity:1}.task-del:active{transform:scale(.85)}
 .task-empty{text-align:center;padding:28px 16px;color:var(--ink3);font-size:13px}
 .task-empty-icon{font-size:24px;margin-bottom:8px}
 /* Hide-values toggle */
@@ -2306,27 +2321,67 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
   const[tab,st]=useState('todo');
   const[input,si]=useState('');
   const[saving,ss]=useState(false);
+  const[removingIds,setRemoving]=useState(new Set());
+  const[poppingIds,setPopping]=useState(new Set());
+  const[rippleIds,setRipple]=useState(new Set());
   const{tasks,loading,addTask,toggleTask,delTask}=taskDb;
 
   const todo=tasks.filter(t=>!t.done);
   const done=tasks.filter(t=>t.done);
 
   const handleAdd=async()=>{
-    const txt=input.trim();if(!txt)return;
-    ss(true);try{await addTask(txt);si('');}catch(e){showError(e.message);}ss(false);
+    const txt=input.trim();if(!txt||saving)return;
+    ss(true);
+    si(''); // clear immediately so input feels instant
+    try{await addTask(txt);}catch(e){showError(e.message);si(txt);}
+    ss(false);
   };
 
+  const handleToggle=(id,markDone)=>{
+    // Trigger pop + ripple on check
+    if(markDone){
+      setPopping(p=>new Set([...p,id]));
+      setRipple(p=>new Set([...p,id]));
+      setTimeout(()=>{setPopping(p=>{const s=new Set(p);s.delete(id);return s;});},320);
+      setTimeout(()=>{setRipple(p=>{const s=new Set(p);s.delete(id);return s;});},400);
+    }
+    // Small delay before state change so animation shows
+    setTimeout(()=>toggleTask(id,markDone),markDone?180:0);
+  };
+
+  const handleDelete=(id)=>{
+    setRemoving(p=>new Set([...p,id]));
+    setTimeout(()=>{
+      delTask(id);
+      setRemoving(p=>{const s=new Set(p);s.delete(id);return s;});
+    },220);
+  };
+
+  const TaskItem=({t,isDone})=>h('div',{
+    key:t.id,
+    className:'task-item'+(isDone?' done-item':'')+(removingIds.has(t.id)?' removing':'')
+  },
+    h('div',{
+      className:'task-check'+(isDone?' checked':'')+(poppingIds.has(t.id)?' popping':''),
+      onClick:()=>handleToggle(t.id,!isDone),
+      style:{overflow:'hidden'}
+    },
+      rippleIds.has(t.id)&&h('span',{className:'task-ripple',style:{position:'absolute',top:0,left:0}}),
+      isDone&&h('i',{className:'bi bi-check'})
+    ),
+    h('div',{className:'task-text'},t.text),
+    h('button',{className:'task-del',onClick:()=>handleDelete(t.id),title:'Excluir'},'×')
+  );
+
   return h('div',null,
-    // Input
     h('div',{className:'task-input-row'},
-      h('input',{className:'task-input',placeholder:'Nova tarefa... (Enter para adicionar)',value:input,
+      h('input',{className:'task-input',placeholder:'Nova nota... (Enter para adicionar)',value:input,
         onChange:e=>si(e.target.value),
-        onKeyDown:e=>{if(e.key==='Enter'&&!saving)handleAdd();},
+        onKeyDown:e=>{if(e.key==='Enter')handleAdd();},
         disabled:saving
       }),
       h('button',{className:'task-add-btn',onClick:handleAdd,disabled:saving||!input.trim(),title:'Adicionar'},'＋')
     ),
-    // Tabs
     h('div',{className:'task-tabs'},
       h('button',{className:'task-tab'+(tab==='todo'?' on':''),onClick:()=>st('todo')},
         'A fazer',todo.length>0&&h('span',{className:'task-tab-badge'},todo.length)
@@ -2335,36 +2390,26 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
         'Feitas',done.length>0&&h('span',{className:'task-tab-badge',style:{background:'var(--g4)'}},done.length)
       )
     ),
-    // List - only show when not hidden
     showOnHome?(
       loading?h('div',{className:'task-empty'},h('div',{className:'spinner',style:{width:24,height:24,borderWidth:2}})):
       tab==='todo'?h('div',{className:'task-list'},
         todo.length===0
-          ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma nota pendente!'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima para começar'))
-          :todo.map(t=>h('div',{key:t.id,className:'task-item'},
-            h('div',{className:'task-check'+(t.done?' checked':''),onClick:()=>toggleTask(t.id,true)}),
-            h('div',{className:'task-text'},t.text),
-            h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
-          ))
+          ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma nota pendente'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima'))
+          :todo.map(t=>h(TaskItem,{key:t.id,t,isDone:false}))
       ):h('div',{className:'task-list'},
         done.length===0
           ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'📋'),h('div',null,'Nenhuma nota concluída'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'As feitas ficam aqui por 7 dias'))
-          :done.map(t=>h('div',{key:t.id,className:'task-item done-item'},
-            h('div',{className:'task-check checked',onClick:()=>toggleTask(t.id,false)},h('i',{className:'bi bi-check'})),
-            h('div',{className:'task-text'},t.text),
-            h('button',{className:'task-del',onClick:()=>delTask(t.id),title:'Excluir'},'×')
-          ))
+          :done.map(t=>h(TaskItem,{key:t.id,t,isDone:true}))
       )
     ):h('div',{className:'task-empty',style:{padding:'14px 0'}},
       h('i',{className:'bi bi-eye-slash',style:{fontSize:20,color:'var(--ink4)'}}),
       h('div',{style:{fontSize:11,color:'var(--ink4)',marginTop:6}},'Notas ocultas na home')
     ),
-    // Footer toggle
     h('div',{style:{marginTop:10,paddingTop:10,borderTop:'1px solid var(--ink6)',display:'flex',alignItems:'center',justifyContent:'space-between'}},
       h('span',{style:{fontSize:11,color:'var(--ink4)'}},todo.length+' pendente'+(todo.length!==1?'s':'')+' · '+done.length+' feita'+(done.length!==1?'s':'')+' (7d)'),
       h('button',{className:'hide-val-btn'+(showOnHome?' active':''),onClick:onToggleHome},
         h('i',{className:'bi bi-'+(showOnHome?'eye':'eye-slash')}),
-        showOnHome?' Notas visíveis':' Notas ocultas'
+        showOnHome?' Visível':' Oculto'
       )
     )
   );
@@ -2510,7 +2555,7 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
       // LEFT: Task Widget
       h('div',{className:'card'},
         h('div',{className:'card-head'},
-          h('div',{className:'card-title'},h('i',{className:'bi bi-check2-square',style:{marginRight:6,color:'var(--or4)'}},''),'Notas & lembretes')
+          h('div',{className:'card-title'},h('i',{className:'bi bi-check2-square',style:{marginRight:6,color:'var(--or4)'}},''),'Notas')
         ),
         h('div',{className:'card-body'},
           h(TaskWidget,{taskDb,showOnHome:showTasks,onToggleHome:()=>{const v=!showTasks;setShowTasks(v);localStorage.setItem('lapidados_tasks_home',v?'1':'0')}})
@@ -2531,7 +2576,7 @@ function Home({pats,apts,fin,profile,db,plans,onNav,checkins,taskDb,hideV,setHid
           h('div',{className:'card-body'},
             h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Faturado'),h('span',{style:{fontWeight:800,fontSize:15,color:'var(--g4)'}},hideV?h('span',{className:'masked-val'},'••••••'):fmtM(fat))),
             h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Pendente'),h('span',{style:{fontWeight:800,fontSize:15,color:pend>0?'var(--r4)':'var(--ink4)'}},hideV?h('span',{className:'masked-val'},'••••••'):fmtM(pend))),
-            h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Recebimentos'),h('span',{style:{fontWeight:700,fontSize:14,color:'var(--ink2)'}},qp+' pagamentos'))
+            !hideV&&h('div',{className:'fin-snap-row'},h('span',{style:{fontSize:12,color:'var(--ink3)',fontWeight:500}},'Recebimentos'),h('span',{style:{fontWeight:700,fontSize:14,color:'var(--ink2)'}},qp+' pagamentos'))
           )
         )
       )
