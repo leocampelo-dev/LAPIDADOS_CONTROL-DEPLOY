@@ -909,8 +909,8 @@ let PLANS=DEFAULT_PLANS; // will be overridden by DB plans
 
 const toPlan=r=>r?({id:r.id,name:r.name,days:r.duration_days,sessions:r.sessions,price:r.price||null}):null;
 const fromPlan=(p,uid)=>({id:p.id||undefined,user_id:uid,name:p.name,duration_days:parseInt(p.days)||30,sessions:parseInt(p.sessions)||1,price:p.price?parseFloat(p.price):null});
-const toProfile=r=>r?({userId:r.user_id,fullName:r.full_name||'',instagram:r.instagram||'',whatsapp:r.whatsapp||'',avatarData:r.avatar_data||null,gemini_api_key:r.gemini_api_key||''}):null;
-const fromProfile=(p,uid)=>({user_id:uid,full_name:p.fullName||'',instagram:p.instagram||'',whatsapp:p.whatsapp||'',avatar_data:p.avatarData||null,gemini_api_key:p.gemini_api_key||''});
+const toProfile=r=>r?({userId:r.user_id,fullName:r.full_name||'',instagram:r.instagram||'',whatsapp:r.whatsapp||'',avatarData:r.avatar_data||null,gemini_api_key:r.gemini_api_key||'',groq_api_key:r.groq_api_key||''}):null;
+const fromProfile=(p,uid)=>({user_id:uid,full_name:p.fullName||'',instagram:p.instagram||'',whatsapp:p.whatsapp||'',avatar_data:p.avatarData||null,gemini_api_key:p.gemini_api_key||'',groq_api_key:p.groq_api_key||''});
 const fmt=d=>{if(!d)return'—';const dt=d instanceof Date?d:new Date(d+'T00:00:00');return isNaN(dt)?'—':dt.toLocaleDateString('pt-BR')};
 const fmtM=v=>v!=null&&v!==''?new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(parseFloat(v)||0):'—';
 const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
@@ -2149,7 +2149,7 @@ function PhotoEditor({src,onConfirm,onCancel}){
 }
 
 function SettingsProfile({profile,db}){
-  const[f,sf]=useState(profile||{fullName:'',instagram:'',whatsapp:'',avatarData:null,gemini_api_key:''});
+  const[f,sf]=useState(profile||{fullName:'',instagram:'',whatsapp:'',avatarData:null,gemini_api_key:'',groq_api_key:''});
   const[saving,ss]=useState(false);
   const[editing,se]=useState(null);
   const fileRef=useRef(null);
@@ -2222,7 +2222,12 @@ function SettingsProfile({profile,db}){
       h('div',{className:'fl fgf'},
         h('label',{className:'flb'},'🤖 Chave Gemini API'),
         h('input',{className:'fi',type:'password',value:f.gemini_api_key||'',onChange:s('gemini_api_key'),placeholder:'AIza... (Google AI Studio)'}),
-        h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:5}},'Usada na análise IA dos check-ins. Obtenha gratuitamente em ',h('a',{href:'https://aistudio.google.com/apikey',target:'_blank',style:{color:'var(--or4)'}},'aistudio.google.com'))
+        h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:5}},'Obtenha em ',h('a',{href:'https://aistudio.google.com/apikey',target:'_blank',style:{color:'var(--or4)'}},'aistudio.google.com'))
+      ),
+      h('div',{className:'fl fgf'},
+        h('label',{className:'flb'},'⚡ Chave Groq API ',h('span',{style:{background:'var(--g1)',color:'var(--g6)',fontSize:9,fontWeight:800,padding:'1px 6px',borderRadius:20,marginLeft:4}},'RECOMENDADO · GRÁTIS')),
+        h('input',{className:'fi',type:'password',value:f.groq_api_key||'',onChange:s('groq_api_key'),placeholder:'gsk_... (console.groq.com)'}),
+        h('div',{style:{fontSize:11,color:'var(--ink3)',marginTop:5}},'14.400 análises/dia grátis, sem cartão. Obtenha em ',h('a',{href:'https://console.groq.com/keys',target:'_blank',style:{color:'var(--or4)'}},'console.groq.com'))
       )
     ),
     h('div',{style:{marginTop:16}},h('button',{className:'btn btn-primary',onClick:save,disabled:saving},saving?'Salvando...':'Salvar perfil')),
@@ -3093,7 +3098,7 @@ function PatCheckinCard({p,weekCheckin,allCheckins,patInvites,totalPts,onSendWA}
 
 
 // ─── PAT DETAIL MODAL ───
-function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
+function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey,groqKey}){
   if(!p)return null;
   const[exp,setExp]=useState(null);
   const[aiLoading,setAiL]=useState(false);
@@ -3126,14 +3131,15 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
     if(!ci)return showAlert('Sem check-in','Este paciente não tem check-in registrado ainda.','info');
     setAiL(true);
     try{
-      const res=await generateAiAnalysis(geminiKey,ci,prevCi,{...p,total_points:p.totalPts});
+      const res=await generateAiAnalysis(geminiKey,ci,prevCi,{...p,total_points:p.totalPts},groqKey);
       setAiData(res);
       await SB.from('checkins').update({
         ai_summary:res.summary,ai_focus:res.focus,ai_risk:res.risk,
         ai_insights:res.insights,ai_reply:res.reply
       }).eq('id',ci.id);
-      if(res.isOffline)toast('Análise local gerada!');
-      else{toast('Análise Gemini salva!');showSuccess('Análise IA gerada com sucesso!');}
+      const label=res.isOffline?'Análise local gerada!':res.source==='groq'?'Análise Groq IA salva! ⚡':'Análise Gemini salva!';
+      toast(label);
+      if(!res.isOffline)showSuccess(label);
     }catch(e){showError(aiErrMsg(e));}
     setAiL(false);
   };
@@ -3166,7 +3172,7 @@ function PatDetailModal({p,onClose,onSendWA,wasSentThisWeek,reload,geminiKey}){
     // ── AI Card
     h('div',{className:'ci-ai-card'+(aiData?' has-data':'')},
       h('div',{className:'ci-ai-title'},
-        h('span',null,'🤖 Análise'+(aiData?(aiData.isOffline?' · Local inteligente':' · Gemini IA'):' · Clique para gerar')),
+        h('span',null,'🤖 Análise'+(aiData?(aiData.isOffline?' · Local':aiData.source==='groq'?' · Groq IA ⚡':' · Gemini IA'):' · Clique para gerar')),
         ci&&h('button',{className:'btn btn-ghost btn-xs',onClick:handleAi,disabled:aiLoading},
           aiLoading?'Analisando...':aiData?'↻ Reanalisar':'Gerar análise')
       ),
@@ -3339,11 +3345,11 @@ function getDelta(cur,prev,field){
 function aiErrMsg(e){
   const m=e.message||'';
   if(m==='quota_exceeded'||m==='all_failed')
-    return 'Cota gratuita esgotada. Acesse aistudio.google.com → Settings → verifique seu plano, ou aguarde a cota renovar (geralmente em 24h).';
-  if(m==='invalid_key')
-    return 'Chave de API inválida. Verifique se copiou corretamente em Configurações → Perfil.';
+    return 'Cota gratuita esgotada. Tente mais tarde ou configure uma chave Groq em Configurações.';
+  if(m==='invalid_key'||m==='groq_invalid_key')
+    return 'Chave de API inválida. Verifique em Configurações → Perfil.';
   if(m==='no_permission')
-    return 'Chave sem permissão. Certifique-se de que a Gemini API está ativada no projeto.';
+    return 'Chave sem permissão. Verifique se a API está ativada no projeto.';
   return 'Erro ao conectar com a IA. Verifique sua conexão e tente novamente.';
 }
 async function callGemini(apiKey,prompt){
@@ -3447,26 +3453,61 @@ function generateOfflineAnalysis(ci,prevCi,pat){
   };
 }
 
-async function generateAiAnalysis(apiKey,ci,prevCi,pat){
-  // Try Gemini if key provided
-  if(apiKey){
+async function callGroq(apiKey,prompt){
+  const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+    body:JSON.stringify({
+      model:'llama-3.1-8b-instant',
+      messages:[{role:'user',content:prompt}],
+      max_tokens:600,temperature:0.7
+    })
+  });
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok){
+    const code=data.error?.code||res.status;
+    const msg=(data.error?.message||'').toLowerCase();
+    if(code===401||msg.includes('invalid')||msg.includes('api key'))throw new Error('invalid_key');
+    if(code===429||msg.includes('quota')||msg.includes('rate'))throw new Error('quota_exceeded');
+    throw new Error('groq_error_'+code);
+  }
+  return data.choices?.[0]?.message?.content||'';
+}
+
+async function generateAiAnalysis(geminiKey,ci,prevCi,pat,groqKey){
+  const prev_block=prevCi
+    ?'Semana anterior: Dieta '+(prevCi.diet_score||0)+'/10, Treino '+(prevCi.training_score||0)+'/10, Sono '+(prevCi.sleep_score||0)+'/10, Score '+(prevCi.lapidados_score||0)+'/100'
+    :'Primeira semana registrada.';
+  const prompt='Você é um assistente de nutrição analisando check-in semanal.\n\nPaciente: '+pat.name+'\nPlano: '+(pat.plan||'N/A')+'\nRank: '+getRank(pat.total_points||0).name+'\n\nCheck-in:\n- Dieta: '+(ci.diet_score||0)+'/10\n- Treino: '+(ci.training_score||0)+'/10\n- Sono: '+(ci.sleep_score||0)+'/10\n- Cardio: '+(ci.cardio_score||0)+'/10\n- Energia: '+(ci.energy_level||0)+'/10\n- Score: '+(ci.lapidados_score||0)+'/100\n- Vitória: "'+(ci.wins||ci.weekly_win||'N/A')+'"\n- Dificuldade: "'+(ci.main_difficulty||ci.weekly_difficulty||'N/A')+'"\n- Ajuda: "'+(ci.needs_help||'N/A')+'"\n'+prev_block+'\n\nResponda APENAS em JSON válido sem markdown:\n{"summary":"2-3 frases encorajadoras","focus":"foco principal próxima semana","risk":"baixo|medio|evasao","insights":["insight1","insight2","insight3"],"reply":"mensagem WhatsApp 2-3 frases tom pessoal"}';
+
+  // 1. Try Groq first (best free option)
+  if(groqKey){
     try{
-      const prev_block=prevCi
-        ?'Semana anterior: Dieta '+(prevCi.diet_score||0)+'/10, Treino '+(prevCi.training_score||0)+'/10, Sono '+(prevCi.sleep_score||0)+'/10, Score '+(prevCi.lapidados_score||0)+'/100'
-        :'Primeira semana registrada.';
-      const prompt='Você é um assistente de nutrição analisando check-in semanal.\n\nPaciente: '+pat.name+'\nPlano: '+(pat.plan||'N/A')+'\nRank: '+getRank(pat.total_points||0).name+'\n\nCheck-in:\n- Dieta: '+(ci.diet_score||0)+'/10\n- Treino: '+(ci.training_score||0)+'/10\n- Sono: '+(ci.sleep_score||0)+'/10\n- Cardio: '+(ci.cardio_score||0)+'/10\n- Energia: '+(ci.energy_level||0)+'/10\n- Score: '+(ci.lapidados_score||0)+'/100\n- Vitória: "'+(ci.wins||ci.weekly_win||'N/A')+'"\n- Dificuldade: "'+(ci.main_difficulty||ci.weekly_difficulty||'N/A')+'"\n- Ajuda: "'+(ci.needs_help||'N/A')+'"\n'+prev_block+'\n\nResponda APENAS em JSON válido sem markdown:\n{"summary":"2-3 frases encorajadoras","focus":"foco principal próxima semana","risk":"baixo|medio|evasao","insights":["insight1","insight2","insight3"],"reply":"mensagem WhatsApp 2-3 frases tom pessoal"}';
-      const raw=await callGemini(apiKey,prompt);
+      const raw=await callGroq(groqKey,prompt);
       const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
-      result.isOffline=false;
+      result.isOffline=false;result.source='groq';
+      return result;
+    }catch(e){
+      if(e.message==='invalid_key')throw new Error('groq_invalid_key');
+      // quota or other → fall through
+    }
+  }
+
+  // 2. Try Gemini
+  if(geminiKey){
+    try{
+      const raw=await callGemini(geminiKey,prompt);
+      const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      result.isOffline=false;result.source='gemini';
       return result;
     }catch(e){
       if(e.message!=='quota_exceeded'&&e.message!=='all_failed'&&e.message!=='no_permission')throw e;
-      // Fall through to offline analysis
-      toast('Gemini indisponível — usando análise inteligente local');
     }
   }
-  // Offline fallback — always works
-  return generateOfflineAnalysis(ci,prevCi,pat);
+
+  // 3. Offline fallback
+  const result=generateOfflineAnalysis(ci,prevCi,pat);
+  return result;
 }
 
 // ─── MAIN CHECKIN HUB ───
@@ -3479,6 +3520,7 @@ function CheckinHub({pats,db}){
   const[rankUp,setRankUp]=useState(null);
   const{week,year}=getWeekNum();
   const geminiKey=db.profile?.gemini_api_key||'';
+  const groqKey=db.profile?.groq_api_key||'';
 
   const checkinByPat=useMemo(()=>{
     const m={};checkins.forEach(c=>{if(!m[c.patient_id])m[c.patient_id]=[];m[c.patient_id].push(c);});return m;
@@ -3640,7 +3682,7 @@ function CheckinHub({pats,db}){
       p:enriched.find(x=>x.id===selectedPat),
       onClose:()=>setSelectedPat(null),
       onSendWA:handleSendWA,
-      wasSentThisWeek,reload,geminiKey
+      wasSentThisWeek,reload,geminiKey,groqKey
     })
   );
 }
