@@ -502,41 +502,32 @@ tr:hover td{background:#fafafa}
 
 /* ── TASK WIDGET ── */
 .task-input-row{display:flex;gap:8px;margin-bottom:14px}
-.task-input{flex:1;padding:10px 14px;border:1.5px solid var(--ink5);border-radius:10px;font-size:13px;outline:none;background:var(--w);color:var(--ink);transition:border .15s;font-family:inherit}
+.task-input{flex:1;padding:10px 14px;border:1.5px solid var(--ink5);border-radius:10px;font-size:13px;outline:none;background:var(--w);color:var(--ink);transition:border .2s;font-family:inherit}
 .task-input:focus{border-color:var(--or4);box-shadow:0 0 0 3px rgba(232,93,4,.1)}
 .task-input::placeholder{color:var(--ink4)}
-.task-add-btn{width:40px;height:40px;border-radius:10px;background:var(--or4);border:none;color:#fff;font-size:22px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .1s}
-.task-add-btn:hover{background:var(--or5)}.task-add-btn:active{transform:scale(.9)}
+.task-add-btn{width:40px;height:40px;border-radius:10px;background:var(--or4);border:none;color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,transform .12s}
+.task-add-btn:hover{background:var(--or5)}.task-add-btn:active{transform:scale(.88)}
 .task-tabs{display:flex;border-bottom:1.5px solid var(--ink6);margin-bottom:12px}
 .task-tab{padding:7px 16px;font-size:12px;font-weight:700;color:var(--ink3);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:inherit}
 .task-tab.on{color:var(--or4);border-bottom-color:var(--or4)}
 .task-tab-badge{background:var(--or4);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;min-width:16px;text-align:center}
 .task-list{display:flex;flex-direction:column;gap:5px;max-height:300px;overflow-y:auto;padding-right:2px}
-/* Item enter animation */
-@keyframes taskIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-/* Item exit animation */
-@keyframes taskOut{from{opacity:1;transform:translateX(0);max-height:60px}to{opacity:0;transform:translateX(16px);max-height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0}}
-/* Check pop animation */
-@keyframes checkPop{0%{transform:scale(1)}35%{transform:scale(1.45)}65%{transform:scale(.88)}100%{transform:scale(1)}}
-/* Ripple from checkbox */
-@keyframes ripple{from{transform:scale(1);opacity:.5}to{transform:scale(2.8);opacity:0}}
-.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--ink6);border-radius:10px;background:var(--w);position:relative;animation:taskIn .22s cubic-bezier(.4,0,.2,1)}
-.task-item:hover{background:var(--ink7);border-color:var(--ink5);transition:background .15s,border-color .15s}
-.task-item.removing{animation:taskOut .22s cubic-bezier(.4,0,.6,1) forwards;overflow:hidden;pointer-events:none}
-.task-item.done-item{opacity:.72}
-/* Checkbox */
-.task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink5);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:border-color .15s,background .2s;background:var(--w);margin-top:1px;position:relative}
-.task-check:hover{border-color:var(--or4)}
+/* Item — only transitions, no entry animation (avoids re-render flicker) */
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--ink6);border-radius:10px;background:var(--w);position:relative;transition:opacity .22s ease,transform .22s ease,background .15s,border-color .15s}
+.task-item:hover{background:var(--ink7);border-color:var(--ink5)}
+.task-item.removing{opacity:0;transform:translateX(14px);pointer-events:none}
+.task-item.done-item{opacity:.7}
+/* Checkbox — smooth color transition is the effect */
+.task-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--ink5);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;background:var(--w);margin-top:1px;transition:background .2s ease,border-color .2s ease,transform .12s ease}
+.task-check:hover{border-color:var(--g4);transform:scale(1.08)}
+.task-check:active{transform:scale(.82)}
 .task-check.checked{background:var(--g4);border-color:var(--g4);color:#fff;font-size:11px}
-.task-check.popping{animation:checkPop .3s cubic-bezier(.175,.885,.32,1.275)}
-/* Ripple el */
-.task-ripple{position:absolute;width:20px;height:20px;border-radius:50%;background:rgba(34,197,94,.45);pointer-events:none;animation:ripple .38s ease-out forwards}
-/* Text */
-.task-text{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;word-break:break-word;transition:color .25s}
+/* Text fade on check */
+.task-text{flex:1;font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;word-break:break-word;transition:color .25s ease}
 .task-item.done-item .task-text{text-decoration:line-through;color:var(--ink4)}
-/* Delete btn */
-.task-del{opacity:0;width:24px;height:24px;border-radius:6px;border:none;background:var(--r1);color:var(--r4);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s,transform .1s}
-.task-item:hover .task-del{opacity:1}.task-del:active{transform:scale(.85)}
+/* Delete — shows on hover */
+.task-del{opacity:0;width:24px;height:24px;border-radius:6px;border:none;background:var(--r1);color:var(--r4);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s,transform .12s}
+.task-item:hover .task-del{opacity:1}.task-del:active{transform:scale(.82)}
 .task-empty{text-align:center;padding:28px 16px;color:var(--ink3);font-size:13px}
 .task-empty-icon{font-size:24px;margin-bottom:8px}
 /* Hide-values toggle */
@@ -2322,8 +2313,6 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
   const[input,si]=useState('');
   const[saving,ss]=useState(false);
   const[removingIds,setRemoving]=useState(new Set());
-  const[poppingIds,setPopping]=useState(new Set());
-  const[rippleIds,setRipple]=useState(new Set());
   const{tasks,loading,addTask,toggleTask,delTask}=taskDb;
 
   const todo=tasks.filter(t=>!t.done);
@@ -2331,42 +2320,33 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
 
   const handleAdd=async()=>{
     const txt=input.trim();if(!txt||saving)return;
-    ss(true);
-    si(''); // clear immediately so input feels instant
+    ss(true);si('');
     try{await addTask(txt);}catch(e){showError(e.message);si(txt);}
     ss(false);
   };
 
-  const handleToggle=(id,markDone)=>{
-    // Trigger pop + ripple on check
-    if(markDone){
-      setPopping(p=>new Set([...p,id]));
-      setRipple(p=>new Set([...p,id]));
-      setTimeout(()=>{setPopping(p=>{const s=new Set(p);s.delete(id);return s;});},320);
-      setTimeout(()=>{setRipple(p=>{const s=new Set(p);s.delete(id);return s;});},400);
-    }
-    // Small delay before state change so animation shows
-    setTimeout(()=>toggleTask(id,markDone),markDone?180:0);
-  };
-
+  // Delete: add .removing class (CSS fade+slide), wait, then actually delete
   const handleDelete=(id)=>{
     setRemoving(p=>new Set([...p,id]));
     setTimeout(()=>{
       delTask(id);
-      setRemoving(p=>{const s=new Set(p);s.delete(id);return s;});
-    },220);
+      // Don't remove from removingIds — item will unmount naturally
+    },240);
   };
 
-  const TaskItem=({t,isDone})=>h('div',{
+  // Toggle: just call directly — CSS transition on .task-check handles the visual
+  const handleToggle=(id,markDone)=>{
+    toggleTask(id,markDone);
+  };
+
+  const renderItem=(t,isDone)=>h('div',{
     key:t.id,
     className:'task-item'+(isDone?' done-item':'')+(removingIds.has(t.id)?' removing':'')
   },
     h('div',{
-      className:'task-check'+(isDone?' checked':'')+(poppingIds.has(t.id)?' popping':''),
-      onClick:()=>handleToggle(t.id,!isDone),
-      style:{overflow:'hidden'}
+      className:'task-check'+(isDone?' checked':''),
+      onClick:()=>handleToggle(t.id,!isDone)
     },
-      rippleIds.has(t.id)&&h('span',{className:'task-ripple',style:{position:'absolute',top:0,left:0}}),
       isDone&&h('i',{className:'bi bi-check'})
     ),
     h('div',{className:'task-text'},t.text),
@@ -2391,16 +2371,19 @@ function TaskWidget({taskDb,showOnHome,onToggleHome}){
       )
     ),
     showOnHome?(
-      loading?h('div',{className:'task-empty'},h('div',{className:'spinner',style:{width:24,height:24,borderWidth:2}})):
-      tab==='todo'?h('div',{className:'task-list'},
-        todo.length===0
-          ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma nota pendente'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima'))
-          :todo.map(t=>h(TaskItem,{key:t.id,t,isDone:false}))
-      ):h('div',{className:'task-list'},
-        done.length===0
-          ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'📋'),h('div',null,'Nenhuma nota concluída'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'As feitas ficam aqui por 7 dias'))
-          :done.map(t=>h(TaskItem,{key:t.id,t,isDone:true}))
-      )
+      loading
+        ?h('div',{className:'task-empty'},h('div',{className:'spinner',style:{width:24,height:24,borderWidth:2}}))
+        :tab==='todo'
+          ?h('div',{className:'task-list'},
+              todo.length===0
+                ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'✅'),h('div',null,'Nenhuma nota pendente'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'Adicione uma acima'))
+                :todo.map(t=>renderItem(t,false))
+            )
+          :h('div',{className:'task-list'},
+              done.length===0
+                ?h('div',{className:'task-empty'},h('div',{className:'task-empty-icon'},'📋'),h('div',null,'Nenhuma nota concluída'),h('div',{style:{fontSize:11,marginTop:4,color:'var(--ink4)'}},'As feitas ficam aqui por 7 dias'))
+                :done.map(t=>renderItem(t,true))
+            )
     ):h('div',{className:'task-empty',style:{padding:'14px 0'}},
       h('i',{className:'bi bi-eye-slash',style:{fontSize:20,color:'var(--ink4)'}}),
       h('div',{style:{fontSize:11,color:'var(--ink4)',marginTop:6}},'Notas ocultas na home')
